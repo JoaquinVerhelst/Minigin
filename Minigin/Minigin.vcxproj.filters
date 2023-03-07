@@ -33,9 +33,6 @@
     <ClInclude Include="Transform.h">
       <Filter>Engine Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
     <ClInclude Include="TextObject.h">
       <Filter>Engine Files</Filter>
     </ClInclude>
@@ -66,21 +63,18 @@
     <ClInclude Include="Singleton.h">
       <Filter>Engine Files\Singletons</Filter>
     </ClInclude>
-    <ClInclude Include="RenderTextComponent.h">
+    <ClInclude Include="FPSComponent.h">
       <Filter>Engine Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="FPSComponent.h">
+    <ClInclude Include="Scene.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RotatorComponent.h">
       <Filter>Engine Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="TextObject.cpp">
@@ -116,11 +110,17 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Engine Files</Filter>
     </ClCompile>
-    <ClCompile Include="RenderTextComponent.cpp">
-      <Filter>Engine Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="FPSComponent.cpp">
       <Filter>Engine Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Engine Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RotatorComponent.cpp">
+      <Filter>Engine Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Engine Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

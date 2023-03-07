@@ -11,7 +11,7 @@ namespace dae
 	//class Component;
 	//class vector;
 
-	class GameObject final
+	class GameObject final : public std::enable_shared_from_this<GameObject>
 	{
 	public:
 
@@ -51,11 +51,50 @@ namespace dae
 		bool HasComponent() const;
 
 
+
+		//Scenegraph
+		void SetParent(std::shared_ptr<GameObject> parent, bool keepWorldPosition);
+		std::shared_ptr<GameObject> GetParent() const { return m_Parent; }
+
+		const glm::vec3& GetWorldPosition();
+		const glm::vec3& GetLocalPosition() const { return m_LocalPosition; }
+		void SetLocalPosition(const glm::vec3& pos);
+		void SetPositionDirty();
+		void UpdateWorldPosition();
+
+
+		//DEBUG
+
+		void SetDebug(bool active) { m_Debug = active; }
+
 	private:
+
+		void RemoveChild(std::shared_ptr<GameObject> go);
+		void AddChild(std::shared_ptr<GameObject> go, bool keepWorldPosition);
+
+		void UpdateTransform();
+
 		std::vector<std::shared_ptr<Component>> m_Components;
 		Transform m_Transform;
 		bool m_IsDestroyed;
 		bool m_CanRender;
+
+
+		//Scenegraph
+		std::vector<std::shared_ptr<GameObject>> m_Children;
+		std::shared_ptr<GameObject> m_Parent;
+
+
+		glm::vec3 m_LocalPosition;
+		glm::vec3 m_WorldPosition;
+		bool m_PositionIsDirty;
+
+
+
+
+		//DEBUGG
+
+		bool m_Debug = false;
 	};
 
 
@@ -66,11 +105,11 @@ namespace dae
 	{
 
 		if (HasComponent<T>()) {
-			throw std::runtime_error("COMPONENT OF THIS TYPE IS ALREADY ATTACHED, IDIOT!"); 
+			throw std::runtime_error("Error: Component of this Type" + std::string(typeid(T).name()) + "is already attached to this GameObject!");
 		}
 
-		std::shared_ptr<T> newComponent = std::make_shared<T>(std::forward<TArgs>(mArgs)...);
-		newComponent->SetOwner(this);
+		std::shared_ptr<T> newComponent = std::make_shared<T>(this, std::forward<TArgs>( mArgs)...);
+		//newComponent->SetOwner(this);
 		m_Components.emplace_back(newComponent);
 		newComponent->Init();
 
@@ -92,7 +131,7 @@ namespace dae
 		}
 
 		// If the component is not found, throw an exception
-		throw std::runtime_error("No component of this type is in this gameobject");
+		throw std::runtime_error("No component of this type: " + std::string(typeid(T).name()) + "is in this gameobject");
 	}
 
 

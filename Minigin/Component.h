@@ -12,22 +12,8 @@ namespace dae
 	class Component
 	{
 
-
+		GameObject* m_pOwner;
 	public:
-
-		GameObject* GetOwner() const { return m_pOwner; }
-
-		void SetOwner(GameObject* pOwner)
-		{
-			if (m_pOwner != nullptr)
-				m_pOwner = nullptr;
-
-			m_pOwner = pOwner;
-		}
-
-		Component()
-			:m_pOwner{}
-		{};
 		virtual ~Component() = default;
 
 		Component(const Component& other) = delete;
@@ -41,11 +27,9 @@ namespace dae
 		virtual bool IsRenderer() = 0;
 
 	protected:
+		explicit Component(GameObject* pOwner) : m_pOwner(pOwner) {}
+		GameObject* GetOwner() const { return m_pOwner; }
 
-		//explicit Component(GameObject* pOwner) : m_pOwner(pOwner) {}
 
-	private:
-
-		GameObject* m_pOwner;
 	};
 }

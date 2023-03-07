@@ -1,13 +1,17 @@
 #include "FPSComponent.h"
 
 #include "GameObject.h"
-#include "RenderTextComponent.h"
+#include "SimpleRenderComponent.h"
 #include "Time.h"
 #include <string>
 
 
-dae::FPSComponent::FPSComponent()
-	:m_FPSText{}
+dae::FPSComponent::FPSComponent(GameObject* owner)
+	: Component(owner),
+	m_Count{ 0.5f },
+	m_UpdateTime{ 0.5f },
+	m_FPSText{},
+	m_HasRenderComponent{false}
 {
 }
 
@@ -15,10 +19,23 @@ dae::FPSComponent::FPSComponent()
 
 void dae::FPSComponent::Update()
 {
-	if (GetOwner()->HasComponent<RenderTextComponent>())
+	m_Count += Time::GetInstance().GetDeltaTime();
+
+	if (m_Count >= m_UpdateTime)
 	{
-		m_FPSText = "FPS: " + std::to_string(static_cast<int>(Time::GetInstance().GetFPS()));
-		GetOwner()->GetComponent<RenderTextComponent>().SetText(m_FPSText);
+		if (m_HasRenderComponent)
+		{
+			m_FPSText = "FPS: " + std::to_string(static_cast<int>(Time::GetInstance().GetFPS()));
+			GetOwner()->GetComponent<SimpleRenderComponent>().SetText(m_FPSText);
+		}
+		else
+		{
+			if (GetOwner()->HasComponent<SimpleRenderComponent>())
+			{
+				m_HasRenderComponent = true;
+			}
+		}
+
 	}
 
 }

@@ -20,8 +20,7 @@ namespace dae
 
 		bool IsRenderer() override { return false; }
 
-
-		FPSComponent();
+		FPSComponent(GameObject* owner);
 		~FPSComponent() = default;
 
 		FPSComponent(const FPSComponent& other) = delete;
@@ -29,8 +28,14 @@ namespace dae
 		FPSComponent& operator=(const FPSComponent& other) = delete;
 		FPSComponent& operator=(FPSComponent&& other) = delete;
 
+
+		void SetUpdateTime(float time) { m_UpdateTime = time; }
 	private:
 
 		std::string m_FPSText{};
+		bool m_HasRenderComponent;
+
+		float m_Count;
+		float m_UpdateTime;
 	};
 }

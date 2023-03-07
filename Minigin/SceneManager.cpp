@@ -7,6 +7,8 @@ void dae::SceneManager::Update()
 	{
 		scene->Update();
 	}
+
+
 }
 
 void dae::SceneManager::FixedUpdate()
