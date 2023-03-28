@@ -39,9 +39,6 @@
     <ClInclude Include="TextObject.h">
       <Filter>Engine Files</Filter>
     </ClInclude>
-    <ClInclude Include="Font.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
     <ClInclude Include="Minigin.h">
       <Filter>Engine Files</Filter>
     </ClInclude>
@@ -99,21 +96,18 @@
     <ClInclude Include="ImGui\imstb_textedit.h">
       <Filter>Engine Files\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DiggerComponent.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="TextObject.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Font.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Minigin.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="SimpleRenderComponent.cpp">
@@ -169,6 +163,24 @@
     </ClCompile>
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>Engine Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Engine Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Minigin.cpp">
+      <Filter>Engine Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiggerComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Engine Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Engine Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Engine Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -11,6 +11,8 @@ namespace dae
 		~Minigin();
 		void Run(const std::function<void()>& load);
 
+		void SetUpInput();
+
 		Minigin(const Minigin& other) = delete;
 		Minigin(Minigin&& other) = delete;
 		Minigin& operator=(const Minigin& other) = delete;

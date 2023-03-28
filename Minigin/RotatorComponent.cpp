@@ -1,5 +1,5 @@
 #include "RotatorComponent.h"
-
+#include "GameObject.h"
 #include "Time.h"
 
 
@@ -29,6 +29,11 @@ void dae::RotatorComponent::Init()
 void dae::RotatorComponent::RotatorLogic()
 {
     m_Angle += m_Speed * Time::GetInstance().GetDeltaTime();
+
+    if (m_Angle >= 360.f)
+    {
+        m_Angle -= 360.f;
+    }
 
     glm::vec2 offset = glm::vec2(std::cos(m_Angle), std::sin(m_Angle)) * m_Radius;
     GetOwner()->SetPosition(m_Center.x + offset.x, m_Center.y + offset.y);

@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "SimpleRenderComponent.h"
+#include "Time.h"
 #include <iostream>
 
 
@@ -66,6 +67,8 @@ void dae::GameObject::Render() const
 void dae::GameObject::Init()
 {
 }
+
+
 
 
 void dae::GameObject::SetPosition(float x, float y)

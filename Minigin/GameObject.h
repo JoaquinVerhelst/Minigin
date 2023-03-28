@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include <algorithm>
 
+#include "Command.h"
+
 namespace dae
 {
 	//class Component;

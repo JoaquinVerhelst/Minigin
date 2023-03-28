@@ -12,6 +12,8 @@
 #include <chrono>
 #include "Time.h"
 
+#include <iostream>
+
 SDL_Window* g_window{};
 
 void PrintSDLVersion()
@@ -93,6 +95,38 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 	float fixedTimeStep = 0.02f;
 
+	std::cout << '\n';
+	std::cout << '\n';
+
+	std::cout << "Player1 Controls: Controller 1 DPad and WASD" << '\n';
+	std::cout << "Player2 Controls: Controller 2 DPad and arrow keys" << '\n';
+
+
+	//Temporary way for initializition 
+
+	auto* walkUp = new WalkCommand(0);
+	auto* walkDown = new WalkCommand(1);
+	auto* walkRight = new WalkCommand(2);
+	auto* walkLeft = new WalkCommand(3);
+
+	input.AddControllerBinding(InputManager::ControllerButton::DPadUp, walkUp);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadDown, walkDown);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadRight, walkRight);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadLeft, walkLeft);
+
+
+	input.AddKeyBinding(SDL_SCANCODE_W, walkUp, 0);
+	input.AddKeyBinding(SDL_SCANCODE_S, walkDown, 0);
+	input.AddKeyBinding(SDL_SCANCODE_A, walkLeft, 0);
+	input.AddKeyBinding(SDL_SCANCODE_D, walkRight, 0);
+
+	input.AddKeyBinding(SDL_SCANCODE_UP, walkUp, 1);
+	input.AddKeyBinding(SDL_SCANCODE_DOWN, walkDown, 1);
+	input.AddKeyBinding(SDL_SCANCODE_LEFT, walkLeft, 1);
+	input.AddKeyBinding(SDL_SCANCODE_RIGHT, walkRight, 1);
+
+
+
 	while (doContinue)
 	{
 		time.Update();
@@ -111,6 +145,22 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 		renderer.Render();
 	}
+
+
+
+
+
+	delete walkUp;
+	delete walkDown;
+	delete walkRight;
+	delete walkLeft;
+
+
+}
+
+void dae::Minigin::SetUpInput()
+{
+
 
 
 }
