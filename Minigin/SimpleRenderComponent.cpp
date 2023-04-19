@@ -84,7 +84,7 @@ void dae::SimpleRenderComponent::UpdateText()
 		throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 	}
 	SDL_FreeSurface(surf);
-	m_Texture = std::make_shared<Texture2D>(texture);
+	m_Texture = std::make_unique<Texture2D>(texture);
 }
 
 

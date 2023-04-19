@@ -14,10 +14,6 @@ namespace dae
 	{
 	public:
 		void Update() override;
-
-		void Render() const override;
-		void Init() override;
-
 		bool IsRenderer() override { return false; }
 
 		FPSComponent(GameObject* owner);

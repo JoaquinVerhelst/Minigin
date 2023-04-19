@@ -2,18 +2,17 @@
 
 #include "Component.h"
 #include <glm/glm.hpp>
-
-
+#include "CharacterComponent.h"
+#include "Subject.h"
 
 namespace dae
 {
 	class GameObject;
 
-	class DiggerComponent final : public Component
+	class DiggerComponent final : public CharacterComponent
 	{
 	public:
 		void Update() override;
-		void Render() const override;
 		void Init() override;
 		bool IsRenderer() override { return false; }
 
@@ -25,15 +24,13 @@ namespace dae
 		DiggerComponent& operator=(const DiggerComponent& other) = delete;
 		DiggerComponent& operator=(DiggerComponent&& other) = delete;
 
-		void Walk(int direction);
-
-		int GetInputID() { return m_InputID; }
 
 	private:
 
-		int m_InputID;
-		float m_WalkSpeed;
-		//InputManager* m_InputManager;
+
+
+
+
 
 	};
 }

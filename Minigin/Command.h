@@ -2,11 +2,10 @@
 
 #include "GameObject.h"
 #include <map>
-
+//#include "InputManager.h"
 
 namespace dae
 {
-	class GameObject;
 	//enum class Direction : int
 	//{
 	//	Up,
@@ -22,7 +21,7 @@ namespace dae
 
 		Command() = default;
 		virtual ~Command() = default;
-		virtual void Execute(GameObject* actor) = 0;
+		virtual void Execute(GameObject* actor, int type) = 0;
 
 	};
 
@@ -35,7 +34,7 @@ namespace dae
 		//0 = up, 1 = down, 2 = right, 3 = left
 		WalkCommand(int direction);
 
-		void Execute(GameObject* actor) override;
+		void Execute(GameObject* actor, int type) override;
 
 
 	private:
@@ -44,10 +43,31 @@ namespace dae
 	};
 
 
+	class SelfDamageCommand : public Command
+	{
+	public:
+
+		SelfDamageCommand() = default;
+
+		void Execute(GameObject* actor, int type) override;
+
+
+	private:
+	};
 
 
 
+	class AddScoreCommand : public Command
+	{
+	public:
 
+		AddScoreCommand() = default;
+
+		void Execute(GameObject* actor, int type) override;
+
+
+	private:
+	};
 
 
 }

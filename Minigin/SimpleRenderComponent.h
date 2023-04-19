@@ -6,8 +6,8 @@
 
 namespace dae
 {
-    class Texture2D;
-    class string;
+    //class Texture2D;
+    //class string;
     class Font;
 
 
@@ -46,7 +46,7 @@ namespace dae
 
         std::shared_ptr<Font> m_Font;
 
-        std::shared_ptr<Texture2D> m_Texture;
+        std::unique_ptr<Texture2D> m_Texture;
 
 
         //glm::vec2 m_Scale;  // Not yet Implemented

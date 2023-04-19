@@ -12,8 +12,6 @@ namespace dae
 	{
 	public:
 		void Update() override;
-		void Render() const override;
-		void Init() override;
 		bool IsRenderer() override { return false; }
 
 		RotatorComponent(GameObject* owner, const glm::vec2& center, float radius, float speed);
@@ -28,7 +26,7 @@ namespace dae
 
 	private:
 
-
+		
 		glm::vec2 m_Center;
 		float m_Radius;
 		float m_Speed;

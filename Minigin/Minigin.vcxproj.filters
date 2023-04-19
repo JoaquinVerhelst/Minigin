@@ -22,6 +22,18 @@
     <Filter Include="Engine Files\ImGui">
       <UniqueIdentifier>{f75c3059-ba27-42cc-ae62-d7389346fd6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine Files\Patterns">
+      <UniqueIdentifier>{67c089fb-82f0-46ec-bdbf-bece62331515}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Files\Patterns\Observer">
+      <UniqueIdentifier>{2ce43933-0415-4bb0-9bc9-b8ecba8569e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Files\Patterns\Command">
+      <UniqueIdentifier>{5f208f43-096f-458f-979d-690a5771e3de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Files\Patterns\State">
+      <UniqueIdentifier>{7cf010df-b579-4b13-8b67-f2fb285b2927}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
@@ -96,14 +108,38 @@
     <ClInclude Include="ImGui\imstb_textedit.h">
       <Filter>Engine Files\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DiggerComponent.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Font.h">
       <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Engine Files\Patterns\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Subject.h">
+      <Filter>Engine Files\Patterns\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="DiggerComponent.h">
+      <Filter>Engine Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthBarComponent.h">
+      <Filter>Engine Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthComponent.h">
+      <Filter>Engine Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreComponent.h">
+      <Filter>Engine Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreDisplayComponent.h">
+      <Filter>Engine Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterComponent.h">
+      <Filter>Engine Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Engine Files\Patterns\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Engine Files\Patterns\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -164,14 +200,8 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>Engine Files\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
     <ClCompile Include="Minigin.cpp">
       <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DiggerComponent.cpp">
-      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Engine Files</Filter>
@@ -181,6 +211,30 @@
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Engine Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiggerComponent.cpp">
+      <Filter>Engine Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthBarComponent.cpp">
+      <Filter>Engine Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthComponent.cpp">
+      <Filter>Engine Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreComponent.cpp">
+      <Filter>Engine Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreDisplayComponent.cpp">
+      <Filter>Engine Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterComponent.cpp">
+      <Filter>Engine Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Engine Files\Patterns\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>Engine Files\Patterns\State</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

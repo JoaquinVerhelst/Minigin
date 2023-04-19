@@ -18,13 +18,6 @@ void dae::RotatorComponent::Update()
     RotatorLogic();
 }
 
-void dae::RotatorComponent::Render() const
-{
-}
-
-void dae::RotatorComponent::Init()
-{
-}
 
 void dae::RotatorComponent::RotatorLogic()
 {

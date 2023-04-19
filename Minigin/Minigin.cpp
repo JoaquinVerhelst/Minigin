@@ -101,18 +101,27 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	std::cout << "Player1 Controls: Controller 1 DPad and WASD" << '\n';
 	std::cout << "Player2 Controls: Controller 2 DPad and arrow keys" << '\n';
 
+	std::cout << "Add Score =  ButtonA" << '\n';
 
-	//Temporary way for initializition 
+	std::cout << "remove Health =  ButtonB" << '\n';
+
+	//Temporary way for initializition  TODO: Change The Command -> no objects
 
 	auto* walkUp = new WalkCommand(0);
 	auto* walkDown = new WalkCommand(1);
 	auto* walkRight = new WalkCommand(2);
 	auto* walkLeft = new WalkCommand(3);
+	auto* Selfdamage = new SelfDamageCommand();
+	auto* addScore = new AddScoreCommand();
 
-	input.AddControllerBinding(InputManager::ControllerButton::DPadUp, walkUp);
-	input.AddControllerBinding(InputManager::ControllerButton::DPadDown, walkDown);
-	input.AddControllerBinding(InputManager::ControllerButton::DPadRight, walkRight);
-	input.AddControllerBinding(InputManager::ControllerButton::DPadLeft, walkLeft);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadUp, walkUp, InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadDown, walkDown, InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadRight, walkRight, InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadLeft, walkLeft, InputType::Pressed);
+
+	input.AddControllerBinding(InputManager::ControllerButton::ButtonB, Selfdamage, InputType::Up);
+
+	input.AddControllerBinding(InputManager::ControllerButton::ButtonA, addScore, InputType::Up);
 
 
 	input.AddKeyBinding(SDL_SCANCODE_W, walkUp, 0);
@@ -154,7 +163,8 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	delete walkDown;
 	delete walkRight;
 	delete walkLeft;
-
+	delete Selfdamage;
+	delete addScore;
 
 }
 

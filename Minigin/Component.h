@@ -22,8 +22,8 @@ namespace dae
 		Component& operator=(Component&& other) = delete;
 
 		virtual void Update() = 0;
-		virtual void Init() = 0;
-		virtual void Render() const = 0;
+		virtual void Init() {};
+		virtual void Render() const {};
 		virtual bool IsRenderer() = 0;
 
 	protected:

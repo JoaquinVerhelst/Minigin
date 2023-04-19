@@ -19,6 +19,8 @@ namespace dae
 
 	private:
 
+
+
 		struct KeyBind
 		{
 			Command* command;
@@ -26,6 +28,12 @@ namespace dae
 			int inputID;
 		};
 
+		struct ControllerBind
+		{
+			Command* command;
+			ControllerButton button;
+			InputType inputType;
+		};
 
 		XINPUT_STATE* m_PreviousStates;
 		XINPUT_STATE* m_CurrentStates;
@@ -35,11 +43,13 @@ namespace dae
 
 		std::vector<GameObject*> m_Players{};
 
-		std::vector<std::pair<ControllerButton, Command*>> m_ControllerBinds;
+		std::vector<ControllerBind> m_ControllerBinds;
 
 		std::vector<KeyBind> m_KeyBinds;
 
 	public:
+
+
 		InputManagerImpl()
 			:m_CurrentStates(new XINPUT_STATE[XUSER_MAX_COUNT]), m_PreviousStates(new XINPUT_STATE[XUSER_MAX_COUNT])
 			, m_ButtonsPressedThisFrame(new WORD[XUSER_MAX_COUNT]), m_ButtonsReleasedThisFrame(new WORD[XUSER_MAX_COUNT])
@@ -139,24 +149,29 @@ namespace dae
 			{
 				for (size_t y = 0; y < m_ControllerBinds.size(); ++y)
 				{
-					const auto& key = m_ControllerBinds[y].first;
+
+					const auto& key = m_ControllerBinds[y].button;
 
 
-					if (IsDownThisFrame(static_cast<unsigned int>(key), static_cast<int>(i)))
+	
+					if (IsPressed(static_cast<unsigned int>(key), static_cast<int>(i)))
 					{
-						auto& command = m_ControllerBinds[y].second;
-						command->Execute(m_Players[i]);
+						auto& command = m_ControllerBinds[y].command;
+						command->Execute(m_Players[i], 0);
 					}
+
 					else if (IsUpThisFrame(static_cast<unsigned int>(key), static_cast<int>(i)))
 					{
-						auto& command = m_ControllerBinds[y].second;
-						command->Execute(m_Players[i]);
+						auto& command = m_ControllerBinds[y].command;
+						command->Execute(m_Players[i], 1);
 					}
-					else if (IsPressed(static_cast<unsigned int>(key), static_cast<int>(i)))
+
+					else if (IsDownThisFrame(static_cast<unsigned int>(key), static_cast<int>(i)))
 					{
-						auto& command = m_ControllerBinds[y].second;
-						command->Execute(m_Players[i]);
+						auto& command = m_ControllerBinds[y].command;
+						command->Execute(m_Players[i], 2);
 					}
+
 				}
 			}
 
@@ -172,7 +187,7 @@ namespace dae
 			{
 				if (keystate[m_KeyBinds[i].button])
 				{
-					m_KeyBinds[i].command->Execute(m_Players[m_KeyBinds[i].inputID]);
+					m_KeyBinds[i].command->Execute(m_Players[m_KeyBinds[i].inputID], 0);
 				}
 			}
 
@@ -206,9 +221,15 @@ namespace dae
 
 
 
-		void AddControllerBinding(InputManager::ControllerButton button, Command* command)
+		void AddControllerBinding(InputManager::ControllerButton button, Command* command, InputType inputType)
 		{
-			m_ControllerBinds.emplace_back(std::make_pair(button, command));
+			ControllerBind tempControllerBind{};
+			tempControllerBind.button = button;
+			tempControllerBind.command = command;
+			tempControllerBind.inputType = inputType;
+
+			m_ControllerBinds.emplace_back(tempControllerBind);
+
 		}
 
 
@@ -273,9 +294,9 @@ namespace dae
 		delete pImpl;
 	}
 
-	void InputManager::AddControllerBinding(ControllerButton button, Command* command)
+	void InputManager::AddControllerBinding(ControllerButton button, Command* command, InputType inputType)
 	{
-		pImpl->AddControllerBinding(button, command);
+		pImpl->AddControllerBinding(button, command, inputType);
 	}
 
 	void InputManager::AddKeyBinding(SDL_Scancode button, Command* command, int inputID)

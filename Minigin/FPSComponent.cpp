@@ -39,12 +39,3 @@ void dae::FPSComponent::Update()
 	}
 
 }
-
-void dae::FPSComponent::Render() const
-{
-}
-
-void dae::FPSComponent::Init()
-{
-}
-
