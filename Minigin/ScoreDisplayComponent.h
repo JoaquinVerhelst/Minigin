@@ -6,6 +6,8 @@
 #include "Texture2D.h"
 #include <memory>
 #include "Transform.h"
+#include "SimpleRenderComponent.h"
+
 #include "Font.h"
 #include <string>
 
@@ -35,7 +37,7 @@ namespace dae
         void SetStartPosition(float x, float y);
 
         void OnNotify(const GameObject& entity, Event event) override;
-        void UpdateText();
+        //void UpdateText();
 
 
     private:
@@ -44,10 +46,7 @@ namespace dae
 
         ScoreComponent* m_ScoreComponent;
 
-        std::shared_ptr<Font> m_Font;
-        std::unique_ptr<Texture2D> m_Texture;
-
-        std::string m_Text;
+        std::unique_ptr<SimpleRenderComponent> m_SimpleRenderComponent;
 
         Transform m_Position;
 

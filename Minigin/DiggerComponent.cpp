@@ -24,6 +24,11 @@ namespace dae
 	{
 	}
 
+	void DiggerComponent::Render() const
+	{
+		CharacterComponent::Render();
+	}
+
 
 
 }

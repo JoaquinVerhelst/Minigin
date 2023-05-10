@@ -1,20 +1,35 @@
 #include "SimpleRenderComponent.h"
-#include <glm/glm.hpp>
+
 #include "Renderer.h"
 #include "GameObject.h"
 #include "Font.h"
 #include <SDL_ttf.h>
 #include "Time.h"
 
-dae::SimpleRenderComponent::SimpleRenderComponent(GameObject* owner, const std::string& filePath)
+#include "World.h"
+
+dae::SimpleRenderComponent::SimpleRenderComponent(GameObject* owner, const std::string& filePath, bool isBackground)
 	: Component(owner),
 	m_Texture{ nullptr },
 	m_NeedsUpdate(false),
 	m_Text(""),
 	m_Font(nullptr),
-	m_DoOnce{ true }
+	m_DoOnce{ true },
+	m_IsBackground{isBackground},
+	m_SourceRect{},
+	m_ScaleX{1},
+	m_ScaleY{ 1 }
 {
-	m_Texture = std::make_unique<Texture2D>( filePath );
+	m_Texture = std::make_unique<Texture2D>(filePath);
+
+	if (m_IsBackground)
+	{
+		SetTextureBackgound();
+	}
+
+	m_SourceRect = { 0,0, m_Texture->GetSize().x, m_Texture->GetSize().y };
+
+	
 }
 
 dae::SimpleRenderComponent::SimpleRenderComponent(GameObject* owner, const std::string& text, const std::shared_ptr<Font>& font, bool needUpdating)
@@ -23,7 +38,11 @@ dae::SimpleRenderComponent::SimpleRenderComponent(GameObject* owner, const std::
 	m_Text(text),
 	m_Font(font),
 	m_Texture(nullptr),
-	m_DoOnce{ true }
+	m_DoOnce{ true },
+	m_IsBackground{ false },
+	m_SourceRect{},
+	m_ScaleX{ 1 },
+	m_ScaleY{ 1 }
 {
 	UpdateText();
 }
@@ -43,11 +62,31 @@ void dae::SimpleRenderComponent::Init()
 
 void dae::SimpleRenderComponent::Render() const
 {
+
 	const auto& pos = GetOwner()->GetPosition().GetPosition();
 
 
-	Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
+	if (!m_Text.empty())
+	{
+		Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
+	}
+	if (!m_IsBackground)
+	{
+
+		SDL_Rect destRect = { static_cast<int>(pos.x), static_cast<int>(pos.y), m_SourceRect.w * m_ScaleX, m_SourceRect.h * m_ScaleY };
+		SDL_Rect sourceRect = m_SourceRect;
+
+		Renderer::GetInstance().RenderTexture(m_Texture->GetSDLTexture(), &sourceRect, &destRect, 0, nullptr, SDL_FLIP_NONE);
+
+	}
+
+
 	
+}
+
+void dae::SimpleRenderComponent::Render(glm::vec3 position) const
+{
+	Renderer::GetInstance().RenderTexture(*m_Texture, position.x, position.y);
 }
 
 void dae::SimpleRenderComponent::SetTexture(const std::string& filePath)
@@ -69,6 +108,11 @@ void dae::SimpleRenderComponent::SetText(const std::string& text)
 	UpdateText();
 }
 
+std::string dae::SimpleRenderComponent::GetText()
+{
+	return m_Text;
+}
+
 void dae::SimpleRenderComponent::UpdateText()
 {
 	const SDL_Color color = { 255,255,255 }; // only white text is supported now
@@ -85,6 +129,34 @@ void dae::SimpleRenderComponent::UpdateText()
 	}
 	SDL_FreeSurface(surf);
 	m_Texture = std::make_unique<Texture2D>(texture);
+}
+
+void dae::SimpleRenderComponent::SetTextureBackgound()
+{
+
+	Renderer::GetInstance().SetBackgroundTexture(m_Texture->GetSDLTexture());
+
+}
+
+//DOESNT WORK
+void dae::SimpleRenderComponent::CalculateScaleByGrid()
+{
+	//DONT WORK
+	glm::vec2 cellSize = World::GetInstance().GetCellSize();
+
+	m_ScaleX = static_cast<int>(cellSize.x) / m_SourceRect.w;
+
+	m_ScaleY = static_cast<int>(cellSize.y) / m_SourceRect.h;
+
+
+
+
+}
+
+void dae::SimpleRenderComponent::SetScale(int scaleX, int scaleY)
+{
+	m_ScaleX = scaleX;
+	m_ScaleY = scaleY;
 }
 
 

@@ -32,7 +32,7 @@ namespace dae
 		{
 			Command* command;
 			ControllerButton button;
-			InputType inputType;
+			Command::InputType inputType;
 		};
 
 		XINPUT_STATE* m_PreviousStates;
@@ -157,19 +157,19 @@ namespace dae
 					if (IsPressed(static_cast<unsigned int>(key), static_cast<int>(i)))
 					{
 						auto& command = m_ControllerBinds[y].command;
-						command->Execute(m_Players[i], 0);
+						command->Execute(m_Players[i], Command::InputType::Pressed);
 					}
 
 					else if (IsUpThisFrame(static_cast<unsigned int>(key), static_cast<int>(i)))
 					{
 						auto& command = m_ControllerBinds[y].command;
-						command->Execute(m_Players[i], 1);
+						command->Execute(m_Players[i], Command::InputType::Up);
 					}
 
 					else if (IsDownThisFrame(static_cast<unsigned int>(key), static_cast<int>(i)))
 					{
 						auto& command = m_ControllerBinds[y].command;
-						command->Execute(m_Players[i], 2);
+						command->Execute(m_Players[i], Command::InputType::Down);
 					}
 
 				}
@@ -187,7 +187,7 @@ namespace dae
 			{
 				if (keystate[m_KeyBinds[i].button])
 				{
-					m_KeyBinds[i].command->Execute(m_Players[m_KeyBinds[i].inputID], 0);
+					m_KeyBinds[i].command->Execute(m_Players[m_KeyBinds[i].inputID], Command::InputType::Pressed);
 				}
 			}
 
@@ -199,20 +199,32 @@ namespace dae
 		bool KeyBoardEventhandler()
 		{
 			SDL_Event e;
+
+
+
 			while (SDL_PollEvent(&e)) {
+
 				if (e.type == SDL_QUIT) {
 					return false;
-				}
-				if (e.type == SDL_KEYDOWN) {
-
 				}
 				if (e.type == SDL_MOUSEBUTTONDOWN) {
 
 				}
 
+				for (size_t i = 0; i < m_KeyBinds.size(); i++)
+				{
+					if (e.type == SDL_KEYUP) {
 
-				ImGui_ImplSDL2_ProcessEvent(&e);
+						if (e.key.keysym.scancode == m_KeyBinds[i].button)
+						{
+							m_KeyBinds[i].command->Execute(m_Players[m_KeyBinds[i].inputID], Command::InputType::Up);
+						}
+					}
 
+
+
+
+				}
 			}
 
 			return true;
@@ -221,7 +233,7 @@ namespace dae
 
 
 
-		void AddControllerBinding(InputManager::ControllerButton button, Command* command, InputType inputType)
+		void AddControllerBinding(InputManager::ControllerButton button, Command* command, Command::InputType inputType)
 		{
 			ControllerBind tempControllerBind{};
 			tempControllerBind.button = button;
@@ -294,7 +306,7 @@ namespace dae
 		delete pImpl;
 	}
 
-	void InputManager::AddControllerBinding(ControllerButton button, Command* command, InputType inputType)
+	void InputManager::AddControllerBinding(ControllerButton button, Command* command, Command::InputType inputType)
 	{
 		pImpl->AddControllerBinding(button, command, inputType);
 	}

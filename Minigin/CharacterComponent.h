@@ -6,7 +6,7 @@
 
 #include "Subject.h"
 #include "GameObject.h"
-
+#include "Command.h"
 
 
 namespace dae
@@ -16,7 +16,8 @@ namespace dae
 	enum class StateType
 	{
 		Default,
-		Walk,
+		HorizontalWalk,
+		VerticalWalk,
 		Idle
 	};
 
@@ -27,8 +28,9 @@ namespace dae
 		~CharacterComponent();
 
 		void Update() override;
+		void Render() const override;
 		void Init() override;
-		bool IsRenderer() override { return false; }
+		bool IsRenderer() override { return true; }
 
 
 
@@ -38,6 +40,12 @@ namespace dae
 		CharacterComponent& operator=(CharacterComponent&& other) = delete;
 
 		void Walk(int direction, int inputType, StateType newStateType);
+
+		void HorizontalWalk(int direction, Command::InputType inputType, StateType newStateType);
+		void VerticalWalk(int direction, Command::InputType inputType, StateType newStateType);
+
+
+
 
 		int GetInputID() { return m_InputID; }
 
@@ -54,11 +62,11 @@ namespace dae
 		State* m_CurrentState;
 
 
-		const int m_GridCellSize = 50;
+		glm::vec2 m_CellSize;
 
-		// Define the maximum number of cells in the x and y directions
-		int m_MaxCellsX;
-		int m_MaxCellsY;
 
+	private:
+
+		glm::vec2 CalculateWalk(int direction, float cellSize , float x, float y);
 	};
 }

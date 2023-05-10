@@ -9,27 +9,34 @@
 
 namespace dae
 {
-
-
-
-
-
-	dae::WalkCommand::WalkCommand(int direction)
+	dae::HorizontalWalkCommand::HorizontalWalkCommand(int direction)
 		:m_Direction{ direction }
 	{
 	}
 
-	void WalkCommand::Execute(GameObject* actor, int type)
+	void HorizontalWalkCommand::Execute(GameObject* actor, InputType inputType)
 	{
-		actor->GetComponent<CharacterComponent>().Walk(m_Direction, type, StateType::Walk);
+		actor->GetComponent<CharacterComponent>().HorizontalWalk(m_Direction, inputType, StateType::HorizontalWalk);
+	}
+
+
+
+	VerticalWalkCommand::VerticalWalkCommand(int direction)
+		:m_Direction{ direction }
+	{
+	}
+
+	void VerticalWalkCommand::Execute(GameObject* actor, InputType inputType)
+	{
+		actor->GetComponent<CharacterComponent>().VerticalWalk(m_Direction, inputType, StateType::VerticalWalk);
 	}
 
 
 
 
-	void SelfDamageCommand::Execute(GameObject* actor, int inputType)
+	void SelfDamageCommand::Execute(GameObject* actor, InputType inputType)
 	{
-		if (inputType == 1)
+		if (inputType == InputType::Up)
 		{
 			HealthComponent& healthComp = actor->GetComponent<HealthComponent>();
 
@@ -45,17 +52,18 @@ namespace dae
 	}
 
 
-	void AddScoreCommand::Execute(GameObject* actor, int inputType)
+	void AddScoreCommand::Execute(GameObject* actor, InputType inputType)
 	{
-		if (inputType == 1)
+		if (inputType == InputType::Up)
 		{
 			ScoreComponent& scoreComp = actor->GetComponent<ScoreComponent>();
 
 			scoreComp.AddScore(100);
 		}
-
 		
 	}
+
+
 
 }
 

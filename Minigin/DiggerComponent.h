@@ -14,7 +14,8 @@ namespace dae
 	public:
 		void Update() override;
 		void Init() override;
-		bool IsRenderer() override { return false; }
+		void Render() const override;
+		bool IsRenderer() override { return true; }
 
 		DiggerComponent(GameObject* owner, float walksSpeed = {50.f});
 		~DiggerComponent() = default;

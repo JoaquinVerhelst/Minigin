@@ -34,6 +34,9 @@
     <Filter Include="Engine Files\Patterns\State">
       <UniqueIdentifier>{7cf010df-b579-4b13-8b67-f2fb285b2927}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine Files\Patterns\ServiceLocator">
+      <UniqueIdentifier>{87df1ddc-f33f-46f9-97f9-08c8e3322e1d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
@@ -141,6 +144,15 @@
     <ClInclude Include="State.h">
       <Filter>Engine Files\Patterns\State</Filter>
     </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Engine Files\Singletons</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSystem.h">
+      <Filter>Engine Files\Patterns\ServiceLocator</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundServiceLocator.h">
+      <Filter>Engine Files\Patterns\ServiceLocator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TextObject.cpp">
@@ -235,6 +247,15 @@
     </ClCompile>
     <ClCompile Include="State.cpp">
       <Filter>Engine Files\Patterns\State</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Engine Files\Singletons</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundSystem.cpp">
+      <Filter>Engine Files\Patterns\ServiceLocator</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundServiceLocator.cpp">
+      <Filter>Engine Files\Patterns\ServiceLocator</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

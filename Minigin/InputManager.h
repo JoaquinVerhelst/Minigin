@@ -12,11 +12,11 @@
 
 namespace dae
 {
-	enum class InputType {
-		Pressed,
-		Up,
-		Down
-	};
+	//enum class InputType {
+	//	Pressed,
+	//	Up,
+	//	Down
+	//};
 
 	class InputManager final : public Singleton<InputManager>
 	{
@@ -58,7 +58,7 @@ namespace dae
 		~InputManager();
 
 
-		void AddControllerBinding(ControllerButton button, Command* command, InputType inputType);
+		void AddControllerBinding(ControllerButton button, Command* command, Command::InputType inputType);
 		void AddKeyBinding(SDL_Scancode button, Command* command, int inputID);
 
 	};

@@ -3,6 +3,9 @@
 #include "Texture2D.h"
 #include <memory>
 #include <string>
+#include <glm/glm.hpp>
+#include <SDL.h>
+
 
 namespace dae
 {
@@ -13,14 +16,16 @@ namespace dae
 
     class SimpleRenderComponent : public Component {
     public:
-        explicit SimpleRenderComponent(GameObject* owner, const std::string& filePath);
+        explicit SimpleRenderComponent(GameObject* owner, const std::string& filePath, bool isBackground = false);
         explicit SimpleRenderComponent(GameObject* owner, const std::string& text, const std::shared_ptr<Font>& font, bool needUpdating);
+
         ~SimpleRenderComponent();
 
 
         void Update() override;
         void Init() override;
         void Render() const override;
+        void Render(glm::vec3 position) const;
         bool IsRenderer() override { return true; }
 
         SimpleRenderComponent(const SimpleRenderComponent& other) = delete;
@@ -31,16 +36,20 @@ namespace dae
         void SetTexture(const std::string& filePath);
         void SetText(const std::string& text, const std::shared_ptr<Font>& font, bool needUpdating);
         void SetText(const std::string& text);
+        std::string GetText();
+
 
         void UpdateText();
-
-
+        void SetTextureBackgound();
+        void CalculateScaleByGrid();
+        void SetScale(int scaleX, int scaleY);
         //void SetScale(const glm::vec2& scale); // Not yet Implemented
 
     private:
 
         bool m_NeedsUpdate;
         bool m_DoOnce;
+        bool m_IsBackground;
 
         std::string m_Text;
 
@@ -48,6 +57,9 @@ namespace dae
 
         std::unique_ptr<Texture2D> m_Texture;
 
+        SDL_Rect m_SourceRect;
+        int m_ScaleY;
+        int m_ScaleX;
 
         //glm::vec2 m_Scale;  // Not yet Implemented
 

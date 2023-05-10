@@ -49,19 +49,20 @@ void dae::GameObject::Render() const
 
 
 	//this is a temporary check for renderers -> will prob change this
-	if (m_CanRender)
+	//if (m_CanRender)
+	//{
+
+	const auto count = m_Components.size();
+
+	for (size_t i = 0; i < count; i++)
 	{
-		const auto count = m_Components.size();
-
-		for (size_t i = 0; i < count; i++)
+		if (m_Components[i]->IsRenderer())
 		{
-			if (m_Components[i]->IsRenderer())
-			{
-				m_Components[i]->Render();
-			}
+			m_Components[i]->Render();
 		}
-
 	}
+
+	//}
 }
 
 void dae::GameObject::Init()

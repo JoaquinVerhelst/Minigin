@@ -1,6 +1,7 @@
 #pragma once
 #include "CharacterComponent.h"
 //#include "InputManager.h"
+#include "Command.h"
 
 namespace dae
 {
@@ -14,7 +15,7 @@ namespace dae
 
 		State() = default;
 		virtual ~State() = default;
-		virtual bool HandleInput(CharacterComponent* character, StateType newStateType, int inputType) = 0;
+		virtual bool HandleInput(CharacterComponent* character, Command::InputType inputType, StateType newStateType) = 0;
 		//virtual void Update(CharacterComponent*) {};
 
 		virtual StateType GetType() { return m_Type; }
@@ -25,19 +26,36 @@ namespace dae
 	};
 
 
-	class WalkState : public State
+	class HorizontalWalkState : public State
 	{
 	public:
-		WalkState()
+		HorizontalWalkState()
 		{
-			m_Type = StateType::Walk;
+			m_Type = StateType::HorizontalWalk;
 		}
 
-		~WalkState() = default;
+		~HorizontalWalkState() = default;
 
-		bool HandleInput(CharacterComponent* character, StateType newStateType, int inputType) override;
+		bool HandleInput(CharacterComponent* character, Command::InputType inputType, StateType newStateType) override;
 
 	};
+
+	class VerticalWalkState : public State
+	{
+	public:
+		VerticalWalkState()
+		{
+			m_Type = StateType::VerticalWalk;
+		}
+
+		~VerticalWalkState() = default;
+
+		bool HandleInput(CharacterComponent* character, Command::InputType inputType, StateType newStateType) override;
+
+	};
+
+
+
 
 	class IdleState : public State
 	{
@@ -50,7 +68,7 @@ namespace dae
 
 		~IdleState() = default;
 
-		bool HandleInput(CharacterComponent* character, StateType newStateType, int inputType) override;
+		bool HandleInput(CharacterComponent* character, Command::InputType inputType, StateType newStateType) override;
 	};
 
 

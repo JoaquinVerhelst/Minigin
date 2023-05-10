@@ -11,10 +11,15 @@
 #include "ResourceManager.h"
 #include <chrono>
 #include "Time.h"
-
+#include "World.h"
 #include <iostream>
 
 SDL_Window* g_window{};
+
+
+
+
+
 
 void PrintSDLVersion()
 {
@@ -57,8 +62,8 @@ dae::Minigin::Minigin(const std::string &dataPath)
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		640,
-		480,
+		1080,
+		720,
 		SDL_WINDOW_OPENGL
 	);
 	if (g_window == nullptr) 
@@ -69,6 +74,9 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	Renderer::GetInstance().Init(g_window);
 	Time::GetInstance().Init();
 	ResourceManager::GetInstance().Init(dataPath);
+	World::GetInstance().Init(20, 14, g_window);
+
+
 }
 
 dae::Minigin::~Minigin()
@@ -87,6 +95,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 	auto& time = Time::GetInstance();
+	auto& world = World::GetInstance();
 
 	//Game loop
 	bool doContinue = true;
@@ -107,21 +116,21 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 	//Temporary way for initializition  TODO: Change The Command -> no objects
 
-	auto* walkUp = new WalkCommand(0);
-	auto* walkDown = new WalkCommand(1);
-	auto* walkRight = new WalkCommand(2);
-	auto* walkLeft = new WalkCommand(3);
+	auto* walkUp = new VerticalWalkCommand(1);
+	auto* walkDown = new VerticalWalkCommand(0);
+	auto* walkRight = new HorizontalWalkCommand(0);
+	auto* walkLeft = new HorizontalWalkCommand(1);
 	auto* Selfdamage = new SelfDamageCommand();
 	auto* addScore = new AddScoreCommand();
 
-	input.AddControllerBinding(InputManager::ControllerButton::DPadUp, walkUp, InputType::Pressed);
-	input.AddControllerBinding(InputManager::ControllerButton::DPadDown, walkDown, InputType::Pressed);
-	input.AddControllerBinding(InputManager::ControllerButton::DPadRight, walkRight, InputType::Pressed);
-	input.AddControllerBinding(InputManager::ControllerButton::DPadLeft, walkLeft, InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadUp, walkUp, Command::InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadDown, walkDown, Command::InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadRight, walkRight, Command::InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadLeft, walkLeft, Command::InputType::Pressed);
 
-	input.AddControllerBinding(InputManager::ControllerButton::ButtonB, Selfdamage, InputType::Up);
+	input.AddControllerBinding(InputManager::ControllerButton::ButtonB, Selfdamage, Command::InputType::Up);
 
-	input.AddControllerBinding(InputManager::ControllerButton::ButtonA, addScore, InputType::Up);
+	input.AddControllerBinding(InputManager::ControllerButton::ButtonA, addScore, Command::InputType::Up);
 
 
 	input.AddKeyBinding(SDL_SCANCODE_W, walkUp, 0);
@@ -145,6 +154,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		lag += time.GetDeltaTime();
 
 		sceneManager.Update();
+		world.Update();
 
 		while (lag >= fixedTimeStep)
 		{
@@ -152,7 +162,9 @@ void dae::Minigin::Run(const std::function<void()>& load)
 			lag -= fixedTimeStep;
 		}
 
+
 		renderer.Render();
+
 	}
 
 

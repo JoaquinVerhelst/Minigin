@@ -12,7 +12,7 @@ dae::HealthComponent::HealthComponent(GameObject* owner, int health)
 
 dae::HealthComponent::~HealthComponent()
 {
-	removeAllObservers();
+	//removeAllObservers();
 }
 
 int dae::HealthComponent::GetHealth()

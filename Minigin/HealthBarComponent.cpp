@@ -37,7 +37,7 @@ dae::HealthBarComponent::~HealthBarComponent()
 {
     if (m_HealthComponent)
     {
-        //m_HealthComponent->removeObserver(this);
+        m_HealthComponent->removeAllObservers();
        //delete m_HealthComponent;
         m_HealthComponent = nullptr;
     }
