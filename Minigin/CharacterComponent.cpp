@@ -51,19 +51,8 @@ namespace dae
 	{
 		//m_CurrentState->Update(this);
 
-		auto pos = GetOwner()->GetPosition().GetPosition();
 
-
-		//int currentCellX = pos.x / m_GridCellSize;
-		//int currentCellY = pos.y / m_GridCellSize;
-
-
-		//GetOwner()->GetComponent<SimpleRenderComponent>().
-
-		//std::cout << 
-
-
-		World::GetInstance().BreakWorld(pos, {30,30});
+		World::GetInstance().BreakWorld(GetOwner(), {30,30});
 
 	}
 
@@ -81,47 +70,11 @@ namespace dae
 
 	void CharacterComponent::Init()
 	{
-
-
-
-
 	}
 
 
 
-	void CharacterComponent::Walk(int , int , StateType )
-	{
 
-
-
-		//if (!m_CurrentState->HandleInput(this, newStateType, inputType))
-		//	return;
-
-
-		//if (direction ==1 || direction == 0)
-		//{
-		//	WalkVertical(direction);
-
-		//}
-		//else if (direction == 2 || direction == 3)
-		//{
-		//	WalkHorizontal(direction);
-		//}
-
-
-		//switch (direction)
-		//{
-		//case 0:
-		//case 1:
-
-		//	break;
-		//case 2:
-		//case 3:
-
-		//	break;
-		//}
-
-	}
 
 	void CharacterComponent::SetState(State* newState)
 	{
@@ -139,6 +92,7 @@ namespace dae
 		float deltaTime = Time::GetInstance().GetDeltaTime();
 
 		int offset = static_cast<int>(x) % static_cast<int>(cellSize);
+
 
 
 		if (offset == 0)
@@ -164,8 +118,10 @@ namespace dae
 		glm::vec3 currentPos = GetOwner()->GetPosition().GetPosition();
 
 
+		
 		auto vec = CalculateWalk(direction, m_CellSize.y, currentPos.y, currentPos.x);
 
+		World::GetInstance().CheckForTreasure(GetOwner(), { 51,54 });
 
 		GetOwner()->SetPosition(vec.y, vec.x);
 	}
@@ -179,10 +135,27 @@ namespace dae
 		glm::vec3 currentPos = GetOwner()->GetPosition().GetPosition();
 
 
-		auto vec = CalculateWalk(direction, m_CellSize.x, currentPos.x, currentPos.y);
+		if (World::GetInstance().CheckForTreasure(GetOwner(), { 50,50 }))
+		{
+			if (direction == 0)
+			{
+				GetOwner()->SetPosition(currentPos.x, currentPos.y - 0.5f);
+			}
+			else
+			{
+				GetOwner()->SetPosition(currentPos.x, currentPos.y + 0.5f);
+			}
+		}
+		else
+		{
+			auto vec = CalculateWalk(direction, m_CellSize.x, currentPos.x, currentPos.y);
 
 
-		GetOwner()->SetPosition(vec.x, vec.y);
+			GetOwner()->SetPosition(vec.x, vec.y);
+		}
+
+
+
 
 	}
 

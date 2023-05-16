@@ -2,6 +2,10 @@
 
 #include "Renderer.h"
 #include "Time.h"
+#include "ScoreComponent.h"
+#include "SoundServiceLocator.h"
+#include "TreasureComponent.h"
+#include <iostream>
 
 using namespace dae;
 
@@ -33,8 +37,10 @@ void World::Init(int rows, int columns, SDL_Window* window)
     m_Columns = columns;
 
 
+
     m_CellWidth = width / m_Rows;
     m_CellHeight = height / m_Columns;
+
 
 
     glm::vec2 pos = {};
@@ -56,6 +62,12 @@ void World::Init(int rows, int columns, SDL_Window* window)
 
     m_UpdateTexture = true;
 
+
+   // std::vector<int> index = { 1,2,3,6,10,12,11,13,15,16,20 };
+
+
+
+
 }
 
 void World::Render() const
@@ -75,12 +87,12 @@ void World::Render() const
 
             rect = { x , y, m_CellWidth, m_CellHeight };
 
-            //if (m_Grid[i]->isCellBroken)
+
+            //if (m_Grid[i]->hasTreasure)
             //{
-            //    SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 128, 0, 255);
+            //    SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255);
             //    SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
             //}
- 
             if (i % 3 == 0)
             {
                 SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 204, 0, 255);
@@ -99,16 +111,10 @@ void World::Render() const
 
         }
     }
-
-
-
 }
 
 void dae::World::ResetGrid()
 {
-
-
-
 
 
 }
@@ -120,7 +126,7 @@ void dae::World::Update()
     {
         m_Count += Time::GetInstance().GetDeltaTime();
 
-        if (m_Count >= 0.2f)
+        if (m_Count >= 0.5f)
         {
             m_UpdateTexture = false;
         }
@@ -143,9 +149,27 @@ bool World::IsOverlappingWithWorld(const glm::vec2& position, const glm::vec2& s
                 return true;
             }
         }
-    }
+    }   
 
     return false;
+}
+
+size_t dae::World::GetOverlappedTreasureIndex(const glm::vec2& position, const glm::vec2& size) const
+{
+    for (size_t i = 0; i < m_Treasure.size(); i++)
+    {
+        const glm::vec2& treasurePos = m_Treasure[i]->GetPosition().GetPosition();
+        const glm::vec2& treasureShape = m_Treasure[i]->GetShape();
+
+        if (position.x + size.x > treasurePos.x && position.x < treasurePos.x + treasureShape.x &&
+            position.y + size.y > treasurePos.y && position.y < treasurePos.y + treasureShape.y)
+        {
+            return i;
+        }
+        
+    }
+
+    return static_cast<size_t>(-1);
 }
 
 GridCell* World::GetOverlappedCell(const glm::vec2& position, const glm::vec2& size) const
@@ -168,17 +192,46 @@ GridCell* World::GetOverlappedCell(const glm::vec2& position, const glm::vec2& s
 
 }
 
-void World::BreakWorld(const glm::vec2& position, const glm::vec2& size)
+void World::BreakWorld(GameObject* actor, const glm::vec2& size)
 {
-    GridCell* cell = GetOverlappedCell(position, size);
+
+    auto pos = actor->GetPosition().GetPosition();
 
 
-    if (cell)
+    GridCell* cell = GetOverlappedCell(pos, size);
+
+    
+    if (cell && cell->isCellBroken == false)
     {
         cell->isCellBroken = true;
     }
 
 
+}
+
+bool dae::World::CheckForTreasure(GameObject* actor, const glm::vec2& size)
+{
+    auto pos = actor->GetPosition().GetPosition();
+
+    size_t treasureIndex = GetOverlappedTreasureIndex(pos, size);
+
+    if(treasureIndex != -1)
+    {
+        if (m_Treasure[treasureIndex]->GetComponent<TreasureComponent>().PickUpTreasure(actor))
+        {
+            m_Treasure[treasureIndex]->Destroy();
+
+            m_Treasure.erase(m_Treasure.begin() + treasureIndex);
+            return false;
+
+        }
+        else
+        {
+            return m_Treasure[treasureIndex]->GetComponent<TreasureComponent>().CalculateCollision(actor);
+        }
+    }
+
+    return false;
 }
 
 glm::vec2 dae::World::GetCellSize()
@@ -189,4 +242,15 @@ glm::vec2 dae::World::GetCellSize()
 void dae::World::UpdateWorld()
 {
     m_UpdateTexture = true;
+}
+
+std::vector<GridCell*> dae::World::GetWorldGrid()
+{
+    return m_Grid;
+}
+
+void dae::World::PlaceTreasure(std::shared_ptr<GameObject> treasure, int gridIndex)
+{
+    treasure->SetPosition(m_Grid[gridIndex]->position.x, m_Grid[gridIndex]->position.y);
+    m_Treasure.emplace_back(treasure);
 }

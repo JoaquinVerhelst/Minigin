@@ -41,16 +41,6 @@ void dae::GameObject::FixedUpdate()
 
 void dae::GameObject::Render() const
 {	
-	if (m_Debug)
-	{
-		//std::cout << "Debug Comonent" << '\n';
-	}
-
-
-
-	//this is a temporary check for renderers -> will prob change this
-	//if (m_CanRender)
-	//{
 
 	const auto count = m_Components.size();
 
@@ -61,8 +51,6 @@ void dae::GameObject::Render() const
 			m_Components[i]->Render();
 		}
 	}
-
-	//}
 }
 
 void dae::GameObject::Init()

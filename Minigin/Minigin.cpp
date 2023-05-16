@@ -14,6 +14,11 @@
 #include "World.h"
 #include <iostream>
 
+
+#include "SoundServiceLocator.h"
+#include "SoundSystem.h"
+
+
 SDL_Window* g_window{};
 
 
@@ -77,10 +82,16 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	World::GetInstance().Init(20, 14, g_window);
 
 
+	SoundServiceLocator::RegisterSoundSystem(new SDL_SoundSystem());
+
+
+
+
 }
 
 dae::Minigin::~Minigin()
 {
+	SoundServiceLocator::Destroy();
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(g_window);
 	g_window = nullptr;

@@ -32,17 +32,15 @@ void Scene::Update()
 	{
 		m_Objects[i]->Update();
 
-		if (m_Objects[i]->IsDestroyed())
-		{
-			m_Indexs.emplace_back(i);
-		}
 	}
 
-	if (m_Indexs.size() > 0)
+
+
+	for (size_t i = 0; i < m_Objects.size(); ++i)
 	{
-		for (size_t i = 0; i < m_Indexs.size(); i++)
+		if (m_Objects[i]->IsDestroyed())
 		{
-			Remove(m_Objects[m_Indexs[i]]);
+			m_Objects.erase(m_Objects.begin() + i);
 		}
 	}
 

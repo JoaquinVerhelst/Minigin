@@ -38,6 +38,10 @@ namespace dae
 		void SetPosition(float x, float y);
 		Transform GetPosition() { return m_Transform; }
 		
+		void SetShape(glm::ivec2 shape) { m_Shape = shape; }
+		glm::ivec2 GetShape() { return m_Shape; }
+
+
 
 		//Component System
 		template <typename T, typename...TArgs>
@@ -78,6 +82,7 @@ namespace dae
 
 		std::vector<std::shared_ptr<Component>> m_Components;
 		Transform m_Transform;
+		glm::ivec2 m_Shape;
 		bool m_IsDestroyed;
 		bool m_CanRender;
 

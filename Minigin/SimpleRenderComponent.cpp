@@ -6,6 +6,7 @@
 #include <SDL_ttf.h>
 #include "Time.h"
 
+#include "ShapeComponent.h"
 #include "World.h"
 
 dae::SimpleRenderComponent::SimpleRenderComponent(GameObject* owner, const std::string& filePath, bool isBackground)
@@ -27,9 +28,16 @@ dae::SimpleRenderComponent::SimpleRenderComponent(GameObject* owner, const std::
 		SetTextureBackgound();
 	}
 
+	//if (!GetOwner()->HasComponent<ShapeComponent>())
+	//{
+	//	GetOwner()->AddComponent<ShapeComponent>();
+	//}
+
 	m_SourceRect = { 0,0, m_Texture->GetSize().x, m_Texture->GetSize().y };
 
-	
+	GetOwner()->SetShape(glm::ivec2(m_Texture->GetSize().x, m_Texture->GetSize().y));
+	//GetOwner()->GetComponent<ShapeComponent>().SetShape(glm::ivec2( m_Texture->GetSize().x, m_Texture->GetSize().y));
+
 }
 
 dae::SimpleRenderComponent::SimpleRenderComponent(GameObject* owner, const std::string& text, const std::shared_ptr<Font>& font, bool needUpdating)

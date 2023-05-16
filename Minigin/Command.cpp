@@ -7,6 +7,10 @@
 #include "ScoreComponent.h"
 
 
+
+#include "SoundServiceLocator.h"
+#include "SoundSystem.h"
+
 namespace dae
 {
 	dae::HorizontalWalkCommand::HorizontalWalkCommand(int direction)
@@ -48,6 +52,16 @@ namespace dae
 			{
 				healthComp.SetHealth(healthComp.GetHealth() - 1);
 			}
+
+
+
+
+
+
+			SoundServiceLocator::GetSoundSysyem().Play(0, 1.0f);
+
+
+
 		}
 	}
 
@@ -59,9 +73,12 @@ namespace dae
 			ScoreComponent& scoreComp = actor->GetComponent<ScoreComponent>();
 
 			scoreComp.AddScore(100);
+
 		}
-		
 	}
+
+
+
 
 
 

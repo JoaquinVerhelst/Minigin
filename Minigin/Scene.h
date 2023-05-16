@@ -30,8 +30,6 @@ namespace dae
 		std::string m_Name;
 		std::vector < std::shared_ptr<GameObject>> m_Objects{};
 
-		std::vector<size_t> m_Indexs{};
-
 		static unsigned int m_idCounter; 
 	};
 

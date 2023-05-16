@@ -39,7 +39,6 @@ namespace dae
 		CharacterComponent& operator=(const CharacterComponent& other) = delete;
 		CharacterComponent& operator=(CharacterComponent&& other) = delete;
 
-		void Walk(int direction, int inputType, StateType newStateType);
 
 		void HorizontalWalk(int direction, Command::InputType inputType, StateType newStateType);
 		void VerticalWalk(int direction, Command::InputType inputType, StateType newStateType);

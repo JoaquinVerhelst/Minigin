@@ -37,6 +37,9 @@
     <Filter Include="Engine Files\Patterns\ServiceLocator">
       <UniqueIdentifier>{87df1ddc-f33f-46f9-97f9-08c8e3322e1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Treasure">
+      <UniqueIdentifier>{56efc3b9-8cf9-4699-b0d7-775865910662}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ResourceManager.h">
@@ -153,6 +156,18 @@
     <ClInclude Include="SoundServiceLocator.h">
       <Filter>Engine Files\Patterns\ServiceLocator</Filter>
     </ClInclude>
+    <ClInclude Include="ShapeComponent.h">
+      <Filter>Engine Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EmeraldComponent.h">
+      <Filter>Game\Treasure</Filter>
+    </ClInclude>
+    <ClInclude Include="TreasureComponent.h">
+      <Filter>Game\Treasure</Filter>
+    </ClInclude>
+    <ClInclude Include="GoldComponent.h">
+      <Filter>Game\Treasure</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TextObject.cpp">
@@ -256,6 +271,18 @@
     </ClCompile>
     <ClCompile Include="SoundServiceLocator.cpp">
       <Filter>Engine Files\Patterns\ServiceLocator</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeComponent.cpp">
+      <Filter>Engine Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="EmeraldComponent.cpp">
+      <Filter>Game\Treasure</Filter>
+    </ClCompile>
+    <ClCompile Include="TreasureComponent.cpp">
+      <Filter>Game\Treasure</Filter>
+    </ClCompile>
+    <ClCompile Include="GoldComponent.cpp">
+      <Filter>Game\Treasure</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
