@@ -1,10 +1,13 @@
 #include "SoundSystem.h"
+
 #include <SDL.h>
-
 #include <chrono>
-
+#include <iostream>
 #include <thread>
-
+#include "SDL_mixer.h"
+#include <condition_variable>
+#include <mutex>
+#include <future>
 
 
 namespace dae
@@ -12,15 +15,77 @@ namespace dae
 
 
 
-    // SDL Sound System ------------------------------------------------------
+
+    class SDL_SoundSystem::SDL_SoundSystemImpl
+    {
+    private:
+
+        struct PlayMessage
+        {
+            sound_id id;
+            float volume;
+        };
+
+
+        struct AudioClip
+        {
+            sound_id id;
+            Mix_Chunk* audio;
+            const char* pathFile;
+        };
+
+
+        static const int MAX_PENDING = 16;
+
+        static PlayMessage m_Pending[MAX_PENDING];
+        static int m_NumPending;
+
+        std::vector<AudioClip*> m_AudioClips;
+        Mix_Music* m_BackgroundMusic;
+
+
+
+        //threads
+
+
+        std::vector<std::future<void>> m_LoadFutures;
+        std::vector<std::future<void>> m_PlayFutures;
+
+
+
+        void LoadAndPlaySound(AudioClip* audioClip, float volume);
+
+        void PlaySound(AudioClip* audioClip, float volume);
+
+
+    public:
+
+        SDL_SoundSystemImpl();
+        ~SDL_SoundSystemImpl();
+
+        void Update();
+
+        void Play(const sound_id id, const float volume);
+        void LoadSound(const sound_id id);
+        void AddSound(const char* path, const sound_id id = -1);
+        void PlayMusic(const char* path);
+
+        void SetMusicVolume(int volume);
+
+    };
+
+
+
+    SDL_SoundSystem::SDL_SoundSystemImpl::PlayMessage SDL_SoundSystem::SDL_SoundSystemImpl::m_Pending[MAX_PENDING];
+    int SDL_SoundSystem::SDL_SoundSystemImpl::m_NumPending = 0;
+
+    // SDL Sound pImpl System functions------------------------------------------------------
     // -----------------------------------------------------------------------
 
-    PlayMessage SDL_SoundSystem::m_Pending[MAX_PENDING];
-    int SDL_SoundSystem::m_NumPending = 0;
 
-    SDL_SoundSystem::SDL_SoundSystem()
+    SDL_SoundSystem::SDL_SoundSystemImpl::SDL_SoundSystemImpl()
     {
-
+        
         // Initialize SDL and SDL_mixer
         SDL_Init(SDL_INIT_AUDIO);
         Mix_Init(MIX_INIT_MP3);
@@ -35,11 +100,10 @@ namespace dae
         //PlayMusic("../Data/Sound/LadyMaria.mp3");
 
         //SetMusicVolume(32);
-
-        m_NumPending = 0;
+        
     }
 
-    SDL_SoundSystem::~SDL_SoundSystem()
+    SDL_SoundSystem::SDL_SoundSystemImpl::~SDL_SoundSystemImpl()
     {
         for (auto* audio : m_AudioClips) {
             Mix_FreeChunk(audio->audio);
@@ -52,7 +116,7 @@ namespace dae
         Mix_CloseAudio();
     }
 
-    void SDL_SoundSystem::Update()
+    void SDL_SoundSystem::SDL_SoundSystemImpl::Update()
     {
         for (size_t i = 0; i < m_NumPending; ++i)
         {
@@ -83,7 +147,7 @@ namespace dae
 
                 // Create a separate thread to play the sound
                 std::thread thread([this, audioClip, volume = m_Pending[i].volume]() {
-                    PlayAsync(audioClip, volume);
+                    PlaySound(audioClip, volume);
                     });
 
                 // Detach the thread to run independently
@@ -100,26 +164,32 @@ namespace dae
         }
 
         m_NumPending = 0;
-
     }
 
-    void SDL_SoundSystem::Play(const sound_id id, const float volume)
+    void SDL_SoundSystem::SDL_SoundSystemImpl::Play(const sound_id id, const float volume)
     {
-
         if (m_NumPending >= MAX_PENDING)
         {
             std::cout << "Maximum pending sounds. Cannot play ID: " << id << '\n';
             return;
         }
-  
+
         m_Pending[m_NumPending].id = id;
         m_Pending[m_NumPending].volume = volume;
 
         ++m_NumPending;
     }
 
-    void SDL_SoundSystem::LoadSound(AudioClip* audioclip)
+    void dae::SDL_SoundSystem::SDL_SoundSystemImpl::LoadAndPlaySound(AudioClip* audioClip, float volume)
     {
+        std::cout << "Loading audio...\n";
+        LoadSound(audioClip->id);
+        PlaySound(audioClip, volume);
+    }
+
+    void dae::SDL_SoundSystem::SDL_SoundSystemImpl::LoadSound(const sound_id id)
+    {
+        auto* audioclip = m_AudioClips[id];
 
         Mix_Chunk* sound = Mix_LoadWAV(audioclip->pathFile);
         if (!sound) {
@@ -128,11 +198,21 @@ namespace dae
         }
 
         audioclip->audio = sound;
-
-
     }
 
-    void SDL_SoundSystem::AddSound(const char* path, sound_id id)
+    void dae::SDL_SoundSystem::SDL_SoundSystemImpl::PlaySound(AudioClip* audioClip, float volume)
+    {
+        //std::this_thread::sleep_for(std::chrono::seconds(1));
+        Mix_VolumeChunk(audioClip->audio, static_cast<int>(volume * MIX_MAX_VOLUME));
+
+        if (Mix_PlayChannel(-1, audioClip->audio, 0) == -1)
+        {
+            std::cout << "Could not play sound" << '\n';
+            return;
+        }
+    }
+
+    void dae::SDL_SoundSystem::SDL_SoundSystemImpl::AddSound(const char* path, sound_id id)
     {
 
         AudioClip* audioClip = new AudioClip();
@@ -144,7 +224,7 @@ namespace dae
             audioClip->id = m_AudioClips.size();
             m_AudioClips.emplace_back(audioClip);
         }
-        else if ( id < m_AudioClips.size())
+        else if (id < m_AudioClips.size())
         {
             audioClip->id = id;
             delete m_AudioClips[id];
@@ -155,16 +235,11 @@ namespace dae
             std::cout << "Failed to add audio to ID: " << id << "with the given path: " << path << '\n';
         }
 
-
-
-
-
-
     }
 
-    void SDL_SoundSystem::PlayMusic(const char* path)
-    {
 
+    void dae::SDL_SoundSystem::SDL_SoundSystemImpl::PlayMusic(const char* path)
+    {
         m_BackgroundMusic = Mix_LoadMUS(path);
         if (!m_BackgroundMusic) {
             printf("Mix_LoadMUS failed: %s\n", Mix_GetError());
@@ -172,13 +247,10 @@ namespace dae
         }
 
         Mix_PlayMusic(m_BackgroundMusic, -1); // loop the music indefinitely
-
-
     }
 
-    void SDL_SoundSystem::SetMusicVolume(int volume)
+    void dae::SDL_SoundSystem::SDL_SoundSystemImpl::SetMusicVolume(int volume)
     {
-
         if (volume < 0) {
             volume = 0;
         }
@@ -191,54 +263,53 @@ namespace dae
     }
 
 
-    void SDL_SoundSystem::LoadAndPlaySound(AudioClip* audioClip, float volume)
+
+
+
+    // SDL Sound System ------------------------------------------------------
+    // -----------------------------------------------------------------------
+
+
+    SDL_SoundSystem::SDL_SoundSystem()
     {
-
-        std::cout << "Loading audio...\n";
-        LoadSound(audioClip);
-       
-
-        PlayAsync(audioClip, volume);
-
+        pImpl = new SDL_SoundSystemImpl();
     }
 
-
-
-    void SDL_SoundSystem::LoadSoundThread(AudioClip* audioClip, std::promise<void> promise)
+    SDL_SoundSystem::~SDL_SoundSystem()
     {
-
-       // std::this_thread::sleep_for(std::chrono::seconds(1));
-
-        if (audioClip->audio == nullptr)
-        {
-            Mix_Chunk* sound = Mix_LoadWAV(audioClip->pathFile);
-            if (!sound)
-            {
-                std::cerr << "Error: Could not load sound ID: " << audioClip->id << " with the given path: " << audioClip->pathFile << std::endl;
-                return;
-            }
-            audioClip->audio = sound;
-        }
-
-        promise.set_value();
+        pImpl->~SDL_SoundSystemImpl();
     }
 
-
-
-    void SDL_SoundSystem::PlayAsync(AudioClip* audioClip, float volume)
+    void SDL_SoundSystem::Update()
     {
-
-        //std::this_thread::sleep_for(std::chrono::seconds(1));
-
-
-        Mix_VolumeChunk(audioClip->audio, static_cast<int>(volume * MIX_MAX_VOLUME));
-
-        if (Mix_PlayChannel(-1, audioClip->audio, 0) == -1)
-        {
-            std::cout << "Could not play sound" << '\n';
-            return;
-        }
+        pImpl->Update();
     }
+
+    void SDL_SoundSystem::Play(const sound_id id, const float volume)
+    {
+        pImpl->Play(id, volume);
+    }
+
+    void SDL_SoundSystem::LoadSound(sound_id id)
+    {
+        pImpl->LoadSound(id);
+    }
+
+    void SDL_SoundSystem::AddSound(const char* path, sound_id id)
+    {
+        pImpl->AddSound(path, id);
+    }
+
+    void SDL_SoundSystem::PlayMusic(const char* path)
+    {
+        pImpl->PlayMusic(path);
+    }
+
+    void SDL_SoundSystem::SetMusicVolume(int volume)
+    {
+        pImpl->SetMusicVolume(volume);
+    }
+
 
 
 
@@ -266,10 +337,10 @@ namespace dae
 
     }
 
-    void LoggingSoundSystem::LoadSound(AudioClip* audioclip)
+    void LoggingSoundSystem::LoadSound(sound_id id)
     {
 
-        m_SoundSystem->LoadSound(audioclip);
+        m_SoundSystem->LoadSound(id);
     }
 
     void LoggingSoundSystem::AddSound(const char* path, sound_id id)
@@ -286,5 +357,7 @@ namespace dae
     {
         m_SoundSystem->SetMusicVolume(volume);
     }
+
+
 
 }
