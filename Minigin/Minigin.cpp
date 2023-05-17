@@ -82,7 +82,7 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	World::GetInstance().Init(20, 14, g_window);
 
 
-	SoundServiceLocator::RegisterSoundSystem(new SDL_SoundSystem());
+	SoundServiceLocator::RegisterSoundSystem(new LoggingSoundSystem( new SDL_SoundSystem()));
 
 
 
@@ -166,7 +166,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 		sceneManager.Update();
 		world.Update();
-
+		SoundServiceLocator::GetSoundSysyem().Update();
 		while (lag >= fixedTimeStep)
 		{
 			sceneManager.FixedUpdate();

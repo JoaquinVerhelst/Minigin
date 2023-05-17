@@ -13,7 +13,7 @@ bool dae::HorizontalWalkState::HandleInput(CharacterComponent* character, Comman
 		else if (inputType == Command::InputType::Up)
 		{
 			character->SetState(new IdleState);
-			std::cout << "idle state" << '\n';
+			//std::cout << "idle state" << '\n';
 			return false;
 		}
 	}
@@ -45,7 +45,7 @@ bool dae::VerticalWalkState::HandleInput(CharacterComponent* character, Command:
 		else if (inputType == Command::InputType::Up)
 		{
 			character->SetState(new IdleState);
-			std::cout << "idle state" << '\n';
+			//std::cout << "idle state" << '\n';
 			return false;
 		}
 	}
@@ -64,13 +64,13 @@ bool dae::IdleState::HandleInput(CharacterComponent* character, Command::InputTy
 	if (newStateType == StateType::HorizontalWalk)
 	{
 		character->SetState(new HorizontalWalkState);
-		std::cout << "horizontal walk state" << '\n';
+		//std::cout << "horizontal walk state" << '\n';
 		return true;
 	}
 	else if (newStateType == StateType::VerticalWalk)	
 	{
 		character->SetState(new VerticalWalkState);
-		std::cout << "vertical walk state" << '\n';
+		//std::cout << "vertical walk state" << '\n';
 		return true;
 	}
 	else

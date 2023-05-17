@@ -34,11 +34,11 @@
     <Filter Include="Engine Files\Patterns\State">
       <UniqueIdentifier>{7cf010df-b579-4b13-8b67-f2fb285b2927}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine Files\Patterns\ServiceLocator">
-      <UniqueIdentifier>{87df1ddc-f33f-46f9-97f9-08c8e3322e1d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Treasure">
       <UniqueIdentifier>{56efc3b9-8cf9-4699-b0d7-775865910662}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Files\Patterns\SoundSystem">
+      <UniqueIdentifier>{87df1ddc-f33f-46f9-97f9-08c8e3322e1d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -151,10 +151,10 @@
       <Filter>Engine Files\Singletons</Filter>
     </ClInclude>
     <ClInclude Include="SoundSystem.h">
-      <Filter>Engine Files\Patterns\ServiceLocator</Filter>
+      <Filter>Engine Files\Patterns\SoundSystem</Filter>
     </ClInclude>
     <ClInclude Include="SoundServiceLocator.h">
-      <Filter>Engine Files\Patterns\ServiceLocator</Filter>
+      <Filter>Engine Files\Patterns\SoundSystem</Filter>
     </ClInclude>
     <ClInclude Include="ShapeComponent.h">
       <Filter>Engine Files\Components</Filter>
@@ -267,10 +267,10 @@
       <Filter>Engine Files\Singletons</Filter>
     </ClCompile>
     <ClCompile Include="SoundSystem.cpp">
-      <Filter>Engine Files\Patterns\ServiceLocator</Filter>
+      <Filter>Engine Files\Patterns\SoundSystem</Filter>
     </ClCompile>
     <ClCompile Include="SoundServiceLocator.cpp">
-      <Filter>Engine Files\Patterns\ServiceLocator</Filter>
+      <Filter>Engine Files\Patterns\SoundSystem</Filter>
     </ClCompile>
     <ClCompile Include="ShapeComponent.cpp">
       <Filter>Engine Files\Components</Filter>
