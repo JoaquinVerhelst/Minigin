@@ -144,7 +144,7 @@
     <ClInclude Include="Command.h">
       <Filter>Engine Files\Patterns\Command</Filter>
     </ClInclude>
-    <ClInclude Include="State.h">
+    <ClInclude Include="PlayerState.h">
       <Filter>Engine Files\Patterns\State</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
@@ -167,6 +167,15 @@
     </ClInclude>
     <ClInclude Include="GoldComponent.h">
       <Filter>Game\Treasure</Filter>
+    </ClInclude>
+    <ClInclude Include="NobbinComponent.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuComponent.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GoldStateMachine.h">
+      <Filter>Engine Files\Patterns\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -260,7 +269,7 @@
     <ClCompile Include="Command.cpp">
       <Filter>Engine Files\Patterns\Command</Filter>
     </ClCompile>
-    <ClCompile Include="State.cpp">
+    <ClCompile Include="PlayerState.cpp">
       <Filter>Engine Files\Patterns\State</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
@@ -283,6 +292,15 @@
     </ClCompile>
     <ClCompile Include="GoldComponent.cpp">
       <Filter>Game\Treasure</Filter>
+    </ClCompile>
+    <ClCompile Include="NobbinComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GoldStateMachine.cpp">
+      <Filter>Engine Files\Patterns\State</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

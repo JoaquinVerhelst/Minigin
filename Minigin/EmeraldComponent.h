@@ -21,7 +21,7 @@ namespace dae
 		void Init() override;
 
 		bool PickUpTreasure(GameObject* actor) override;
-		bool CalculateCollision(GameObject* actor) override;
+		bool HandleCollision(GameObject* actor) override;
 
 
 		EmeraldComponent(const EmeraldComponent& other) = delete;

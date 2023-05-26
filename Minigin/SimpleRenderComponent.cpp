@@ -88,6 +88,10 @@ void dae::SimpleRenderComponent::Render() const
 
 	}
 
+	if (m_IsBackground)
+	{
+		//Renderer::GetInstance().SetBackgroundTexture(m_Texture->GetSDLTexture());
+	}
 
 	
 }
@@ -121,6 +125,11 @@ std::string dae::SimpleRenderComponent::GetText()
 	return m_Text;
 }
 
+std::shared_ptr<dae::Texture2D> dae::SimpleRenderComponent::GetTexture()
+{
+	return m_Texture;
+}
+
 void dae::SimpleRenderComponent::UpdateText()
 {
 	const SDL_Color color = { 255,255,255 }; // only white text is supported now
@@ -142,7 +151,7 @@ void dae::SimpleRenderComponent::UpdateText()
 void dae::SimpleRenderComponent::SetTextureBackgound()
 {
 
-	Renderer::GetInstance().SetBackgroundTexture(m_Texture->GetSDLTexture());
+	//Renderer::GetInstance().SetBackgroundTexture(m_Texture->GetSDLTexture());
 
 }
 

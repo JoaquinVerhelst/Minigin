@@ -10,7 +10,7 @@ namespace dae
 	DiggerComponent::DiggerComponent(GameObject* owner, float walkSpeed)
 		: dae::CharacterComponent(owner, walkSpeed, true)
 	{
-
+		SetState(new IdleState);
 	}
 
 
@@ -22,6 +22,7 @@ namespace dae
 
 	void DiggerComponent::Init()
 	{
+		CharacterComponent::Init();
 	}
 
 	void DiggerComponent::Render() const

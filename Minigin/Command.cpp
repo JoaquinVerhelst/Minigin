@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 #include "CharacterComponent.h"
-#include "State.h"
+#include "PlayerState.h"
 #include "HealthComponent.h"
 #include "ScoreComponent.h"
 
@@ -20,7 +20,8 @@ namespace dae
 
 	void HorizontalWalkCommand::Execute(GameObject* actor, InputType inputType)
 	{
-		actor->GetComponent<CharacterComponent>().HorizontalWalk(m_Direction, inputType, StateType::HorizontalWalk);
+		actor->GetComponent<CharacterComponent>().HandleInput(inputType, PlayerStateType::HorizontalWalk);
+		actor->GetComponent<CharacterComponent>().SetDirection(m_Direction);
 	}
 
 
@@ -32,7 +33,8 @@ namespace dae
 
 	void VerticalWalkCommand::Execute(GameObject* actor, InputType inputType)
 	{
-		actor->GetComponent<CharacterComponent>().VerticalWalk(m_Direction, inputType, StateType::VerticalWalk);
+		actor->GetComponent<CharacterComponent>().HandleInput(inputType, PlayerStateType::VerticalWalk);
+		actor->GetComponent<CharacterComponent>().SetDirection(m_Direction);
 	}
 
 

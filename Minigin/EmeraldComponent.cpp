@@ -24,7 +24,7 @@ bool dae::EmeraldComponent::PickUpTreasure(GameObject* actor)
 	return true;
 }
 
-bool dae::EmeraldComponent::CalculateCollision(GameObject*)
+bool dae::EmeraldComponent::HandleCollision(GameObject* actor)
 {
-	return false;
+	return PickUpTreasure(actor);
 }

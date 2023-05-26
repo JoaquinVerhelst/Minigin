@@ -7,19 +7,13 @@
 #include "Subject.h"
 #include "GameObject.h"
 #include "Command.h"
-
+#include "PlayerState.h"
 
 namespace dae
 {
-	class State;
+	//class State;
 
-	enum class StateType
-	{
-		Default,
-		HorizontalWalk,
-		VerticalWalk,
-		Idle
-	};
+
 
 	class CharacterComponent : public Component
 	{
@@ -39,33 +33,42 @@ namespace dae
 		CharacterComponent& operator=(const CharacterComponent& other) = delete;
 		CharacterComponent& operator=(CharacterComponent&& other) = delete;
 
+		void HandleInput(Command::InputType inputType, PlayerStateType newStateType);
+		//virtual void HorizontalWalk(int direction);
+		//void VerticalWalk(int direction);
 
-		void HorizontalWalk(int direction, Command::InputType inputType, StateType newStateType);
-		void VerticalWalk(int direction, Command::InputType inputType, StateType newStateType);
+		glm::vec3 GetPosition();
+		void SetDirection(int direction);
+		int GetDirection();
 
-
-
+		glm::ivec2 GetCellSize();
 
 		int GetInputID() { return m_InputID; }
 
 		//void CalculatePosition();
 
-		State* GetState() { return m_CurrentState; }
-		void SetState(State* newState);
+		PlayerState* GetState() { return m_CurrentState; }
+		void SetState(PlayerState* newState);
+
+		glm::vec2 CalculateWalk(int direction, int cellSize, float x, float y);
 
 	protected:
 
+		int m_Direction;
 		int m_InputID;
 		float m_WalkSpeed;
 
-		State* m_CurrentState;
+		PlayerState* m_CurrentState;
 
 
-		glm::vec2 m_CellSize;
+		glm::ivec2 m_CellSize;
+
+
 
 
 	private:
 
-		glm::vec2 CalculateWalk(int direction, float cellSize , float x, float y);
+
+		//glm::vec2 CheckForCollision(int direction, float cellSize, float x, float y);
 	};
 }

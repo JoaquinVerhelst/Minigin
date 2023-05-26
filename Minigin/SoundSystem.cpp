@@ -277,7 +277,7 @@ namespace dae
 
     SDL_SoundSystem::~SDL_SoundSystem()
     {
-        pImpl->~SDL_SoundSystemImpl();
+        delete pImpl;
     }
 
     void SDL_SoundSystem::Update()

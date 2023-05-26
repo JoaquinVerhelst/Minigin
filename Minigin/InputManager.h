@@ -52,6 +52,8 @@ namespace dae
 		bool IsUp(ControllerButton button, int ID) const;
 
 
+
+
 		int AssignController(GameObject* actor);
 
 		explicit InputManager();
@@ -61,6 +63,18 @@ namespace dae
 		void AddControllerBinding(ControllerButton button, Command* command, Command::InputType inputType);
 		void AddKeyBinding(SDL_Scancode button, Command* command, int inputID);
 
+
+		void ClearFrameEvents();
+
+
+
+
+		bool IsKeyBoardKey(SDL_Scancode key, SDL_EventType type);
+		glm::ivec2 GetMouseLocation();
+		bool GetMouseAction( SDL_EventType type);
+
+
+		void QuitGame(bool quitgame);
 	};
 
 

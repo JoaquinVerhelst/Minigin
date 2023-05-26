@@ -2,7 +2,7 @@
 #include "Command.h"
 #include "InputManager.h"
 #include "Time.h"
-#include "State.h"
+
 #include "Renderer.h"
 #include "Minigin.h"
 #include "World.h"
@@ -20,8 +20,9 @@ namespace dae
 		: dae::Component(owner)
 		, m_WalkSpeed{ walkSpeed }
 		, m_CellSize{ 0 }
-		, m_CurrentState{ new IdleState }
+		, m_CurrentState{ new IdleState()}
 		, m_InputID{0}
+		,m_Direction{0}
 	{
 		auto& input = InputManager::GetInstance();
 
@@ -35,9 +36,12 @@ namespace dae
 			m_InputID = -1;
 		}
 
-		glm::vec2 cellSize = World::GetInstance().GetCellSize();
+		glm::ivec2 cellSize = World::GetInstance().GetCellSize();
 
 		m_CellSize = cellSize;
+
+
+
 
 	}
 
@@ -47,36 +51,54 @@ namespace dae
 		m_CurrentState = nullptr;
 	}
 
+	void CharacterComponent::HandleInput(Command::InputType inputType, PlayerStateType newStateType)
+	{
+		PlayerState* newState = m_CurrentState->HandleInput( inputType, newStateType);
+		if (newState != nullptr)
+		{
+			SetState(newState);
+		}
+	}
+
+
 	void CharacterComponent::Update()
 	{
-		//m_CurrentState->Update(this);
-
+		m_CurrentState->Update(GetOwner(), this);
 
 		World::GetInstance().BreakWorld(GetOwner(), {30,30});
 
+
+
+
+
+		glm::ivec3 pos = GetOwner()->GetPosition().GetPosition();
+		SDL_Rect rect = SDL_Rect{ pos.x, pos.y, 50, 50 };
+		
 	}
 
 	void CharacterComponent::Render() const
 	{
-
 		glm::vec3 currentPos = GetOwner()->GetPosition().GetPosition();
 
-		SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), Renderer::GetInstance().GetCanvas() );
+		SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), Renderer::GetInstance().GetCanvas());
 		SDL_Rect rect = SDL_Rect{ static_cast<int>(currentPos.x) , static_cast<int>(currentPos.y), 50 ,50 };
 		SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 0, 0, 255);
 		SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
-	}
 
+		SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), nullptr);
+	}
 
 	void CharacterComponent::Init()
 	{
+		SetState(new IdleState());
+
 	}
 
 
 
 
 
-	void CharacterComponent::SetState(State* newState)
+	void CharacterComponent::SetState(PlayerState* newState)
 	{
 		if (m_CurrentState != nullptr)
 		{
@@ -87,76 +109,49 @@ namespace dae
 		m_CurrentState = newState;
 	}
 
-	glm::vec2 CharacterComponent::CalculateWalk(int direction, float cellSize, float x, float y)
+	glm::vec2 CharacterComponent::CalculateWalk(int direction, int cellSize, float x, float y)
 	{
 		float deltaTime = Time::GetInstance().GetDeltaTime();
 
-		int offset = static_cast<int>(x) % static_cast<int>(cellSize);
-
-
+		double offset = std::round(static_cast<int>(x) % static_cast<int>(cellSize));
 
 		if (offset == 0)
 		{
 			y += (direction == 0 ? m_WalkSpeed * deltaTime : -m_WalkSpeed * deltaTime);
+			x = static_cast<float>(std::round(static_cast<int>(x)));
 		}
 		else
 		{
 			x += (offset >= cellSize / 2.f ? m_WalkSpeed * deltaTime : -m_WalkSpeed * deltaTime);
+			y = static_cast<float>(std::round(static_cast<int>(y)));
 		}
 
 		return glm::vec2(x, y);
 	}
 
 
-	void CharacterComponent::HorizontalWalk(int direction, Command::InputType inputType, StateType newStateType)
+
+
+	glm::vec3 CharacterComponent::GetPosition()
 	{
-		if (!m_CurrentState->HandleInput(this, inputType, newStateType))
-			return;
-
-
-
-		glm::vec3 currentPos = GetOwner()->GetPosition().GetPosition();
-
-
-		
-		auto vec = CalculateWalk(direction, m_CellSize.y, currentPos.y, currentPos.x);
-
-		World::GetInstance().CheckForTreasure(GetOwner(), { 51,54 });
-
-		GetOwner()->SetPosition(vec.y, vec.x);
+		return GetOwner()->GetPosition().GetPosition();
 	}
 
-	void CharacterComponent::VerticalWalk(int direction, Command::InputType inputType, StateType newStateType)
+
+
+	void CharacterComponent::SetDirection(int direction)
 	{
-		if (!m_CurrentState->HandleInput(this, inputType, newStateType))
-			return;
+		m_Direction = direction;
+	}
 
+	int CharacterComponent::GetDirection()
+	{
+		return m_Direction;
+	}
 
-		glm::vec3 currentPos = GetOwner()->GetPosition().GetPosition();
-
-
-		if (World::GetInstance().CheckForTreasure(GetOwner(), { 50,50 }))
-		{
-			if (direction == 0)
-			{
-				GetOwner()->SetPosition(currentPos.x, currentPos.y - 0.5f);
-			}
-			else
-			{
-				GetOwner()->SetPosition(currentPos.x, currentPos.y + 0.5f);
-			}
-		}
-		else
-		{
-			auto vec = CalculateWalk(direction, m_CellSize.x, currentPos.x, currentPos.y);
-
-
-			GetOwner()->SetPosition(vec.x, vec.y);
-		}
-
-
-
-
+	glm::ivec2 CharacterComponent::GetCellSize()
+	{
+		return m_CellSize;
 	}
 
 

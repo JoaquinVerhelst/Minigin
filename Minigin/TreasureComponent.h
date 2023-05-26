@@ -20,11 +20,12 @@ namespace dae
 		TreasureComponent(GameObject* owner);
 
 		virtual void Update() = 0;
+		virtual void FixedUpdate() = 0;
 		virtual void Init() = 0;
 		bool IsRenderer() override { return false; }
 
 		virtual bool PickUpTreasure(GameObject* actor) = 0;
-		virtual bool CalculateCollision(GameObject* actor) = 0;
+		virtual bool HandleCollision(GameObject* actor) = 0;
 
 		TreasureComponent(const TreasureComponent& other) = delete;
 		TreasureComponent(TreasureComponent&& other) = delete;

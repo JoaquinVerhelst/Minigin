@@ -6,6 +6,9 @@
 #include "SoundServiceLocator.h"
 #include "TreasureComponent.h"
 #include <iostream>
+#include "SimpleRenderComponent.h"
+#include "CharacterComponent.h"
+
 
 using namespace dae;
 
@@ -21,6 +24,11 @@ World::~World()
         m_Grid[i] = nullptr;
     }
 
+
+    for (size_t i = 0; i < m_Levels.size(); i++)
+    {
+        delete m_Levels[i];
+    }
 
 
 }
@@ -43,7 +51,7 @@ void World::Init(int rows, int columns, SDL_Window* window)
 
 
 
-    glm::vec2 pos = {};
+    glm::ivec2 pos = {};
 
 
     for (size_t r = 0; r < m_Rows; ++r)
@@ -76,7 +84,6 @@ void World::Render() const
     {
         SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), Renderer::GetInstance().GetCanvas());
 
-
         SDL_Rect rect = {};
 
 
@@ -88,33 +95,29 @@ void World::Render() const
             rect = { x , y, m_CellWidth, m_CellHeight };
 
 
-            //if (m_Grid[i]->hasTreasure)
-            //{
-            //    SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255);
-            //    SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
-            //}
-            if (i % 3 == 0)
+            if (m_Grid[i]->isCellBroken)
             {
-                SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 204, 0, 255);
+                SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 0, 0, 255);
+                SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
             }
-            else if (i % 3 == 1)
-            {
-                SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 153, 0, 255);
-            }
-            else
-            {
-                SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 102, 0, 255);
-            }
-
-            SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
             
 
         }
     }
+
+
+
+   // RenderBrokenPath();
 }
 
-void dae::World::ResetGrid()
+void dae::World::Reset()
 {
+    for (size_t i = 0; i < m_Grid.size(); i++)
+    {
+        m_Grid[i]->isCellBroken = false;
+    }
+
+
 
 
 }
@@ -217,17 +220,17 @@ bool dae::World::CheckForTreasure(GameObject* actor, const glm::vec2& size)
 
     if(treasureIndex != -1)
     {
-        if (m_Treasure[treasureIndex]->GetComponent<TreasureComponent>().PickUpTreasure(actor))
+        if (m_Treasure[treasureIndex]->GetComponent<TreasureComponent>().HandleCollision(actor))
         {
             m_Treasure[treasureIndex]->Destroy();
-
             m_Treasure.erase(m_Treasure.begin() + treasureIndex);
+
             return false;
 
         }
         else
         {
-            return m_Treasure[treasureIndex]->GetComponent<TreasureComponent>().CalculateCollision(actor);
+            return true;
         }
     }
 
@@ -254,3 +257,62 @@ void dae::World::PlaceTreasure(std::shared_ptr<GameObject> treasure, int gridInd
     treasure->SetPosition(m_Grid[gridIndex]->position.x, m_Grid[gridIndex]->position.y);
     m_Treasure.emplace_back(treasure);
 }
+
+void dae::World::PlaceGameObject(std::shared_ptr<GameObject> gameobject, int gridIndex)
+{
+    gameobject->SetPosition(m_Grid[gridIndex]->position.x, m_Grid[gridIndex]->position.y);
+}
+
+void dae::World::BreakGridIndexes(std::vector<int> gridIndexes)
+{
+    for (size_t i = 0; i < gridIndexes.size(); i++)
+    {
+        if (gridIndexes[i] >= m_Grid.size())
+            break;
+
+        m_Grid[gridIndexes[i]]->isCellBroken = true;
+    }
+}
+
+void dae::World::SetGameMode(GameModeTypes gameMode)
+{
+    m_CurrentGameMode = gameMode;
+}
+
+
+
+
+void dae::World::ResetAndLoadWorld(int index)
+{
+    Reset();
+
+    m_CurrentWorldIndex = index;
+
+    Renderer::GetInstance().SetBackgroundTexture(m_Levels[index]->background->GetComponent<SimpleRenderComponent>().GetTexture()->GetSDLTexture());
+
+
+    if (index != 0 && index != 4)
+    {
+        m_Levels[index]->player1->GetComponent<CharacterComponent>().SetState(new IdleState());
+    }
+  
+    
+
+    // break the world
+
+
+
+
+    // place players
+
+    // place treasure
+
+    // place enemy Manager
+
+}
+
+void dae::World::AddLevelInfo(LevelInfo* levelinfo)
+{
+    m_Levels.emplace_back(levelinfo);
+}
+

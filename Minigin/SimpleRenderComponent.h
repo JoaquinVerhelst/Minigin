@@ -39,6 +39,7 @@ namespace dae
         std::string GetText();
 
 
+        std::shared_ptr<Texture2D> GetTexture();
         void UpdateText();
         void SetTextureBackgound();
         void CalculateScaleByGrid();
@@ -55,7 +56,7 @@ namespace dae
 
         std::shared_ptr<Font> m_Font;
 
-        std::unique_ptr<Texture2D> m_Texture;
+        std::shared_ptr<Texture2D> m_Texture;
 
         SDL_Rect m_SourceRect;
         int m_ScaleY;

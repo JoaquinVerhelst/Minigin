@@ -8,77 +8,39 @@
 #include "SoundServiceLocator.h"
 #include "GameObject.h"
 
-dae::GoldComponent::GoldComponent(GameObject* owner, int gridindex)
+#include <iostream>
+
+
+dae::GoldComponent::GoldComponent(GameObject* owner, int gridindex, float pushspeed, float fallspeed)
 	: TreasureComponent(owner)
 	, m_CurrentGridIndex{ gridindex }
-	, m_IsBroken{false}
-	, m_IsFalling{false}
 	, m_FallingDistance{ 0 }
 	, m_PushDirection{ -1 }
-	, m_IsPushed{false}
 	, m_WaitToFallCounter{ 0 }
 	, m_WaitToFallTime{ 2.f }
+	, m_CurrentState{ new IdleGoldState() }
+	, m_PushSpeed{pushspeed}
+	, m_FallSpeed{fallspeed}
 {
 
 }
 
+dae::GoldComponent::~GoldComponent()
+{
+	if (m_CurrentState != nullptr)
+	{
+		delete m_CurrentState;
+		m_CurrentState = nullptr;
+	}
+}
+
 void dae::GoldComponent::Update()
 {
+	m_CurrentState->Update(GetOwner(), this);
+}
 
-	auto pos = GetOwner()->GetPosition().GetPosition();
-
-	//float gravity = 9.381f;
-	float fallingSpeed = 120.f;
-	//get the gridindex dit in zit
-
-	// kijk of de gridindex + 1 is gedigd
-
-	auto grid = World::GetInstance().GetWorldGrid();
-
-	if (grid[m_CurrentGridIndex + 1]->isCellBroken)
-	{
-
-		if (m_WaitToFallCounter >= m_WaitToFallTime)
-		{
-			++m_FallingDistance;
-			m_IsFalling = true;
-			++m_CurrentGridIndex;
-		}
-		else
-		{
-			m_WaitToFallCounter += Time::GetInstance().GetDeltaTime();
-		}
-
-	}
-	if (m_IsFalling)
-	{
-
-		GetOwner()->SetPosition(pos.x, pos.y + fallingSpeed * Time::GetInstance().GetDeltaTime());
-
-		if (pos.y >= grid[m_CurrentGridIndex]->position.y)
-		{
-			m_IsFalling = false;
-
-			if (m_FallingDistance >= 2)
-			{
-				SoundServiceLocator::GetSoundSysyem().Play(2, 1.0f);
-				GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture("../Data/Sprites/GoldBroken.png");
-				m_IsBroken = true;
-			}
-
-			m_FallingDistance = 0;
-			m_WaitToFallCounter = 0;
-		}
-	}
-
-	if (m_IsPushed)
-	{
-		CalculatePush();
-	}
-
-
-
-
+void dae::GoldComponent::FixedUpdate()
+{
 }
 
 void dae::GoldComponent::Init()
@@ -87,86 +49,111 @@ void dae::GoldComponent::Init()
 
 bool dae::GoldComponent::PickUpTreasure(GameObject* actor)
 {
-
-	if (m_IsBroken)
-	{
-		SoundServiceLocator::GetSoundSysyem().Play(1, 1.0f);
-		actor->GetComponent<ScoreComponent>().AddScore(500);
-		return true;
-	}
-
-	return false;
+	SoundServiceLocator::GetSoundSysyem().Play(1, 1.0f);
+	actor->GetComponent<ScoreComponent>().AddScore(500);
+	return true;
 }
 
-bool dae::GoldComponent::CalculateCollision(GameObject* actor)
+bool dae::GoldComponent::HandleCollision(GameObject* actor)
 {
-	auto pos = GetOwner()->GetPosition().GetPosition();
-
-	auto playerPos = actor->GetPosition().GetPosition();
-
-
-
-	if (!m_IsFalling)
-	{
-		if (pos.y > playerPos.y || pos.y < playerPos.y)
-		{
-			return true;
-		}
-		else if (pos.x > playerPos.x) {
-			m_PushDirection = 0;
-			m_CurrentGridIndex += 14;
-			m_IsPushed = true;
-			return false;
-		}
-		else if (pos.x < playerPos.x) {
-			m_PushDirection = 1;
-			m_CurrentGridIndex += 14;
-			m_IsPushed = true;
-			return false;
-		}
-	}
-	else
-	{
-		//player dead
-	}
-
-	
-	return false;
-
-
+	return m_CurrentState->HandleCollision(actor, GetOwner());
 }
 
-void dae::GoldComponent::CalculatePush()
+void dae::GoldComponent::CalculateFall()
 {
-	float pushSpeed = 100.f;
+	float fallingSpeed = 120.f;
 	auto pos = GetOwner()->GetPosition().GetPosition();
 	auto grid = World::GetInstance().GetWorldGrid();
 
+	GetOwner()->SetPosition(pos.x, pos.y + fallingSpeed * Time::GetInstance().GetDeltaTime());
 
-
-	if (m_PushDirection == 0)
+	if (pos.y >= grid[m_CurrentGridIndex]->position.y)
 	{
-		GetOwner()->SetPosition(pos.x + pushSpeed * Time::GetInstance().GetDeltaTime() , pos.y);
+		GetOwner()->SetPosition(std::round(pos.x), std::round(pos.y + fallingSpeed * Time::GetInstance().GetDeltaTime()));
 
-
-		if (pos.x >= grid[m_CurrentGridIndex]->position.x)
+		if (m_FallingDistance >= 2)
 		{
-			m_IsPushed = false;
+			SoundServiceLocator::GetSoundSysyem().Play(2, 1.0f);
+			GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture("../Data/Sprites/GoldBroken.png");
+
+			SetState(new BrokenGoldState());
+		}
+		else
+		{
+			SetState(new IdleGoldState());
 		}
 
-
+		m_FallingDistance = 0;
+		m_WaitToFallCounter = 0;
 	}
-	else
+}
+
+void dae::GoldComponent::CheckForFalling()
+{
+	auto pos = GetOwner()->GetPosition().GetPosition();
+	auto grid = World::GetInstance().GetWorldGrid();
+
+	if (grid[m_CurrentGridIndex + 1]->isCellBroken)
 	{
-		GetOwner()->SetPosition(pos.x - pushSpeed * Time::GetInstance().GetDeltaTime(), pos.y);
-
-
-		if (pos.x <= grid[m_CurrentGridIndex]->position.x)
+		if (m_WaitToFallCounter >= m_WaitToFallTime)
 		{
-			m_IsPushed = false;
+			++m_FallingDistance;
+			++m_CurrentGridIndex;
+
+			if (m_CurrentState->GetType() != GoldStateType::Falling)
+			{
+				SetState(new FallingGoldState());
+			}
+		}
+		else
+		{
+			m_WaitToFallCounter += Time::GetInstance().GetDeltaTime();
 		}
 	}
+}
+
+void dae::GoldComponent::PushRight()
+{
+	auto grid = World::GetInstance().GetWorldGrid();
+	m_PushDirection = 0;
+	m_CurrentGridIndex += 14;
 
 
+	if (m_CurrentGridIndex >= grid.size())
+	{
+		m_CurrentGridIndex -= 14;
+		return;
+	}
 
+
+	SetState(new PushedGoldState());
+
+}
+
+void dae::GoldComponent::PushLeft()
+{
+	m_PushDirection = 1;
+	m_CurrentGridIndex -= 14;
+
+	if (m_CurrentGridIndex <= 0)
+	{
+		m_CurrentGridIndex += 14;
+		return;
+	}
+
+	SetState(new PushedGoldState());
+
+}
+
+void dae::GoldComponent::SetState(dae::GoldState* newState)
+{
+	if (m_CurrentState != nullptr)
+	{
+		delete m_CurrentState;
+		m_CurrentState = nullptr;
+	}
+
+	std::cout << "new state" << newState <<  " " << int(newState->GetType() )<< '\n';
+
+	m_CurrentState = newState;
 }

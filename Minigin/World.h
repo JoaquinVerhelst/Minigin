@@ -16,6 +16,21 @@ namespace dae
 		bool isCellBroken;
 	};
 
+	struct LevelInfo
+	{
+		int levelIndex;
+		std::string levelname;
+
+		std::shared_ptr<GameObject> background;
+		std::shared_ptr<GameObject> player1;
+		std::shared_ptr<GameObject> player2;
+
+		std::vector<int> brokenWorldIndexs;
+		std::vector<int> emeraldIndexs;
+		std::vector<int> GoldIndexs;
+
+	};
+	
 
 	class World final : public Singleton<World>
 	{
@@ -23,11 +38,18 @@ namespace dae
 
 	public:
 
+		enum class GameModeTypes
+		{
+			SinglePlayer,
+			Coop,
+			Versus
+		};
+
 
 		~World();
 		void Init(int rows, int columns, SDL_Window* window);
 		void Render() const;
-		void ResetGrid();
+		void Reset();
 		void Update();
 
 		bool IsOverlappingWithWorld(const glm::vec2& position, const glm::vec2& size) const;
@@ -51,8 +73,18 @@ namespace dae
 
 
 		void PlaceTreasure(std::shared_ptr<GameObject> treasure, int gridIndex);
+		void PlaceGameObject(std::shared_ptr<GameObject> gameobject, int gridIndex);
+
+		void BreakGridIndexes(std::vector<int> gridIndexes);
+
+		void SetGameMode(GameModeTypes gameMode);
+
+		void ResetAndLoadWorld(int index);
+		void AddLevelInfo(LevelInfo* levelinfo);
 
 	private:
+
+		std::vector<SDL_Rect> m_BrokenPath;
 
 		int m_Rows;
 		int m_Columns;
@@ -66,7 +98,16 @@ namespace dae
 		float m_Count = 0;
 
 
+		GameModeTypes m_CurrentGameMode;
+		std::vector<LevelInfo*> m_Levels;
+
+		int m_CurrentWorldIndex;
 	};
 
 
 }
+
+
+// bij menu kies je de coop, single of multi -> Dan load je lvl 1 gebaseerd op dat, f1 load je lvl2 gebaseerd op gamemode , enzo....
+
+//esc terug naar menu en kies terug gamemode, en load je zo terug....

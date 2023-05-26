@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "Texture2D.h"
 #include "World.h"
+#include "SDL_image.h"
 
 //#include "ImGui/imgui.h"
 //#include "ImGui/imgui_impl_opengl2.h"
@@ -39,9 +40,19 @@ void dae::Renderer::Init(SDL_Window* window)
 
 	SDL_GetWindowSize(window, &width, &height);
 
+
+	m_combinedTexture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+	SDL_SetTextureBlendMode(m_combinedTexture, SDL_BLENDMODE_BLEND);
+
+
+	m_backgroundTexture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+	SDL_SetTextureBlendMode(m_backgroundTexture, SDL_BLENDMODE_BLEND);
+
+
 	m_canvasTexture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
-	SDL_SetRenderTarget(m_renderer, m_canvasTexture);
-	SDL_RenderClear(m_renderer);
+	SDL_SetTextureBlendMode(m_canvasTexture, SDL_BLENDMODE_BLEND);
+
+
 
 	//IMGUI_CHECKVERSION();
 	//ImGui::CreateContext();
@@ -57,41 +68,29 @@ void dae::Renderer::Render() const
 	SDL_RenderClear(m_renderer);
 
 
+	//NEVER TOUCH THIS AGAIN 
 
-	//SDL_Rect rect = SDL_Rect{ static_cast<int>(300) , static_cast<int>(300), 20 ,20 };
-	//SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255 ,0, 0, 255);
-	//SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
+	SDL_SetRenderTarget(m_renderer, m_combinedTexture);
 
-
-
+	SDL_RenderClear(m_renderer);
 
 
-	SDL_Rect rect = SDL_Rect{ 0, 0, 640, 480 };
-	SDL_SetRenderTarget(m_renderer, m_backgroundTexture);
-
-
-	//SDL_RenderCopy(m_renderer, m_backgroundTexture, nullptr, &rect);
-
+	SDL_RenderCopy(m_renderer, m_backgroundTexture, nullptr, nullptr);
 
 	SDL_RenderCopy(m_renderer, m_canvasTexture, nullptr, nullptr);
 
-	SDL_RenderCopy(m_renderer, nullptr, nullptr, &rect);
+
+	SDL_SetRenderTarget(m_renderer, nullptr);
 
 
-	World::GetInstance().Render();
-
+	SDL_RenderCopy(m_renderer, m_combinedTexture, nullptr, nullptr);
 
 	SceneManager::GetInstance().Render();
 
 
-
-
-
-
-
 	SDL_RenderPresent(m_renderer);
 
-
+	
 
 
 
@@ -130,6 +129,16 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 
+void dae::Renderer::RenderTexture(const Texture2D& texture, int x, int y) const
+{
+	SDL_Rect dst{};
+	dst.x = x;
+	dst.y = y;
+	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
+	SDL_SetRenderTarget(m_renderer, nullptr);
+	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+}
+
 void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height) const
 {
 	SDL_Rect dst{};
@@ -137,6 +146,17 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	dst.y = static_cast<int>(y);
 	dst.w = static_cast<int>(width);
 	dst.h = static_cast<int>(height);
+	SDL_SetRenderTarget(m_renderer, nullptr);
+	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+}
+
+void dae::Renderer::RenderTexture(const Texture2D& texture, int x, int y, int width, int height) const
+{
+	SDL_Rect dst{};
+	dst.x = x;
+	dst.y = y;
+	dst.w = width;
+	dst.h = height;
 	SDL_SetRenderTarget(m_renderer, nullptr);
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
@@ -150,7 +170,16 @@ void dae::Renderer::RenderTexture(SDL_Texture* texture, SDL_Rect* sourceRect, SD
 
 inline SDL_Renderer* dae::Renderer::GetSDLRenderer() const { return m_renderer; }
 
-void dae::Renderer::SetBackgroundTexture(SDL_Texture* texture)
+
+
+
+bool dae::Renderer::SetBackgroundTexture(SDL_Texture* texture)
 {
+
 	m_backgroundTexture = texture;
+
+	SDL_SetTextureBlendMode(m_backgroundTexture, SDL_BLENDMODE_BLEND);
+
+
+	return true;
 }

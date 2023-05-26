@@ -63,6 +63,8 @@ dae::Minigin::Minigin(const std::string &dataPath)
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
 
+
+
 	g_window = SDL_CreateWindow(
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
@@ -175,6 +177,8 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 
 		renderer.Render();
+
+		input.GetInstance().ClearFrameEvents();
 
 	}
 

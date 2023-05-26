@@ -7,12 +7,17 @@
 #include "ImGui/imgui_impl_sdl2.h"
 
 #include <vector>
-
+#include "SceneManager.h"
 #include <iostream>
+
+
+
+
+
+
+
 namespace dae
 {
-
-
 
 	class InputManager::InputManagerImpl
 	{
@@ -47,6 +52,18 @@ namespace dae
 
 		std::vector<KeyBind> m_KeyBinds;
 
+
+
+
+
+		//static const int MAX_PENDING = 16;
+
+		//static KeyBind m_Pending[MAX_PENDING];
+		//static int m_NumPending;
+
+
+		bool m_QuitGame = false;
+
 	public:
 
 
@@ -58,6 +75,9 @@ namespace dae
 
 		bool ProcessInput()
 		{
+
+			//Controllers 
+
 			std::swap(m_PreviousStates, m_CurrentStates);
 
 
@@ -75,15 +95,14 @@ namespace dae
 			}
 
 
-
+			//Input bindings check
 			ControllersHandler();
-
-
 			KeyboardHandler();
 
 
 
-			return KeyBoardEventhandler();
+
+			return KeyBoardEventHandler();
 		}
 
 		bool IsDownThisFrame(unsigned int button, int ID) const
@@ -135,11 +154,7 @@ namespace dae
 			return -1;
 		}
 
-		
-
-		// TODO: Think about how to seperate these down, up and pressed functions, since now its all at the same time
-		// (Maybe in the command itself or the controllerbinds, like a extra variable??? same for keybaord)
-
+	
 
 
 		void ControllersHandler()
@@ -151,8 +166,6 @@ namespace dae
 				{
 
 					const auto& key = m_ControllerBinds[y].button;
-
-
 	
 					if (IsPressed(static_cast<unsigned int>(key), static_cast<int>(i)))
 					{
@@ -185,47 +198,49 @@ namespace dae
 			const Uint8* keystate = SDL_GetKeyboardState(NULL);
 			for (size_t i = 0; i < m_KeyBinds.size(); i++)
 			{
-				if (keystate[m_KeyBinds[i].button])
+				if (keystate[m_KeyBinds[i].button] && !m_Players.empty())
 				{
 					m_KeyBinds[i].command->Execute(m_Players[m_KeyBinds[i].inputID], Command::InputType::Pressed);
 				}
 			}
-
 		}
 
 
 
 
-		bool KeyBoardEventhandler()
+		bool KeyBoardEventHandler()
 		{
 			SDL_Event e;
+			
+
+			while (SDL_PollEvent(&e) != 0)
+			{
+				GetFrameEvents().emplace_back(e);
+			}
 
 
 
-			while (SDL_PollEvent(&e)) {
-
-				if (e.type == SDL_QUIT) {
+			for (size_t i = 0; i < GetFrameEvents().size(); i++)
+			{
+				if (GetFrameEvents()[i].type == SDL_QUIT || m_QuitGame) {
 					return false;
 				}
-				if (e.type == SDL_MOUSEBUTTONDOWN) {
 
-				}
-
-				for (size_t i = 0; i < m_KeyBinds.size(); i++)
+				if (GetFrameEvents()[i].type == SDL_KEYUP && !m_Players.empty())
 				{
-					if (e.type == SDL_KEYUP) {
-
-						if (e.key.keysym.scancode == m_KeyBinds[i].button)
+					for (size_t j = 0; j < m_KeyBinds.size(); j++)
+					{
+						if (SDL_SCANCODE_W == m_KeyBinds[j].button)
 						{
-							m_KeyBinds[i].command->Execute(m_Players[m_KeyBinds[i].inputID], Command::InputType::Up);
+							m_KeyBinds[j].command->Execute(m_Players[m_KeyBinds[j].inputID], Command::InputType::Up);
 						}
 					}
-
-
-
-
 				}
+
+
+
 			}
+			
 
 			return true;
 
@@ -257,7 +272,68 @@ namespace dae
 
 
 
+		bool IsKeyBoardKey(SDL_Scancode key, SDL_EventType type )
+		{
+			for (size_t i = 0; i < GetFrameEvents().size(); i++)
+			{
+				if (GetFrameEvents()[i].type == static_cast<unsigned>(type))
+				{
+					if (GetFrameEvents()[i].key.keysym.scancode == key)
+					{
+						return true;
+					}
+				}
+			}
 
+			return false;
+		}
+
+		glm::ivec2 GetMouseLocation()
+		{
+
+			auto e = GetFrameEvents();
+			for (size_t i = 0; i < GetFrameEvents().size(); i++)
+			{
+				if (e[i].type == SDL_MOUSEMOTION)
+				{
+					return glm::ivec2{ (int)e[i].motion.x,(int)e[i].motion.y };
+				}
+			}
+
+			return glm::ivec2{ 0,0 };
+		}
+
+
+		bool GetMouseAction(SDL_EventType type)
+		{
+			for (size_t i = 0; i < GetFrameEvents().size(); i++)
+			{
+				if (GetFrameEvents()[i].type == static_cast<unsigned>(type))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+
+		std::vector<SDL_Event>& GetFrameEvents()
+		{
+			static std::vector<SDL_Event> frame_events;
+			return frame_events;
+		}
+
+		void ClearFrameEvents()
+		{
+			GetFrameEvents().clear();
+		}
+
+	
+		void QuitGame(bool quitgame)
+		{
+			m_QuitGame = quitgame;
+		}
 
 
 	};
@@ -316,5 +392,31 @@ namespace dae
 		pImpl->AddKeyBinding(button, command, inputID);
 	}
 
+	void InputManager::ClearFrameEvents()
+	{
+		pImpl->ClearFrameEvents();
+	}
+
+
+
+	bool InputManager::IsKeyBoardKey(SDL_Scancode key, SDL_EventType type)
+	{
+		return pImpl->IsKeyBoardKey(key, type);
+	}
+
+	glm::ivec2 InputManager::GetMouseLocation()
+	{
+		return pImpl->GetMouseLocation();
+	}
+
+	bool InputManager::GetMouseAction(SDL_EventType type)
+	{
+		return pImpl->GetMouseAction( type);
+	}
+
+	void InputManager::QuitGame(bool quitgame)
+	{
+		pImpl->QuitGame(quitgame);
+	}
 
 }
