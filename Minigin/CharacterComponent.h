@@ -52,11 +52,19 @@ namespace dae
 
 		glm::vec2 CalculateWalk(int direction, int cellSize, float x, float y);
 
+
+		virtual void GetDamaged();
+		virtual void Shoot();
+		virtual void Respawn();
+		virtual void UpdateDeath();
+
 	protected:
 
 		int m_Direction;
 		int m_InputID;
 		float m_WalkSpeed;
+
+
 
 		PlayerState* m_CurrentState;
 

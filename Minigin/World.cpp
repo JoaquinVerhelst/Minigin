@@ -9,6 +9,10 @@
 #include "SimpleRenderComponent.h"
 #include "CharacterComponent.h"
 
+#include "EmeraldComponent.h"
+#include "GoldComponent.h"
+#include "TreasureComponent.h"
+#include "Scene.h"
 
 using namespace dae;
 
@@ -25,10 +29,10 @@ World::~World()
     }
 
 
-    for (size_t i = 0; i < m_Levels.size(); i++)
-    {
-        delete m_Levels[i];
-    }
+    //for (size_t i = 0; i < m_Levels.size(); i++)
+    //{
+    //    delete m_Levels[i];
+    //}
 
 
 }
@@ -72,10 +76,6 @@ void World::Init(int rows, int columns, SDL_Window* window)
 
 
    // std::vector<int> index = { 1,2,3,6,10,12,11,13,15,16,20 };
-
-
-
-
 }
 
 void World::Render() const
@@ -89,33 +89,23 @@ void World::Render() const
 
         for (size_t i = 0; i < m_Grid.size(); i++)
         {
-            int x = static_cast<int>(m_Grid[i]->position.x);
-            int y = static_cast<int>(m_Grid[i]->position.y);
-
-            rect = { x , y, m_CellWidth, m_CellHeight };
-
-
             if (m_Grid[i]->isCellBroken)
             {
+                int x = static_cast<int>(m_Grid[i]->position.x);
+                int y = static_cast<int>(m_Grid[i]->position.y);
+
+                rect = { x , y, m_CellWidth, m_CellHeight };
                 SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 0, 0, 255);
                 SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
             }
-            
-
+         
         }
     }
-
-
-
-   // RenderBrokenPath();
 }
 
 void dae::World::Reset()
 {
-    for (size_t i = 0; i < m_Grid.size(); i++)
-    {
-        m_Grid[i]->isCellBroken = false;
-    }
+
 
 
 
@@ -129,11 +119,14 @@ void dae::World::Update()
     {
         m_Count += Time::GetInstance().GetDeltaTime();
 
-        if (m_Count >= 0.5f)
+        if (m_Count >= .2f)
         {
             m_UpdateTexture = false;
+            m_Count = 0;
         }
     }
+
+
 
 }
 
@@ -197,19 +190,13 @@ GridCell* World::GetOverlappedCell(const glm::vec2& position, const glm::vec2& s
 
 void World::BreakWorld(GameObject* actor, const glm::vec2& size)
 {
-
     auto pos = actor->GetPosition().GetPosition();
 
-
     GridCell* cell = GetOverlappedCell(pos, size);
-
     
     if (cell && cell->isCellBroken == false)
-    {
         cell->isCellBroken = true;
-    }
-
-
+    
 }
 
 bool dae::World::CheckForTreasure(GameObject* actor, const glm::vec2& size)
@@ -228,10 +215,9 @@ bool dae::World::CheckForTreasure(GameObject* actor, const glm::vec2& size)
             return false;
 
         }
-        else
-        {
-            return true;
-        }
+  
+         return true;
+        
     }
 
     return false;
@@ -263,14 +249,20 @@ void dae::World::PlaceGameObject(std::shared_ptr<GameObject> gameobject, int gri
     gameobject->SetPosition(m_Grid[gridIndex]->position.x, m_Grid[gridIndex]->position.y);
 }
 
+void dae::World::PlaceGameObject(GameObject* gameobject, int gridIndex)
+{
+    gameobject->SetPosition(m_Grid[gridIndex]->position.x, m_Grid[gridIndex]->position.y);
+}
+
 void dae::World::BreakGridIndexes(std::vector<int> gridIndexes)
 {
     for (size_t i = 0; i < gridIndexes.size(); i++)
     {
-        if (gridIndexes[i] >= m_Grid.size())
+
+        if (gridIndexes[i] - 1>= m_Grid.size())
             break;
 
-        m_Grid[gridIndexes[i]]->isCellBroken = true;
+        m_Grid[gridIndexes[i] - 1]->isCellBroken = true;
     }
 }
 
@@ -284,35 +276,103 @@ void dae::World::SetGameMode(GameModeTypes gameMode)
 
 void dae::World::ResetAndLoadWorld(int index)
 {
-    Reset();
+
+    //Reset(); ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    for (size_t i = 0; i < m_Grid.size(); i++)
+    {
+        m_Grid[i]->isCellBroken = false;
+    }
+
+    SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), Renderer::GetInstance().GetCanvas());
+    SDL_RenderClear(Renderer::GetInstance().GetSDLRenderer());
+
+    m_Treasure.clear();
+    SceneManager::GetInstance().GetScene(index)->RemoveTreasures();
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     m_CurrentWorldIndex = index;
 
-    Renderer::GetInstance().SetBackgroundTexture(m_Levels[index]->background->GetComponent<SimpleRenderComponent>().GetTexture()->GetSDLTexture());
 
 
-    if (index != 0 && index != 4)
-    {
-        m_Levels[index]->player1->GetComponent<CharacterComponent>().SetState(new IdleState());
-    }
-  
-    
+
+    LevelInfo* currentLevelInfo = SceneManager::GetInstance().GetSceneLevelInfo(m_CurrentWorldIndex);
+    //auto treasures = SceneManager::GetInstance().GetSceneTreasure(m_CurrentWorldIndex);
+
+
+    // background
+    Renderer::GetInstance().SetBackgroundTexture(currentLevelInfo->background->GetComponent<SimpleRenderComponent>().GetTexture()->GetSDLTexture());
 
     // break the world
+    BreakGridIndexes(currentLevelInfo->brokenWorldIndexs);
 
 
+    //Place players and set idle
+    if (currentLevelInfo->worldType == WorldTypes::Level)
+    {
+        currentLevelInfo->player1->GetComponent<CharacterComponent>().SetState(new IdleState());
+        PlaceGameObject(currentLevelInfo->player1, currentLevelInfo->player1PosIndex - 1);
 
-
-    // place players
-
+        currentLevelInfo->player2->GetComponent<CharacterComponent>().SetState(new IdleState());
+        PlaceGameObject(currentLevelInfo->player2, currentLevelInfo->player2PosIndex - 1);
+    }
+  
     // place treasure
+
+    auto go = std::make_shared<dae::GameObject>();
+
+    for (int i = 0; i < currentLevelInfo->emeraldIndexs.size(); ++i)
+    {
+        go = std::make_shared<dae::GameObject>();
+        go->AddComponent<SimpleRenderComponent>("../Data/Sprites/Emerald.png");
+        go->AddComponent<EmeraldComponent>();
+
+        SceneManager::GetInstance().GetScene(m_CurrentWorldIndex)->AddTreasure(go);
+
+        World::GetInstance().PlaceTreasure(go, currentLevelInfo->emeraldIndexs[i] - 1);
+    }
+
+
+    for (int i = 0; i < currentLevelInfo->goldIndexs.size(); ++i)
+    {
+        go = std::make_shared<dae::GameObject>();
+        go->AddComponent<SimpleRenderComponent>("../Data/Sprites/Gold.png");
+        go->AddComponent<GoldComponent>(currentLevelInfo->goldIndexs[i] - 1);
+
+        SceneManager::GetInstance().GetScene(m_CurrentWorldIndex)->AddTreasure(go);
+
+        World::GetInstance().PlaceTreasure(go, currentLevelInfo->goldIndexs[i] - 1);
+    }
 
     // place enemy Manager
 
+
+
+
+
+    //TODO : If all players are dead -> end
+    // TODO : If all emeralds are gone -> Next level
+    // todo If all enemy dead -> next level
+
+
+
+
+
+    UpdateWorld();
+
+
 }
 
-void dae::World::AddLevelInfo(LevelInfo* levelinfo)
+void dae::World::PlayerDied()
 {
-    m_Levels.emplace_back(levelinfo);
+    if (m_CurrentGameMode == GameModeTypes::SinglePlayer)
+    {
+        // TODO : stop and save highscore
+    }    
+    if (m_CurrentGameMode == GameModeTypes::Coop)
+    {
+        // TODO : stop and save highscore
+    }
 }
 

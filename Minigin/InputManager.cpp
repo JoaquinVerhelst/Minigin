@@ -31,6 +31,7 @@ namespace dae
 			Command* command;
 			SDL_Scancode button;
 			int inputID;
+			bool isPressed;
 		};
 
 		struct ControllerBind
@@ -201,8 +202,11 @@ namespace dae
 				if (keystate[m_KeyBinds[i].button] && !m_Players.empty())
 				{
 					m_KeyBinds[i].command->Execute(m_Players[m_KeyBinds[i].inputID], Command::InputType::Pressed);
+					m_KeyBinds[i].isPressed = true;
 				}
+
 			}
+
 		}
 
 
@@ -211,36 +215,24 @@ namespace dae
 		bool KeyBoardEventHandler()
 		{
 			SDL_Event e;
-			
 
 			while (SDL_PollEvent(&e) != 0)
 			{
 				GetFrameEvents().emplace_back(e);
 			}
 
-
-
 			for (size_t i = 0; i < GetFrameEvents().size(); i++)
 			{
 				if (GetFrameEvents()[i].type == SDL_QUIT || m_QuitGame) {
 					return false;
 				}
-
-				if (GetFrameEvents()[i].type == SDL_KEYUP && !m_Players.empty())
-				{
-					for (size_t j = 0; j < m_KeyBinds.size(); j++)
-					{
-						if (SDL_SCANCODE_W == m_KeyBinds[j].button)
-						{
-							m_KeyBinds[j].command->Execute(m_Players[m_KeyBinds[j].inputID], Command::InputType::Up);
-						}
-					}
-				}
-
-
-
 			}
 			
+			for (size_t j = 0; j < m_KeyBinds.size(); j++)
+			{
+				if (IsKeyBoardKey(m_KeyBinds[j].button, SDL_KEYUP))
+					m_KeyBinds[j].command->Execute(m_Players[m_KeyBinds[j].inputID], Command::InputType::Up);
+			}
 
 			return true;
 
@@ -266,7 +258,7 @@ namespace dae
 			tempKeyBind.button = button;
 			tempKeyBind.command = command;
 			tempKeyBind.inputID = inputID;
-
+			tempKeyBind.isPressed = false;
 			m_KeyBinds.emplace_back(tempKeyBind);
 		}
 

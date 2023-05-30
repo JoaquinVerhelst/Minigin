@@ -4,9 +4,13 @@
 #include <memory>
 #include "Singleton.h"
 
+
 namespace dae
 {
 	class Scene;
+	class GameObject;
+	struct LevelInfo;
+
 	class SceneManager final : public Singleton<SceneManager>
 	{
 	public:
@@ -18,6 +22,15 @@ namespace dae
 
 		void NextScene();
 		void NextSceneByIndex(int index);
+
+
+		LevelInfo* GetSceneLevelInfo(int sceneIndex);
+		std::shared_ptr<Scene> GetScene(int sceneIndex);
+
+		LevelInfo* GetCurrentSceneLevelInfo();
+		std::shared_ptr<Scene> GetCurrentScene();
+
+
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

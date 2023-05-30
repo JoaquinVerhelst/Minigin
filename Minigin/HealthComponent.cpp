@@ -24,4 +24,9 @@ void dae::HealthComponent::SetHealth(int health)
 {
 	m_CurrentHealth = health;
 	notify(*GetOwner(), Event::PlayerHealthChanged);
+
+	if (m_CurrentHealth == 0)
+	{
+		notify(*GetOwner(), Event::PlayerDie);
+	}
 }

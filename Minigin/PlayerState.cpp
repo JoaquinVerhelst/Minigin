@@ -1,20 +1,41 @@
 #include "PlayerState.h"
 #include <iostream>
 #include "CharacterComponent.h"
+#include "SimpleRenderComponent.h"
 #include "GameObject.h"
 #include "World.h"
 
 //-----------HORIZINTAL WALK-----------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-dae::PlayerState* dae::HorizontalWalkState::HandleInput(Command::InputType inputType, PlayerStateType)
+void dae::HorizontalWalkState::UpdateSprite(GameObject* actor, int direction)
+{
+
+	SimpleRenderComponent& simpleRender = actor->GetComponent<SimpleRenderComponent>();
+
+	if (direction == 0)
+	{
+		simpleRender.SetAngleAndFlip(0.f, SDL_FLIP_NONE);
+	}
+	else
+	{
+		simpleRender.SetAngleAndFlip(180.f, SDL_FLIP_VERTICAL);
+	}
+}
+
+dae::PlayerState* dae::HorizontalWalkState::HandleInput(Command::InputType inputType, PlayerStateType newStateType)
 {
 	if (inputType == Command::InputType::Up)
 	{
 		return new IdleState();
 	}
+	else if (newStateType == PlayerStateType::VerticalWalk && inputType == Command::InputType::Pressed)
+	{
+		return new VerticalWalkState();
+	}
 	else
 	{
+
 		return nullptr;
 	}
 }
@@ -22,10 +43,10 @@ dae::PlayerState* dae::HorizontalWalkState::HandleInput(Command::InputType input
 void dae::HorizontalWalkState::Update(GameObject* actor, CharacterComponent* character)
 {
 
-
+	auto cellSize = character->GetCellSize();
 	glm::vec3 currentPos = character->GetPosition();
 
-	if (World::GetInstance().CheckForTreasure(actor, { 50,50 }))
+	if (World::GetInstance().CheckForTreasure(actor, { cellSize.x - 1.f ,cellSize.y - 1.f }))
 	{
 
 		if (character->GetDirection() == 0)
@@ -39,27 +60,46 @@ void dae::HorizontalWalkState::Update(GameObject* actor, CharacterComponent* cha
 	}
 	else
 	{
-		auto vec = character->CalculateWalk(character->GetDirection(), character->GetCellSize().y, currentPos.y, currentPos.x);
-
-
+		auto vec = character->CalculateWalk(character->GetDirection(), cellSize.y, currentPos.y, currentPos.x);
 		actor->SetPosition(vec.y, vec.x);
 	}
 
+	World::GetInstance().BreakWorld(actor, { cellSize.x - 1.f,cellSize.y - 1.f });
 }
 
 
 //-----------VERTICAL WALK-------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-dae::PlayerState* dae::VerticalWalkState::HandleInput(Command::InputType inputType, PlayerStateType)
+void dae::VerticalWalkState::UpdateSprite(GameObject* actor, int direction)
+{
+
+	SimpleRenderComponent& simpleRender = actor->GetComponent<SimpleRenderComponent>();
+
+	if (direction == 0)
+	{
+		simpleRender.SetAngleAndFlip(90.f, SDL_FLIP_NONE);
+	}
+	else
+	{
+		simpleRender.SetAngleAndFlip(270.f, SDL_FLIP_VERTICAL);
+	}
+}
+
+dae::PlayerState* dae::VerticalWalkState::HandleInput(Command::InputType inputType, PlayerStateType newStateType)
 {
 
 	if (inputType == Command::InputType::Up)
 	{
 		return new IdleState();
 	}
+	else if (newStateType == PlayerStateType::HorizontalWalk && inputType == Command::InputType::Pressed)
+	{
+		return new HorizontalWalkState();
+	}
 	else
 	{
+
 		return nullptr;
 	}
 
@@ -67,11 +107,11 @@ dae::PlayerState* dae::VerticalWalkState::HandleInput(Command::InputType inputTy
 
 void dae::VerticalWalkState::Update(GameObject* actor, CharacterComponent* character)
 {
-
+	auto cellSize = character->GetCellSize();
 	glm::vec3 currentPos = character->GetPosition();
 
 
-	if (World::GetInstance().CheckForTreasure(actor, { 50,50 }))
+	if (World::GetInstance().CheckForTreasure(actor, { cellSize.x - 1.f,cellSize.y - 1.f }))
 	{
 		if (character->GetDirection() == 0)
 		{
@@ -89,12 +129,19 @@ void dae::VerticalWalkState::Update(GameObject* actor, CharacterComponent* chara
 		actor->SetPosition(vec.x, vec.y);
 	}
 
+	World::GetInstance().BreakWorld(actor, { cellSize.x - 1.f,cellSize.y - 1.f });
+}
+
+//----------- IDLE --------------------------------------------------------------------------
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void dae::IdleState::UpdateSprite(GameObject* , int )
+{
+	//actor->GetComponent<SimpleRenderComponent>().SetFlip(SDL_FLIP_NONE);
+	//actor->GetComponent<SimpleRenderComponent>().SetAngle(0.f);
 }
 
 
-
-//-----------IDLE --------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////////////////
 dae::PlayerState* dae::IdleState::HandleInput(Command::InputType , PlayerStateType newStateType)
 {
 	if (newStateType == PlayerStateType::HorizontalWalk)
@@ -112,3 +159,24 @@ dae::PlayerState* dae::IdleState::HandleInput(Command::InputType , PlayerStateTy
 }
 
 
+//----------- DEAD --------------------------------------------------------------------------
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void dae::DeadState::UpdateSprite(GameObject* actor, int )
+{
+	SimpleRenderComponent& simpleRender = actor->GetComponent<SimpleRenderComponent>();
+	simpleRender.SetAngleAndFlip(0.f, SDL_FLIP_NONE);
+	simpleRender.SetTexture("../Data/Sprites/Death.png");
+
+	actor->GetComponent<CharacterComponent>().GetDamaged();
+}
+
+dae::PlayerState* dae::DeadState::HandleInput(Command::InputType , PlayerStateType )
+{
+	return nullptr;
+}
+
+void dae::DeadState::Update(GameObject* , CharacterComponent* character)
+{
+	character->UpdateDeath();
+}

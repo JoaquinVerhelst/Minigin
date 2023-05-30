@@ -49,7 +49,7 @@ void dae::GoldComponent::Init()
 
 bool dae::GoldComponent::PickUpTreasure(GameObject* actor)
 {
-	SoundServiceLocator::GetSoundSysyem().Play(1, 1.0f);
+	SoundServiceLocator::GetSoundSystem().Play(1, 1.0f);
 	actor->GetComponent<ScoreComponent>().AddScore(500);
 	return true;
 }
@@ -73,7 +73,7 @@ void dae::GoldComponent::CalculateFall()
 
 		if (m_FallingDistance >= 2)
 		{
-			SoundServiceLocator::GetSoundSysyem().Play(2, 1.0f);
+			SoundServiceLocator::GetSoundSystem().Play(2, 1.0f);
 			GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture("../Data/Sprites/GoldBroken.png");
 
 			SetState(new BrokenGoldState());
@@ -153,7 +153,7 @@ void dae::GoldComponent::SetState(dae::GoldState* newState)
 		m_CurrentState = nullptr;
 	}
 
-	std::cout << "new state" << newState <<  " " << int(newState->GetType() )<< '\n';
+	//std::cout << "new state" << newState <<  " " << int(newState->GetType() )<< '\n';
 
 	m_CurrentState = newState;
 }

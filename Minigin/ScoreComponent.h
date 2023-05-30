@@ -30,9 +30,15 @@ namespace dae
 		int GetScore();
 		void AddScore(int score);
 
+		void AddEmeraldScore(int score);
+		//void AddGoldScore(int score);
+		//void AddNobbinScore(int score);
+
 	private:
 
 		int m_CurrentScore;
+
+		int m_EmeraldsInARow;
 	};
 }
 

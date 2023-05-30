@@ -20,8 +20,9 @@ namespace dae
 
 	void HorizontalWalkCommand::Execute(GameObject* actor, InputType inputType)
 	{
-		actor->GetComponent<CharacterComponent>().HandleInput(inputType, PlayerStateType::HorizontalWalk);
-		actor->GetComponent<CharacterComponent>().SetDirection(m_Direction);
+		CharacterComponent& character = actor->GetComponent<CharacterComponent>();
+		character.HandleInput(inputType, PlayerStateType::HorizontalWalk);
+		character.SetDirection(m_Direction);
 	}
 
 
@@ -33,8 +34,9 @@ namespace dae
 
 	void VerticalWalkCommand::Execute(GameObject* actor, InputType inputType)
 	{
-		actor->GetComponent<CharacterComponent>().HandleInput(inputType, PlayerStateType::VerticalWalk);
-		actor->GetComponent<CharacterComponent>().SetDirection(m_Direction);
+		CharacterComponent& character = actor->GetComponent<CharacterComponent>();
+		character.HandleInput(inputType, PlayerStateType::VerticalWalk);
+		character.SetDirection(m_Direction);
 	}
 
 
@@ -60,7 +62,7 @@ namespace dae
 
 
 
-			SoundServiceLocator::GetSoundSysyem().Play(0, 1.0f);
+			SoundServiceLocator::GetSoundSystem().Play(0, 1.0f);
 
 
 

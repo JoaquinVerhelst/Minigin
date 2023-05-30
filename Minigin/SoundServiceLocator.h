@@ -12,7 +12,7 @@ namespace dae
 		static SoundSystem* _ss_instance;
 	public:
 		static void Destroy();
-		static SoundSystem& GetSoundSysyem();
+		static SoundSystem& GetSoundSystem();
 		static void RegisterSoundSystem(SoundSystem* ss);
 	};
 

@@ -1,9 +1,11 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "InputManager.h"
+#include "GameObject.h"
+#include "World.h"
 #include <iostream>
 #include <SDL.h>
-#include "World.h"
+
 
 void dae::SceneManager::Update()
 {
@@ -70,6 +72,26 @@ void dae::SceneManager::NextSceneByIndex(int index)
 
 	m_CurrentId = index;
 
+}
+
+dae::LevelInfo* dae::SceneManager::GetSceneLevelInfo(int sceneIndex)
+{
+	return m_scenes[sceneIndex]->GetLevelInfo();
+}
+
+std::shared_ptr<dae::Scene> dae::SceneManager::GetScene(int sceneIndex)
+{
+	return m_scenes[sceneIndex];
+}
+
+dae::LevelInfo* dae::SceneManager::GetCurrentSceneLevelInfo()
+{
+	return m_scenes[m_CurrentId]->GetLevelInfo();
+}
+
+std::shared_ptr <dae::Scene > dae::SceneManager::GetCurrentScene()
+{
+	return m_scenes[m_CurrentId];
 }
 
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)

@@ -177,6 +177,9 @@
     <ClInclude Include="GoldStateMachine.h">
       <Filter>Engine Files\Patterns\State</Filter>
     </ClInclude>
+    <ClInclude Include="FireBallComponent.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TextObject.cpp">
@@ -301,6 +304,9 @@
     </ClCompile>
     <ClCompile Include="GoldStateMachine.cpp">
       <Filter>Engine Files\Patterns\State</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBallComponent.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -11,7 +11,7 @@ namespace dae
 		delete _ss_instance;
 	}
 
-	SoundSystem& SoundServiceLocator::GetSoundSysyem()
+	SoundSystem& SoundServiceLocator::GetSoundSystem()
 	{
 		return *_ss_instance;
 	}

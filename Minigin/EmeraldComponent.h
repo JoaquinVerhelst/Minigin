@@ -18,6 +18,7 @@ namespace dae
 		EmeraldComponent(GameObject* owner);
 
 		void Update() override;
+		void FixedUpdate() override;
 		void Init() override;
 
 		bool PickUpTreasure(GameObject* actor) override;

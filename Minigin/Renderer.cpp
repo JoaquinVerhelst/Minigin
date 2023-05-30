@@ -78,13 +78,14 @@ void dae::Renderer::Render() const
 	SDL_RenderCopy(m_renderer, m_backgroundTexture, nullptr, nullptr);
 
 	SDL_RenderCopy(m_renderer, m_canvasTexture, nullptr, nullptr);
-
+	
 
 	SDL_SetRenderTarget(m_renderer, nullptr);
 
 
 	SDL_RenderCopy(m_renderer, m_combinedTexture, nullptr, nullptr);
 
+	World::GetInstance().Render();
 	SceneManager::GetInstance().Render();
 
 

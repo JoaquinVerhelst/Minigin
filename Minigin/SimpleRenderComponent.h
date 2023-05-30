@@ -46,6 +46,12 @@ namespace dae
         void SetScale(int scaleX, int scaleY);
         //void SetScale(const glm::vec2& scale); // Not yet Implemented
 
+        void SetAngle(float angle) { m_Angle = angle; }
+        float GetAngle() { return m_Angle; }
+        void SetFlip(SDL_RendererFlip flip) { m_Flip = flip; }
+
+        void SetAngleAndFlip(float angle, SDL_RendererFlip flip);
+
     private:
 
         bool m_NeedsUpdate;
@@ -61,6 +67,11 @@ namespace dae
         SDL_Rect m_SourceRect;
         int m_ScaleY;
         int m_ScaleX;
+
+        float m_Angle;
+        SDL_RendererFlip m_Flip;
+
+
 
         //glm::vec2 m_Scale;  // Not yet Implemented
 

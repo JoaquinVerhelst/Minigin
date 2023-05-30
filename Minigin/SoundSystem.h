@@ -1,5 +1,9 @@
 #pragma once
-
+#include <queue>
+#include <condition_variable>
+#include <mutex>
+#include <future>
+#include <thread>
 
 
 namespace dae
@@ -61,8 +65,6 @@ namespace dae
 	};
 
 
-
-
 	class LoggingSoundSystem final : public SoundSystem {
 		SoundSystem* m_SoundSystem;
 	public:
@@ -80,4 +82,5 @@ namespace dae
 		void PlayMusic(const char* path) override;
 		void SetMusicVolume(int volume);
 	};
+
 }

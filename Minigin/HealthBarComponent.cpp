@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 #include "HealthComponent.h"
-
+#include <iostream>
 
 
 dae::HealthBarComponent::HealthBarComponent(GameObject* owner, const std::string& filePath )
@@ -93,5 +93,11 @@ void dae::HealthBarComponent::OnNotify(const GameObject& entity, Event event)
     {
         // Update the health bar UI
         m_CurrentHealth = m_HealthComponent->GetHealth();
+    }
+
+    if (event == Event::PlayerDie && &entity == GetOwner())
+    {
+        // World player is dead
+        std::cout << "DEAD" << '\n';
     }
 }

@@ -2,7 +2,7 @@
 #include "GoldComponent.h"
 #include "World.h"
 #include "Time.h"
-
+#include "CharacterComponent.h"
 
 
 namespace dae
@@ -100,9 +100,9 @@ namespace dae
 	//////////////////////////////////////////////////////////////////////////////////////////////
 
 
-	bool FallingGoldState::HandleCollision(GameObject* , GameObject* )
+	bool FallingGoldState::HandleCollision(GameObject* playerActor, GameObject* )
 	{
-		// if player touchy, he deady
+		playerActor->GetComponent<CharacterComponent>().SetState(new DeadState());
 		return false;
 	}
 

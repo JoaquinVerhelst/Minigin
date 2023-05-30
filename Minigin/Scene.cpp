@@ -7,12 +7,36 @@ unsigned int Scene::m_idCounter = 0;
 
 Scene::Scene(const std::string& name) : m_Name(name) {}
 
-Scene::~Scene() = default;
+Scene::~Scene()
+{
+	delete m_LevelInfo;
+};
 
 void Scene::Add(std::shared_ptr<GameObject> object)
 {
 	m_Objects.emplace_back(std::move(object));
 }
+
+void dae::Scene::SetLevelInfo(LevelInfo* levelInfo)
+{
+	m_LevelInfo = levelInfo;
+}
+
+LevelInfo* dae::Scene::GetLevelInfo()
+{
+	return m_LevelInfo;
+}
+
+void dae::Scene::AddTreasure(std::shared_ptr<GameObject> treasure)
+{
+	m_Treasures.emplace_back(std::move(treasure));
+}
+
+void dae::Scene::RemoveTreasures()
+{
+	m_Treasures.clear();
+}
+
 
 void Scene::Remove(std::shared_ptr<GameObject> object)
 {
@@ -22,18 +46,21 @@ void Scene::Remove(std::shared_ptr<GameObject> object)
 void Scene::RemoveAll()
 {
 	m_Objects.clear();
+	m_Treasures.clear();
 }
 
 void Scene::Update()
 {
-	//TODO Add lateUpdate or Double buffer pattern
 
-	for(size_t i = 0; i < m_Objects.size(); ++i)
+	for (auto& object : m_Objects)
 	{
-		m_Objects[i]->Update();
-
+		object->Update();
 	}
 
+	for (auto& treasure : m_Treasures)
+	{
+		treasure->Update();
+	}
 
 
 	for (size_t i = 0; i < m_Objects.size(); ++i)
@@ -43,7 +70,13 @@ void Scene::Update()
 			m_Objects.erase(m_Objects.begin() + i);
 		}
 	}
-
+	for (size_t i = 0; i < m_Treasures.size(); ++i)
+	{
+		if (m_Treasures[i]->IsDestroyed())
+		{
+			m_Treasures.erase(m_Treasures.begin() + i);
+		}
+	}
 }
 
 void dae::Scene::FixedUpdate()
@@ -52,6 +85,11 @@ void dae::Scene::FixedUpdate()
 	{
 		object->FixedUpdate();
 	}
+
+	//for (auto& treasure : m_Treasures)
+	//{
+	//	treasure->FixedUpdate();
+	//}
 }
 
 void Scene::Render() const
@@ -59,6 +97,11 @@ void Scene::Render() const
 	for (const auto& object : m_Objects)
 	{
 		object->Render();
+	}
+
+	for (auto& treasure : m_Treasures)
+	{
+		treasure->Render();
 	}
 }
 

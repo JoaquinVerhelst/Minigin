@@ -3,11 +3,9 @@
 #include <SDL.h>
 #include <chrono>
 #include <iostream>
-#include <thread>
+
 #include "SDL_mixer.h"
-#include <condition_variable>
-#include <mutex>
-#include <future>
+
 
 
 namespace dae
@@ -44,18 +42,44 @@ namespace dae
         Mix_Music* m_BackgroundMusic;
 
 
+        //Threads
+        std::thread m_thread;
+        std::queue<std::function<void()>> m_taskQueue;
 
-        //threads
+        //synchronizing access to the sound task queue 
+        std::mutex m_queueMutex;
 
-
-        std::vector<std::future<void>> m_LoadFutures;
-        std::vector<std::future<void>> m_PlayFutures;
+        //used for thread safety during sound loading in the LoadSound function.
+        std::mutex m_SoundMutex;
+        std::condition_variable m_taskCondition;
+        bool m_stop;
 
 
 
         void LoadAndPlaySound(AudioClip* audioClip, float volume);
 
         void PlaySound(AudioClip* audioClip, float volume);
+
+        void WorkerThread()
+        {
+            while (true)
+            {
+                std::function<void()> task;
+
+                {
+                    std::unique_lock<std::mutex> lock(m_queueMutex);
+                    m_taskCondition.wait(lock, [this] { return m_stop || !m_taskQueue.empty(); });
+
+                    if (m_stop && m_taskQueue.empty())
+                        break;
+
+                    task = std::move(m_taskQueue.front());
+                    m_taskQueue.pop();
+                }
+
+                task();
+            }
+        }
 
 
     public:
@@ -72,6 +96,16 @@ namespace dae
 
         void SetMusicVolume(int volume);
 
+
+
+        void EnqueueTask(std::function<void()> task)
+        {
+            {
+                std::unique_lock<std::mutex> lock(m_queueMutex);
+                m_taskQueue.emplace(std::move(task));
+            }
+            m_taskCondition.notify_one();
+        }
     };
 
 
@@ -86,6 +120,10 @@ namespace dae
     SDL_SoundSystem::SDL_SoundSystemImpl::SDL_SoundSystemImpl()
     {
         
+        m_stop = false;
+
+
+
         // Initialize SDL and SDL_mixer
         SDL_Init(SDL_INIT_AUDIO);
         Mix_Init(MIX_INIT_MP3);
@@ -101,10 +139,24 @@ namespace dae
 
         //SetMusicVolume(32);
         
+
+        m_thread = std::thread([this] { WorkerThread(); });
     }
 
     SDL_SoundSystem::SDL_SoundSystemImpl::~SDL_SoundSystemImpl()
     {
+
+
+        {
+            std::unique_lock<std::mutex> lock(m_queueMutex);
+            m_stop = true;
+            m_taskCondition.notify_one();
+        } // Release the lock here before joining the thread
+
+        m_thread.join();
+
+
+
         for (auto* audio : m_AudioClips) {
             Mix_FreeChunk(audio->audio);
             delete audio;
@@ -114,53 +166,37 @@ namespace dae
         Mix_HaltMusic();
         Mix_FreeMusic(m_BackgroundMusic);
         Mix_CloseAudio();
+
+
+
+
     }
 
     void SDL_SoundSystem::SDL_SoundSystemImpl::Update()
     {
         for (size_t i = 0; i < m_NumPending; ++i)
         {
-            auto start = std::chrono::high_resolution_clock::now();
 
             AudioClip* audioClip = m_AudioClips[m_Pending[i].id];
 
             if (audioClip->audio == nullptr)
             {
-                std::cout << "Loading audio...\n";
+                //std::cout << "Loading audio...\n";
 
-                // Create a promise and get its future
-                std::promise<void> promise;
-                std::future<void> future = promise.get_future();
-
-                // Create a separate thread to load and play the sound
-                std::thread thread([this, audioClip, volume = m_Pending[i].volume, promise = std::move(promise)]() mutable {
+                EnqueueTask([this, audioClip, volume = m_Pending[i].volume]() {
                     LoadAndPlaySound(audioClip, volume);
-                    promise.set_value();
                     });
-
-                // Detach the thread to run independently
-                thread.detach();
             }
             else
             {
-                std::cout << "Sound is already loaded. Playing...\n";
+                //std::cout << "Sound is already loaded. Playing...\n";
 
-                // Create a separate thread to play the sound
-                std::thread thread([this, audioClip, volume = m_Pending[i].volume]() {
+                EnqueueTask([this, audioClip, volume = m_Pending[i].volume]() {
                     PlaySound(audioClip, volume);
                     });
-
-                // Detach the thread to run independently
-                thread.detach();
             }
 
 
-            auto end = std::chrono::high_resolution_clock::now();
-
-
-            auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-
-            std::cout << "play took: " << elapsed << "ms\n";
         }
 
         m_NumPending = 0;
@@ -182,27 +218,34 @@ namespace dae
 
     void dae::SDL_SoundSystem::SDL_SoundSystemImpl::LoadAndPlaySound(AudioClip* audioClip, float volume)
     {
-        std::cout << "Loading audio...\n";
         LoadSound(audioClip->id);
         PlaySound(audioClip, volume);
     }
 
     void dae::SDL_SoundSystem::SDL_SoundSystemImpl::LoadSound(const sound_id id)
     {
+
         auto* audioclip = m_AudioClips[id];
 
         Mix_Chunk* sound = Mix_LoadWAV(audioclip->pathFile);
         if (!sound) {
-            std::cerr << "Error: Could not load sound ID: " << audioclip->id << "with the given path: " << audioclip->pathFile << std::endl;
+            std::cerr << "Error: Could not load sound ID: " << audioclip->id << " with the given path: " << audioclip->pathFile << std::endl;
             return;
         }
 
+        std::lock_guard<std::mutex> lock(m_SoundMutex);
         audioclip->audio = sound;
+        
+
     }
 
     void dae::SDL_SoundSystem::SDL_SoundSystemImpl::PlaySound(AudioClip* audioClip, float volume)
     {
+
         //std::this_thread::sleep_for(std::chrono::seconds(1));
+
+        std::lock_guard<std::mutex> lock(m_SoundMutex);
+
         Mix_VolumeChunk(audioClip->audio, static_cast<int>(volume * MIX_MAX_VOLUME));
 
         if (Mix_PlayChannel(-1, audioClip->audio, 0) == -1)
@@ -319,7 +362,16 @@ namespace dae
 
     void LoggingSoundSystem::Update()
     {
+
+        //auto start = std::chrono::high_resolution_clock::now();
+
+
         m_SoundSystem->Update();
+
+
+        //auto end = std::chrono::high_resolution_clock::now();
+        //auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        //std::cout << "play took: " << elapsed << "ms\n";
     }
 
     void LoggingSoundSystem::Play(const sound_id id, const float volume)
@@ -339,7 +391,7 @@ namespace dae
 
     void LoggingSoundSystem::LoadSound(sound_id id)
     {
-
+        std::cout << "Loading audio...\n";
         m_SoundSystem->LoadSound(id);
     }
 

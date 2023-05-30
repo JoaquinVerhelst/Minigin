@@ -168,7 +168,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 		sceneManager.Update();
 		world.Update();
-		SoundServiceLocator::GetSoundSysyem().Update();
+		SoundServiceLocator::GetSoundSystem().Update();
 		while (lag >= fixedTimeStep)
 		{
 			sceneManager.FixedUpdate();

@@ -19,7 +19,9 @@ dae::SimpleRenderComponent::SimpleRenderComponent(GameObject* owner, const std::
 	m_IsBackground{isBackground},
 	m_SourceRect{},
 	m_ScaleX{1},
-	m_ScaleY{ 1 }
+	m_ScaleY{ 1 },
+	m_Angle{ 0 },
+	m_Flip{ SDL_FLIP_NONE}
 {
 	m_Texture = std::make_unique<Texture2D>(filePath);
 
@@ -28,10 +30,6 @@ dae::SimpleRenderComponent::SimpleRenderComponent(GameObject* owner, const std::
 		SetTextureBackgound();
 	}
 
-	//if (!GetOwner()->HasComponent<ShapeComponent>())
-	//{
-	//	GetOwner()->AddComponent<ShapeComponent>();
-	//}
 
 	m_SourceRect = { 0,0, m_Texture->GetSize().x, m_Texture->GetSize().y };
 
@@ -50,7 +48,9 @@ dae::SimpleRenderComponent::SimpleRenderComponent(GameObject* owner, const std::
 	m_IsBackground{ false },
 	m_SourceRect{},
 	m_ScaleX{ 1 },
-	m_ScaleY{ 1 }
+	m_ScaleY{ 1 },
+	m_Angle{ 0 },
+	m_Flip{ SDL_FLIP_NONE }
 {
 	UpdateText();
 }
@@ -84,13 +84,8 @@ void dae::SimpleRenderComponent::Render() const
 		SDL_Rect destRect = { static_cast<int>(pos.x), static_cast<int>(pos.y), m_SourceRect.w * m_ScaleX, m_SourceRect.h * m_ScaleY };
 		SDL_Rect sourceRect = m_SourceRect;
 
-		Renderer::GetInstance().RenderTexture(m_Texture->GetSDLTexture(), &sourceRect, &destRect, 0, nullptr, SDL_FLIP_NONE);
+		Renderer::GetInstance().RenderTexture(m_Texture->GetSDLTexture(), &sourceRect, &destRect, m_Angle, nullptr, m_Flip);
 
-	}
-
-	if (m_IsBackground)
-	{
-		//Renderer::GetInstance().SetBackgroundTexture(m_Texture->GetSDLTexture());
 	}
 
 	
@@ -174,6 +169,12 @@ void dae::SimpleRenderComponent::SetScale(int scaleX, int scaleY)
 {
 	m_ScaleX = scaleX;
 	m_ScaleY = scaleY;
+}
+
+void dae::SimpleRenderComponent::SetAngleAndFlip(float angle, SDL_RendererFlip flip)
+{
+	m_Angle = angle;
+	m_Flip = flip;
 }
 
 

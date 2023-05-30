@@ -9,6 +9,8 @@
 
 #include <iostream>
 #include "SimpleRenderComponent.h"
+#include "HealthComponent.h"
+#include "SoundServiceLocator.h"
 
 namespace dae
 {
@@ -40,9 +42,9 @@ namespace dae
 
 		m_CellSize = cellSize;
 
+		//std::cout << m_CellSize.y << '\n';
 
-
-
+		//std::cout << m_CellSize.x << '\n';
 	}
 
 	CharacterComponent::~CharacterComponent()
@@ -53,9 +55,16 @@ namespace dae
 
 	void CharacterComponent::HandleInput(Command::InputType inputType, PlayerStateType newStateType)
 	{
-		PlayerState* newState = m_CurrentState->HandleInput( inputType, newStateType);
+
+		PlayerState* newState = m_CurrentState->HandleInput(inputType, newStateType);
+
 		if (newState != nullptr)
 		{
+			if (newStateType != m_CurrentState->GetType())
+			{
+				m_CurrentState->UpdateSprite(GetOwner(), GetDirection());
+			}
+
 			SetState(newState);
 		}
 	}
@@ -65,14 +74,30 @@ namespace dae
 	{
 		m_CurrentState->Update(GetOwner(), this);
 
-		World::GetInstance().BreakWorld(GetOwner(), {30,30});
+		auto pos = GetPosition();
+
+		if (pos.y <= 2 * m_CellSize.y)
+		{
+			GetOwner()->SetPosition(pos.x, pos.y + 0.1f);
+
+		}
+		if (pos.y + m_CellSize.y >= 720)
+		{
+			GetOwner()->SetPosition(pos.x, pos.y - 0.1f);
+
+		}
+		if (pos.x <= 0)
+		{
+			GetOwner()->SetPosition(pos.x + 0.1f, pos.y);
+
+		}
+		if (pos.x + m_CellSize.y >= 1080)
+		{
+			GetOwner()->SetPosition(pos.x - 0.1f, pos.y);
+		}
 
 
 
-
-
-		glm::ivec3 pos = GetOwner()->GetPosition().GetPosition();
-		SDL_Rect rect = SDL_Rect{ pos.x, pos.y, 50, 50 };
 		
 	}
 
@@ -81,7 +106,7 @@ namespace dae
 		glm::vec3 currentPos = GetOwner()->GetPosition().GetPosition();
 
 		SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), Renderer::GetInstance().GetCanvas());
-		SDL_Rect rect = SDL_Rect{ static_cast<int>(currentPos.x) , static_cast<int>(currentPos.y), 50 ,50 };
+		SDL_Rect rect = SDL_Rect{ static_cast<int>(currentPos.x) , static_cast<int>(currentPos.y), m_CellSize.x ,m_CellSize.y };
 		SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 0, 0, 255);
 		SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
 
@@ -91,12 +116,7 @@ namespace dae
 	void CharacterComponent::Init()
 	{
 		SetState(new IdleState());
-
 	}
-
-
-
-
 
 	void CharacterComponent::SetState(PlayerState* newState)
 	{
@@ -107,6 +127,7 @@ namespace dae
 		}
 
 		m_CurrentState = newState;
+		m_CurrentState->UpdateSprite(GetOwner(), m_Direction);
 	}
 
 	glm::vec2 CharacterComponent::CalculateWalk(int direction, int cellSize, float x, float y)
@@ -129,6 +150,23 @@ namespace dae
 		return glm::vec2(x, y);
 	}
 
+	void CharacterComponent::GetDamaged()
+	{
+	}
+
+
+	void CharacterComponent::Shoot()
+	{
+	}
+
+	void CharacterComponent::Respawn()
+	{
+	}
+
+	void CharacterComponent::UpdateDeath()
+	{
+	}
+
 
 
 
@@ -137,11 +175,13 @@ namespace dae
 		return GetOwner()->GetPosition().GetPosition();
 	}
 
-
-
 	void CharacterComponent::SetDirection(int direction)
 	{
-		m_Direction = direction;
+		if (m_CurrentState->GetType() != PlayerStateType::Dead && m_Direction != direction)
+		{
+			m_Direction = direction;
+			m_CurrentState->UpdateSprite(GetOwner(), direction);
+		}
 	}
 
 	int CharacterComponent::GetDirection()

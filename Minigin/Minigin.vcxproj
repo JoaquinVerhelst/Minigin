@@ -219,6 +219,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="Component.h" />
     <ClInclude Include="DiggerComponent.h" />
     <ClInclude Include="EmeraldComponent.h" />
+    <ClInclude Include="FireBallComponent.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameObject.h" />
@@ -265,6 +266,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="DiggerComponent.cpp" />
     <ClCompile Include="EmeraldComponent.cpp" />
+    <ClCompile Include="FireBallComponent.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FPSComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />

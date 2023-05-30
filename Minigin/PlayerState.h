@@ -12,7 +12,8 @@ namespace dae
 	{
 		Idle,
 		HorizontalWalk,
-		VerticalWalk
+		VerticalWalk,
+		Dead
 
 	};
 
@@ -23,6 +24,7 @@ namespace dae
 
 		PlayerState() = default;
 		virtual ~PlayerState() = default;
+		virtual void UpdateSprite(GameObject* actor, int direction) = 0;
 		virtual PlayerState* HandleInput(Command::InputType inputType, PlayerStateType newStateType) = 0;
 		virtual void Update(GameObject*, CharacterComponent*) {};
 
@@ -43,6 +45,7 @@ namespace dae
 		}
 
 		~HorizontalWalkState() = default;
+		void UpdateSprite(GameObject* actor, int direction) override;
 		PlayerState* HandleInput( Command::InputType inputType, PlayerStateType newStateType) override;
 		void Update(GameObject* actor, CharacterComponent* character) override;
 	};
@@ -56,11 +59,10 @@ namespace dae
 		}
 
 		~VerticalWalkState() = default;
+		void UpdateSprite(GameObject* actor, int direction) override;
 		PlayerState* HandleInput( Command::InputType inputType, PlayerStateType newStateType) override;
 		void Update(GameObject* actor, CharacterComponent* character) override;
 	};
-
-
 
 
 	class IdleState : public PlayerState
@@ -73,9 +75,24 @@ namespace dae
 		}
 
 		~IdleState() = default;
-
+		void UpdateSprite(GameObject* actor, int direction) override;
 		PlayerState* HandleInput( Command::InputType inputType, PlayerStateType newStateType) override;
 	};
 
+
+	class DeadState : public PlayerState
+	{
+	public:
+
+		DeadState()
+		{
+			m_Type = PlayerStateType::Idle;
+		}
+
+		~DeadState() = default;
+		void UpdateSprite(GameObject* actor, int direction) override;
+		PlayerState* HandleInput(Command::InputType inputType, PlayerStateType newStateType) override;
+		void Update(GameObject* actor, CharacterComponent* character) override;
+	};
 
 }

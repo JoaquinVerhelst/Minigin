@@ -26,10 +26,16 @@ namespace dae
 		DiggerComponent& operator=(DiggerComponent&& other) = delete;
 
 
+		void GetDamaged() override;
+		void Shoot() override;
+		void Respawn() override;
+		void UpdateDeath() override;
 	private:
 
 
-
+		bool m_IsDamaged;
+		float m_DeathCounter;
+		float m_DeathTime;
 
 
 

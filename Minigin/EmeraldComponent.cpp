@@ -13,14 +13,20 @@ void dae::EmeraldComponent::Update()
 {
 }
 
+void dae::EmeraldComponent::FixedUpdate()
+{
+}
+
 void dae::EmeraldComponent::Init()
 {
 }
 
 bool dae::EmeraldComponent::PickUpTreasure(GameObject* actor)
 {
-	SoundServiceLocator::GetSoundSysyem().Play(1, 1.0f);
-	actor->GetComponent<ScoreComponent>().AddScore(25);
+	SoundServiceLocator::GetSoundSystem().Play(1, 1.0f);
+
+	actor->GetComponent<ScoreComponent>().AddEmeraldScore(25);
+
 	return true;
 }
 
