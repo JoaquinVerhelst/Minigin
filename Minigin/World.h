@@ -37,6 +37,7 @@ namespace dae
 
 		enum class WorldTypes
 		{
+			Default,
 			Menu,
 			Level,
 			HighScore
@@ -82,7 +83,16 @@ namespace dae
 
 		void PlayerDied();
 
+		void LoadSinglePlayer();
+		void LoadCoop();
+		void LoadVersus();
 	private:
+
+
+
+
+
+		std::vector<std::shared_ptr<GameObject>> m_Players;
 
 		std::vector<GridCell*> m_Grid;
 		int m_Rows;

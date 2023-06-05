@@ -37,7 +37,7 @@
     <Filter Include="Engine Files\Patterns\SoundSystem">
       <UniqueIdentifier>{87df1ddc-f33f-46f9-97f9-08c8e3322e1d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine Files\Patterns\SoundSystem\State">
+    <Filter Include="Engine Files\Patterns\State">
       <UniqueIdentifier>{7cf010df-b579-4b13-8b67-f2fb285b2927}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -145,7 +145,7 @@
       <Filter>Engine Files\Patterns\Command</Filter>
     </ClInclude>
     <ClInclude Include="PlayerState.h">
-      <Filter>Engine Files\Patterns\SoundSystem\State</Filter>
+      <Filter>Engine Files\Patterns\State</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Engine Files\Singletons</Filter>
@@ -175,13 +175,16 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="GoldStateMachine.h">
-      <Filter>Engine Files\Patterns\SoundSystem\State</Filter>
+      <Filter>Engine Files\Patterns\State</Filter>
     </ClInclude>
     <ClInclude Include="FireBallComponent.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="NobbinManager.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonManager.h">
+      <Filter>Engine Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -276,7 +279,7 @@
       <Filter>Engine Files\Patterns\Command</Filter>
     </ClCompile>
     <ClCompile Include="PlayerState.cpp">
-      <Filter>Engine Files\Patterns\SoundSystem\State</Filter>
+      <Filter>Engine Files\Patterns\State</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Engine Files\Singletons</Filter>
@@ -306,13 +309,16 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="GoldStateMachine.cpp">
-      <Filter>Engine Files\Patterns\SoundSystem\State</Filter>
+      <Filter>Engine Files\Patterns\State</Filter>
     </ClCompile>
     <ClCompile Include="FireBallComponent.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="NobbinManager.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonManager.cpp">
+      <Filter>Engine Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

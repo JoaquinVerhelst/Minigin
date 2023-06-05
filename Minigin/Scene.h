@@ -10,18 +10,37 @@ namespace dae
 
 	struct LevelInfo
 	{
+		LevelInfo()
+		{
+			name = "";
+			background = nullptr;
+			worldType = World::WorldTypes::Default;
+			player1 = nullptr;
+			player1PosIndex = 0;
+			player2 = nullptr;
+			player2PosIndex = 0;
+			brokenWorldIndexs = {};
+			emeraldIndexs = {};
+			goldIndexs = {};
+		}
+
+
+		std::string name;
+		std::string backgroundFilepath;
+
 		World::WorldTypes worldType;
 
-		std::shared_ptr<GameObject> background;
-
-		std::shared_ptr<GameObject> player1;
 		int player1PosIndex;
-		std::shared_ptr<GameObject> player2;
-		int player2PosIndex;
 
+		int player2PosIndex;
 		std::vector<int> brokenWorldIndexs;
 		std::vector<int> emeraldIndexs;
 		std::vector<int> goldIndexs;
+
+
+		std::shared_ptr<GameObject> background;
+		std::shared_ptr<GameObject> player1;
+		std::shared_ptr<GameObject> player2;
 
 		//enemyManager 
 		//enemyManagerPos

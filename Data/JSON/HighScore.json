@@ -1,0 +1,22 @@
+{
+	"singlePlayer": [
+		{
+			"name": "Joa",
+			"score": 500
+		}
+	],
+	"coop": [
+		{
+			"name1": "Joa",
+			"score1": 500,
+			"name2": "Joa",
+			"score2": 500
+		}
+	],
+	"versus": [
+		{
+			"name": "Joa",
+			"score": 500
+		}
+	]
+}

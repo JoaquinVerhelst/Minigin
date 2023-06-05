@@ -96,23 +96,28 @@ namespace dae
 
 		if (IsPointInRect(m_MousePos, m_SinglePlayerButton.shape))
 		{
-			std::cout << "Singleplayer";
+			auto& world = World::GetInstance();
+			world.SetGameMode(World::GameModeTypes::SinglePlayer);
+			world.LoadSinglePlayer();
+
 			SceneManager::GetInstance().NextScene();
-			World::GetInstance().SetGameMode(World::GameModeTypes::SinglePlayer);
 
 		}
 		else if (IsPointInRect(m_MousePos, m_CoopButton.shape))
 		{
-			std::cout << "Coop";
-			SceneManager::GetInstance().NextScene();
-			World::GetInstance().SetGameMode(World::GameModeTypes::Coop);
+			auto& world = World::GetInstance();
+			world.SetGameMode(World::GameModeTypes::Coop);
+			world.LoadCoop();
 
+			SceneManager::GetInstance().NextScene();
 		}
 		else if (IsPointInRect(m_MousePos, m_VersusButton.shape))
 		{
-			std::cout << "Versus";
+			auto& world = World::GetInstance();
+			world.SetGameMode(World::GameModeTypes::Versus);
+			world.LoadVersus();
+
 			SceneManager::GetInstance().NextScene();
-			World::GetInstance().SetGameMode(World::GameModeTypes::Versus);
 		}
 		else if (IsPointInRect(m_MousePos, m_HighScoreButton.shape))
 		{

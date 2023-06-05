@@ -119,19 +119,6 @@ namespace dae
 			return m_CurrentStates[ID].Gamepad.wButtons & button;
 		}
 
-
-		//float GetThumbStickX(int ID) const
-		//{
-		//	//magic number = analog thumb stick max
-		//	return fmaxf(-1, static_cast<float>(m_CurrentStates[ID].Gamepad.sThumbRX / 32767.00000f));
-		//}
-		//float GetThumbStickY(int ID) const
-		//{
-		//	//magic number = analog thumb stick max
-		//	return fmaxf(-1, static_cast<float>(m_CurrentStates[ID].Gamepad.sThumbRY / 32767.00000f));
-		//}
-
-
 		~InputManagerImpl()
 		{
 			delete m_PreviousStates;
@@ -199,14 +186,15 @@ namespace dae
 			const Uint8* keystate = SDL_GetKeyboardState(NULL);
 			for (size_t i = 0; i < m_KeyBinds.size(); i++)
 			{
-				if (keystate[m_KeyBinds[i].button] && !m_Players.empty())
+				if (m_KeyBinds[i].inputID < m_Players.size())
 				{
-					m_KeyBinds[i].command->Execute(m_Players[m_KeyBinds[i].inputID], Command::InputType::Pressed);
-					m_KeyBinds[i].isPressed = true;
+					if (keystate[m_KeyBinds[i].button])
+					{
+						m_KeyBinds[i].command->Execute(m_Players[m_KeyBinds[i].inputID], Command::InputType::Pressed);
+						m_KeyBinds[i].isPressed = true;
+					}
 				}
-
 			}
-
 		}
 
 
@@ -230,7 +218,7 @@ namespace dae
 			
 			for (size_t j = 0; j < m_KeyBinds.size(); j++)
 			{
-				if (IsKeyBoardKey(m_KeyBinds[j].button, SDL_KEYUP))
+				if (m_KeyBinds[j].inputID < m_Players.size() && IsKeyBoardKey(m_KeyBinds[j].button, SDL_KEYUP))
 					m_KeyBinds[j].command->Execute(m_Players[m_KeyBinds[j].inputID], Command::InputType::Up);
 			}
 

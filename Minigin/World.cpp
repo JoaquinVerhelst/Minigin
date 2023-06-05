@@ -13,6 +13,7 @@
 #include "GoldComponent.h"
 #include "TreasureComponent.h"
 #include "Scene.h"
+#include "JsonManager.h"
 
 using namespace dae;
 
@@ -286,8 +287,12 @@ std::vector<GridCell*> dae::World::GetWorldGrid()
 
 void dae::World::PlaceTreasure(std::shared_ptr<GameObject> treasure, int gridIndex)
 {
-    treasure->SetPosition(m_Grid[gridIndex]->position.x, m_Grid[gridIndex]->position.y);
-    m_Treasure.emplace_back(treasure);
+    if (gridIndex >= 0 && gridIndex < m_Grid.size())
+    {
+        treasure->SetPosition(m_Grid[gridIndex]->position.x, m_Grid[gridIndex]->position.y);
+        m_Treasure.emplace_back(treasure);
+    }
+
 }
 
 void dae::World::PlaceGameObject(std::shared_ptr<GameObject> gameobject, int gridIndex)
@@ -305,10 +310,10 @@ void dae::World::BreakGridIndexes(std::vector<int> gridIndexes)
     for (size_t i = 0; i < gridIndexes.size(); i++)
     {
 
-        if (gridIndexes[i] - 1>= m_Grid.size())
+        if (gridIndexes[i] >= m_Grid.size())
             break;
 
-        m_Grid[gridIndexes[i] - 1]->isCellBroken = true;
+        m_Grid[gridIndexes[i]]->isCellBroken = true;
     }
 }
 
@@ -341,12 +346,9 @@ void dae::World::ResetAndLoadWorld(int index)
     m_CurrentWorldIndex = index;
 
 
-
-
     LevelInfo* currentLevelInfo = SceneManager::GetInstance().GetSceneLevelInfo(m_CurrentWorldIndex);
     //auto treasures = SceneManager::GetInstance().GetSceneTreasure(m_CurrentWorldIndex);
-
-
+    // 
     // background
     Renderer::GetInstance().SetBackgroundTexture(currentLevelInfo->background->GetComponent<SimpleRenderComponent>().GetTexture()->GetSDLTexture());
 
@@ -354,14 +356,24 @@ void dae::World::ResetAndLoadWorld(int index)
     BreakGridIndexes(currentLevelInfo->brokenWorldIndexs);
 
 
+
     //Place players and set idle
     if (currentLevelInfo->worldType == WorldTypes::Level)
     {
-        currentLevelInfo->player1->GetComponent<CharacterComponent>().SetState(new IdleState());
-        PlaceGameObject(currentLevelInfo->player1, currentLevelInfo->player1PosIndex - 1);
+        for (size_t i = 0; i < m_Players.size(); i++)
+        {
+            m_Players[i]->GetComponent<CharacterComponent>().SetState(new IdleState());
 
-        currentLevelInfo->player2->GetComponent<CharacterComponent>().SetState(new IdleState());
-        PlaceGameObject(currentLevelInfo->player2, currentLevelInfo->player2PosIndex - 1);
+            if (i == 0)
+            {
+                PlaceGameObject(m_Players[i], currentLevelInfo->player1PosIndex);
+            }
+            else
+            {
+                PlaceGameObject(m_Players[i], currentLevelInfo->player2PosIndex);
+            }
+
+        }
     }
   
     // place treasure
@@ -376,7 +388,7 @@ void dae::World::ResetAndLoadWorld(int index)
 
         SceneManager::GetInstance().GetScene(m_CurrentWorldIndex)->AddTreasure(go);
 
-        World::GetInstance().PlaceTreasure(go, currentLevelInfo->emeraldIndexs[i] - 1);
+        World::GetInstance().PlaceTreasure(go, currentLevelInfo->emeraldIndexs[i]);
     }
 
 
@@ -384,11 +396,11 @@ void dae::World::ResetAndLoadWorld(int index)
     {
         go = std::make_shared<dae::GameObject>();
         go->AddComponent<SimpleRenderComponent>("../Data/Sprites/Gold.png");
-        go->AddComponent<GoldComponent>(currentLevelInfo->goldIndexs[i] - 1);
+        go->AddComponent<GoldComponent>(currentLevelInfo->goldIndexs[i] );
 
         SceneManager::GetInstance().GetScene(m_CurrentWorldIndex)->AddTreasure(go);
 
-        World::GetInstance().PlaceTreasure(go, currentLevelInfo->goldIndexs[i] - 1);
+        World::GetInstance().PlaceTreasure(go, currentLevelInfo->goldIndexs[i] );
     }
 
     // place enemy Manager
@@ -420,5 +432,75 @@ void dae::World::PlayerDied()
     {
         // TODO : stop and save highscore
     }
+
+
+    ResetAndLoadWorld(0);
+}
+
+void dae::World::LoadSinglePlayer()
+{
+    m_Players.clear();
+
+    auto player = JsonManager::GetInstance().LoadPlayer();
+    m_Players.emplace_back(player);
+
+
+    auto scenes = SceneManager::GetInstance().GetScenes();
+
+    for (auto& scene : scenes)
+    {
+        if (scene->GetLevelInfo()->worldType == WorldTypes::Level)
+        {
+            scene->Add(player);
+        }
+    }
+}
+
+void dae::World::LoadCoop()
+{
+    m_Players.clear();
+
+
+    auto player1 = JsonManager::GetInstance().LoadPlayer();
+    m_Players.emplace_back(player1);
+
+    auto player2 = JsonManager::GetInstance().LoadPlayer();
+    m_Players.emplace_back(player2);
+
+
+    auto scenes = SceneManager::GetInstance().GetScenes();
+
+    for (auto& scene : scenes)
+    {
+        if (scene->GetLevelInfo()->worldType == WorldTypes::Level)
+        {
+            scene->Add(player1);
+            scene->Add(player2);
+        }
+    }
+}
+
+void dae::World::LoadVersus()
+{
+    m_Players.clear();
+
+    auto player1 = JsonManager::GetInstance().LoadPlayer();
+    m_Players.emplace_back(player1);
+
+    auto player2 = JsonManager::GetInstance().LoadNobbinPlayer();
+    m_Players.emplace_back(player2);
+
+
+    auto scenes = SceneManager::GetInstance().GetScenes();
+
+    for (auto& scene : scenes)
+    {
+        if (scene->GetLevelInfo()->worldType == WorldTypes::Level)
+        {
+            scene->Add(player1);
+            scene->Add(player2);
+        }
+    }
+
 }
 

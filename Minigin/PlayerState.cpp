@@ -54,18 +54,18 @@ bool dae::HorizontalWalkState::CheckCollision(GameObject* actor, CharacterCompon
 {
 	auto cellSize = character->GetCellSize();
 	glm::vec3 currentPos = character->GetPosition();
-
+	float offset = 0.5f;
 	
 	if (World::GetInstance().CheckForTreasure(actor, { cellSize.x - 1.f ,cellSize.y - 1.f }))
 	{
 
 		if (character->GetDirection() == 0)
 		{
-			actor->SetPosition(currentPos.x - .5f, currentPos.y);
+			actor->SetPosition(currentPos.x - offset, currentPos.y);
 		}
 		else
 		{
-			actor->SetPosition(currentPos.x + .5f, currentPos.y);
+			actor->SetPosition(currentPos.x + offset, currentPos.y);
 		}
 		return true;
 	}

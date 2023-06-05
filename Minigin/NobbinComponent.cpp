@@ -14,8 +14,8 @@
 namespace dae
 {
 
-	NobbinComponent::NobbinComponent(GameObject* owner, float walkSpeed)
-		: dae::CharacterComponent(owner, walkSpeed, false)
+	NobbinComponent::NobbinComponent(GameObject* owner, float walkSpeed, bool isControlledByPlayer)
+		: dae::CharacterComponent(owner, walkSpeed, isControlledByPlayer)
         , m_WalkDirection{0}
         , m_Counter{5.f}
         , m_UpdateDirectionTime{0.15f}
@@ -30,7 +30,9 @@ namespace dae
 	}
 
 
-	void NobbinComponent::CalculateMovement()
+
+
+    void NobbinComponent::CalculateMovement()
 	{
         auto grid = World::GetInstance().GetWorldGrid();
         const int gridSize = static_cast<int>(grid.size());
@@ -176,10 +178,22 @@ namespace dae
         {
             glm::vec3 currentPos = GetOwner()->GetPosition().GetPosition();
 
-            if (!World::GetInstance().GetOverlappedUnbrokenCell(currentPos, glm::vec2(50, 50)))
+
+
+            if (CalculateBounceBack())
             {
-                m_CurrentState->Update(GetOwner(), this);
+                m_CurrentState->Update(GetOwner(), this);;
             }
+
+
+            //if (!World::GetInstance().GetOverlappedUnbrokenCell(currentPos, glm::vec2(50, 50)))
+            //{
+            //    m_CurrentState->Update(GetOwner(), this);
+            //}
+            //else
+            //{
+            //    CalculateBounceBack();
+            //}
         }
 	}
 
@@ -202,5 +216,68 @@ namespace dae
 	}
 
 
+    bool NobbinComponent::CalculateBounceBack()
+    {
+
+        glm::vec3 currentPos = GetPosition();
+
+
+        auto grid = World::GetInstance().GetWorldGrid();
+        const int gridSize = static_cast<int>(grid.size());
+
+
+        //float offset = 0.05f;
+
+        if (m_CurrentState->GetType() == PlayerStateType::VerticalWalk)
+        {
+            if (m_Direction == 0)
+            {
+
+                m_CurrentCell = World::GetInstance().GetOverlappedCell(glm::vec2(currentPos.x + m_CellSize.x/2, currentPos.y), glm::vec2(1, 1));
+
+
+                if (m_CurrentCell->id + 1 <= gridSize && grid[m_CurrentCell->id + 1]->isCellBroken)
+                {
+                    return true;
+                }
+                //GetOwner()->SetPosition(currentPos.x - offset, currentPos.y);
+            }
+            else
+            {
+                m_CurrentCell = World::GetInstance().GetOverlappedCell(glm::vec2(currentPos.x + m_CellSize.x / 2, currentPos.y + m_CellSize.y), glm::vec2(1, 1));
+
+                if (m_CurrentCell->id - 1 >= 0 && grid[m_CurrentCell->id - 1]->isCellBroken)
+                {
+                    return true;
+                }
+               // GetOwner()->SetPosition(currentPos.x + offset, currentPos.y);
+            }
+        }
+        if (m_CurrentState->GetType() == PlayerStateType::HorizontalWalk)
+        {
+            if (m_Direction == 1)
+            {
+                m_CurrentCell = World::GetInstance().GetOverlappedCell(glm::vec2(currentPos.x + m_CellSize.x, currentPos.y + m_CellSize.x / 2), glm::vec2(1, 1));
+                if (m_CurrentCell->id - 14 >= 0 && grid[m_CurrentCell->id - 14]->isCellBroken)
+                {
+                    return true;
+                }
+              //  GetOwner()->SetPosition(currentPos.x, currentPos.y - offset);
+            }
+            else
+            {
+                m_CurrentCell = World::GetInstance().GetOverlappedCell(glm::vec2(currentPos.x, currentPos.y + m_CellSize.x / 2), glm::vec2(1, 1));
+
+                if (m_CurrentCell->id + 14 <= gridSize && grid[m_CurrentCell->id + 14]->isCellBroken)
+                {
+                    return true;
+                }
+
+               // GetOwner()->SetPosition(currentPos.x, currentPos.y + offset);
+            }
+        }
+
+        return false;
+    }
 
 }

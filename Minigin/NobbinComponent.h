@@ -17,7 +17,7 @@ namespace dae
 		void Render() const override;
 		bool IsRenderer() override { return true; }
 
-		NobbinComponent(GameObject* owner, float walksSpeed = { 50.f });
+		NobbinComponent(GameObject* owner, float walksSpeed = { 50.f }, bool isControlledByPlayer = false);
 		~NobbinComponent();
 
 		NobbinComponent(const NobbinComponent& other) = delete;
@@ -28,7 +28,7 @@ namespace dae
 		//void HorizontalWalk(int direction) override;
 	private:
 
-
+		bool CalculateBounceBack();
 		void CalculateMovement() override;
 		void CalculateCell() override;
 

@@ -3,10 +3,12 @@
 
 #include "Component.h"
 #include <vector>
+#include "GameObject.h"
+
 
 namespace dae
 {
-	class GameObject;
+	//class GameObject;
 
 	class NobbinManager final : public Component
 	{
@@ -36,7 +38,7 @@ namespace dae
 
 		int m_AmountofNobbinLeft;
 
-		std::vector<GameObject> m_Nobbins;
-		std::vector<GameObject> m_Players;
+		std::vector<GameObject*> m_Nobbins;
+		std::vector<GameObject*> m_Players;
 	};
 }

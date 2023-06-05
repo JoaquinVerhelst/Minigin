@@ -30,7 +30,7 @@ namespace dae
 		LevelInfo* GetCurrentSceneLevelInfo();
 		std::shared_ptr<Scene> GetCurrentScene();
 
-
+		std::vector<std::shared_ptr<Scene>> GetScenes();
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

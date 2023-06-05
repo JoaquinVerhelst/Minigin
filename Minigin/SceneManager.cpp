@@ -94,6 +94,11 @@ std::shared_ptr <dae::Scene > dae::SceneManager::GetCurrentScene()
 	return m_scenes[m_CurrentId];
 }
 
+std::vector<std::shared_ptr<dae::Scene>> dae::SceneManager::GetScenes()
+{
+	return m_scenes;
+}
+
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 {
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
