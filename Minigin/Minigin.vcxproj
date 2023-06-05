@@ -239,6 +239,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="MenuComponent.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="NobbinComponent.h" />
+    <ClInclude Include="NobbinManager.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="RotatorComponent.h" />
     <ClInclude Include="ScoreComponent.h" />
@@ -286,6 +287,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="MenuComponent.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="NobbinComponent.cpp" />
+    <ClCompile Include="NobbinManager.cpp" />
     <ClCompile Include="RotatorComponent.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
     <ClCompile Include="ScoreDisplayComponent.cpp" />

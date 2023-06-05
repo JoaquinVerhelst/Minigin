@@ -24,13 +24,14 @@ namespace dae
 		, m_CellSize{ 0 }
 		, m_CurrentState{ new IdleState()}
 		, m_InputID{0}
-		,m_Direction{0}
+		, m_Direction{0}
+		, m_CurrentCell{ nullptr }
+		, m_ControlledByPlayer{ isControlledByPlayer }
 	{
-		auto& input = InputManager::GetInstance();
-
 
 		if (isControlledByPlayer)
 		{
+			auto& input = InputManager::GetInstance();
 			m_InputID = input.AssignController(GetOwner());
 		}
 		else
@@ -38,13 +39,7 @@ namespace dae
 			m_InputID = -1;
 		}
 
-		glm::ivec2 cellSize = World::GetInstance().GetCellSize();
-
-		m_CellSize = cellSize;
-
-		//std::cout << m_CellSize.y << '\n';
-
-		//std::cout << m_CellSize.x << '\n';
+		m_CellSize = World::GetInstance().GetCellSize();;
 	}
 
 	CharacterComponent::~CharacterComponent()
@@ -72,8 +67,36 @@ namespace dae
 
 	void CharacterComponent::Update()
 	{
-		m_CurrentState->Update(GetOwner(), this);
+		if (!m_CurrentState->CheckCollision(GetOwner(), this))
+		{
+			m_CurrentState->Update(GetOwner(), this);
+		}
 
+		CheckBorders();
+
+	}
+
+	void CharacterComponent::Render() const
+	{
+		// Renders the broken cells by player
+
+		glm::vec3 currentPos = GetOwner()->GetPosition().GetPosition();
+
+		SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), Renderer::GetInstance().GetCanvas());
+		SDL_Rect rect = SDL_Rect{ static_cast<int>(currentPos.x) , static_cast<int>(currentPos.y), m_CellSize.x ,m_CellSize.y };
+		SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 0, 0, 255);
+		SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
+
+		SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), nullptr);
+	}
+
+	void CharacterComponent::Init()
+	{
+		SetState(new IdleState());
+	}
+
+	void CharacterComponent::CheckBorders()
+	{
 		auto pos = GetPosition();
 
 		if (pos.y <= 2 * m_CellSize.y)
@@ -95,27 +118,6 @@ namespace dae
 		{
 			GetOwner()->SetPosition(pos.x - 0.1f, pos.y);
 		}
-
-
-
-		
-	}
-
-	void CharacterComponent::Render() const
-	{
-		glm::vec3 currentPos = GetOwner()->GetPosition().GetPosition();
-
-		SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), Renderer::GetInstance().GetCanvas());
-		SDL_Rect rect = SDL_Rect{ static_cast<int>(currentPos.x) , static_cast<int>(currentPos.y), m_CellSize.x ,m_CellSize.y };
-		SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 0, 0, 255);
-		SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
-
-		SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), nullptr);
-	}
-
-	void CharacterComponent::Init()
-	{
-		SetState(new IdleState());
 	}
 
 	void CharacterComponent::SetState(PlayerState* newState)
@@ -149,6 +151,8 @@ namespace dae
 
 		return glm::vec2(x, y);
 	}
+
+
 
 	void CharacterComponent::GetDamaged()
 	{

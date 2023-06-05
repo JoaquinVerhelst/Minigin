@@ -13,8 +13,11 @@ namespace dae
 
 	struct GridCell
 	{
+		int id;
 		glm::vec2 position;
 		bool isCellBroken;
+
+		bool temp;
 	};
 
 
@@ -48,7 +51,11 @@ namespace dae
 
 		bool IsOverlappingWithWorld(const glm::vec2& position, const glm::vec2& size) const;
 		size_t GetOverlappedTreasureIndex(const glm::vec2& position, const glm::vec2& size) const;
+
+
+		GridCell* GetOverlappedUnbrokenCell(const glm::vec2& position, const glm::vec2& size) const;
 		GridCell* GetOverlappedCell(const glm::vec2& position, const glm::vec2& size) const;
+
 
 
 		void BreakWorld(GameObject* actor, const glm::vec2& size);
@@ -74,6 +81,7 @@ namespace dae
 		void ResetAndLoadWorld(int index);
 
 		void PlayerDied();
+
 	private:
 
 		std::vector<GridCell*> m_Grid;

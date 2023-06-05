@@ -7,6 +7,7 @@
 #include "Subject.h"
 #include "GameObject.h"
 #include "Command.h"
+#include "World.h"
 #include "PlayerState.h"
 
 namespace dae
@@ -45,25 +46,27 @@ namespace dae
 
 		int GetInputID() { return m_InputID; }
 
-		//void CalculatePosition();
+		void CheckBorders();
 
 		PlayerState* GetState() { return m_CurrentState; }
 		void SetState(PlayerState* newState);
 
 		glm::vec2 CalculateWalk(int direction, int cellSize, float x, float y);
-
+		GridCell* GetCurrentCell() { return m_CurrentCell; }
 
 		virtual void GetDamaged();
 		virtual void Shoot();
 		virtual void Respawn();
 		virtual void UpdateDeath();
 
+		virtual void CalculateMovement() {};
+		virtual void CalculateCell() {};
 	protected:
 
 		int m_Direction;
 		int m_InputID;
 		float m_WalkSpeed;
-
+		bool m_ControlledByPlayer;
 
 
 		PlayerState* m_CurrentState;
@@ -71,6 +74,7 @@ namespace dae
 
 		glm::ivec2 m_CellSize;
 
+		GridCell* m_CurrentCell;
 
 
 

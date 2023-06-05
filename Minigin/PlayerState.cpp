@@ -43,9 +43,19 @@ dae::PlayerState* dae::HorizontalWalkState::HandleInput(Command::InputType input
 void dae::HorizontalWalkState::Update(GameObject* actor, CharacterComponent* character)
 {
 
+	glm::vec3 currentPos = character->GetPosition();
+
+	auto vec = character->CalculateWalk(character->GetDirection(), character->GetCellSize().y, currentPos.y, currentPos.x);
+	actor->SetPosition(vec.y, vec.x);
+
+}
+
+bool dae::HorizontalWalkState::CheckCollision(GameObject* actor, CharacterComponent* character)
+{
 	auto cellSize = character->GetCellSize();
 	glm::vec3 currentPos = character->GetPosition();
 
+	
 	if (World::GetInstance().CheckForTreasure(actor, { cellSize.x - 1.f ,cellSize.y - 1.f }))
 	{
 
@@ -57,14 +67,32 @@ void dae::HorizontalWalkState::Update(GameObject* actor, CharacterComponent* cha
 		{
 			actor->SetPosition(currentPos.x + .5f, currentPos.y);
 		}
+		return true;
+	}
+
+	return false;
+}
+
+void dae::HorizontalWalkState::CalculateDirection(GameObject* actor, CharacterComponent* character)
+{
+	glm::vec3 currentPos = actor->GetPosition().GetPosition();
+
+	auto cell = character->GetCurrentCell();
+
+	if (character->GetDirection() == 0)
+	{
+		if (currentPos.x >= cell->position.x )
+		{
+			character->CalculateCell();
+		}
 	}
 	else
 	{
-		auto vec = character->CalculateWalk(character->GetDirection(), cellSize.y, currentPos.y, currentPos.x);
-		actor->SetPosition(vec.y, vec.x);
+		if (currentPos.x + 50 <= cell->position.x)
+		{
+			character->CalculateCell();
+		}
 	}
-
-	World::GetInstance().BreakWorld(actor, { cellSize.x - 1.f,cellSize.y - 1.f });
 }
 
 
@@ -99,13 +127,20 @@ dae::PlayerState* dae::VerticalWalkState::HandleInput(Command::InputType inputTy
 	}
 	else
 	{
-
 		return nullptr;
 	}
 
 }
 
 void dae::VerticalWalkState::Update(GameObject* actor, CharacterComponent* character)
+{
+	glm::vec3 currentPos = character->GetPosition();
+
+	auto vec = character->CalculateWalk(character->GetDirection(), character->GetCellSize().x, currentPos.x, currentPos.y);
+	actor->SetPosition(vec.x, vec.y);
+}
+
+bool dae::VerticalWalkState::CheckCollision(GameObject* actor, CharacterComponent* character)
 {
 	auto cellSize = character->GetCellSize();
 	glm::vec3 currentPos = character->GetPosition();
@@ -121,15 +156,37 @@ void dae::VerticalWalkState::Update(GameObject* actor, CharacterComponent* chara
 		{
 			actor->SetPosition(currentPos.x, currentPos.y + 0.5f);
 		}
+		return true;
+	}
+
+	return false;
+}
+
+void dae::VerticalWalkState::CalculateDirection(GameObject* actor, CharacterComponent* character)
+{
+
+	glm::vec3 currentPos = actor->GetPosition().GetPosition();
+
+	auto cell = character->GetCurrentCell();
+
+
+	if (character->GetDirection() == 0)
+	{
+		if (currentPos.y >= cell->position.y)
+		{
+
+			character->CalculateCell();
+		}
 	}
 	else
 	{
-		auto vec = character->CalculateWalk(character->GetDirection(), character->GetCellSize().x, currentPos.x, currentPos.y);
-
-		actor->SetPosition(vec.x, vec.y);
+		if (currentPos.y + 50.f <= cell->position.y)
+		{
+			character->CalculateCell();
+		}
 	}
 
-	World::GetInstance().BreakWorld(actor, { cellSize.x - 1.f,cellSize.y - 1.f });
+
 }
 
 //----------- IDLE --------------------------------------------------------------------------

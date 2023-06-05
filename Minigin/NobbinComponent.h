@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Component.h"
-#include <glm/glm.hpp>
+
 #include "CharacterComponent.h"
-#include "Subject.h"
+
 
 namespace dae
 {
@@ -29,8 +29,15 @@ namespace dae
 	private:
 
 
+		void CalculateMovement() override;
+		void CalculateCell() override;
 
-		void CalculateMovement();
 
+		int m_WalkDirection;
+		float m_Counter;
+		float m_UpdateDirectionTime;
+
+
+		bool doonce = true;
 	};
 }

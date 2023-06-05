@@ -26,7 +26,10 @@ namespace dae
 		virtual ~PlayerState() = default;
 		virtual void UpdateSprite(GameObject* actor, int direction) = 0;
 		virtual PlayerState* HandleInput(Command::InputType inputType, PlayerStateType newStateType) = 0;
+
 		virtual void Update(GameObject*, CharacterComponent*) {};
+		virtual bool CheckCollision(GameObject*, CharacterComponent*) { return false; };
+		virtual void CalculateDirection(GameObject*, CharacterComponent*) {};
 
 		virtual PlayerStateType GetType() { return m_Type; }
 
@@ -48,6 +51,8 @@ namespace dae
 		void UpdateSprite(GameObject* actor, int direction) override;
 		PlayerState* HandleInput( Command::InputType inputType, PlayerStateType newStateType) override;
 		void Update(GameObject* actor, CharacterComponent* character) override;
+		bool CheckCollision(GameObject* actor, CharacterComponent* character) override;
+		void CalculateDirection(GameObject* actor , CharacterComponent* character ) override;
 	};
 
 	class VerticalWalkState : public PlayerState
@@ -62,6 +67,8 @@ namespace dae
 		void UpdateSprite(GameObject* actor, int direction) override;
 		PlayerState* HandleInput( Command::InputType inputType, PlayerStateType newStateType) override;
 		void Update(GameObject* actor, CharacterComponent* character) override;
+		bool CheckCollision(GameObject* actor, CharacterComponent* character) override;
+		void CalculateDirection(GameObject* actor, CharacterComponent* character) override;
 	};
 
 

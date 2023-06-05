@@ -56,7 +56,7 @@ void World::Init(int rows, int columns, SDL_Window* window)
 
 
     glm::ivec2 pos = {};
-
+    int index = 0;
 
     for (size_t r = 0; r < m_Rows; ++r)
     {
@@ -65,9 +65,14 @@ void World::Init(int rows, int columns, SDL_Window* window)
             pos = { r * m_CellWidth, c * m_CellHeight };
 
             GridCell* cell = new GridCell();
+            cell->id = index;
             cell->isCellBroken = false;
             cell->position = pos;
 
+
+            cell->temp = false;
+
+            ++index;
             m_Grid.emplace_back(cell);
         }
     }
@@ -99,7 +104,31 @@ void World::Render() const
                 SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
             }
          
+            if (m_Grid[i]->temp)
+            {
+                int x = static_cast<int>(m_Grid[i]->position.x);
+                int y = static_cast<int>(m_Grid[i]->position.y);
+
+                rect = { x , y, m_CellWidth, m_CellHeight };
+                SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255);
+                SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
+            }
+
         }
+    }
+
+    SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), nullptr);
+    for (size_t i = 0; i < m_Grid.size(); i++)
+    {
+        if (m_Grid[i]->temp)
+        {
+            int x = static_cast<int>(m_Grid[i]->position.x);
+            int y = static_cast<int>(m_Grid[i]->position.y);
+            SDL_Rect rect = { x , y, m_CellWidth, m_CellHeight };
+            SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255);
+            SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
+        }
+
     }
 }
 
@@ -168,7 +197,7 @@ size_t dae::World::GetOverlappedTreasureIndex(const glm::vec2& position, const g
     return static_cast<size_t>(-1);
 }
 
-GridCell* World::GetOverlappedCell(const glm::vec2& position, const glm::vec2& size) const
+GridCell* dae::World::GetOverlappedUnbrokenCell(const glm::vec2& position, const glm::vec2& size) const
 {
     for (const auto& cell : m_Grid)
     {
@@ -185,6 +214,23 @@ GridCell* World::GetOverlappedCell(const glm::vec2& position, const glm::vec2& s
     }
 
     return nullptr;
+}
+
+GridCell* World::GetOverlappedCell(const glm::vec2& position, const glm::vec2& size) const
+{
+    for (const auto& cell : m_Grid)
+    {
+        const glm::vec2& cellPos = cell->position;
+
+        if (position.x + size.x > cellPos.x && position.x < cellPos.x + m_CellWidth &&
+            position.y + size.y > cellPos.y && position.y < cellPos.y + m_CellHeight)
+        {
+            return cell;
+        }
+        
+    }
+
+    return nullptr;
 
 }
 
@@ -192,7 +238,7 @@ void World::BreakWorld(GameObject* actor, const glm::vec2& size)
 {
     auto pos = actor->GetPosition().GetPosition();
 
-    GridCell* cell = GetOverlappedCell(pos, size);
+    GridCell* cell = GetOverlappedUnbrokenCell(pos, size);
     
     if (cell && cell->isCellBroken == false)
         cell->isCellBroken = true;

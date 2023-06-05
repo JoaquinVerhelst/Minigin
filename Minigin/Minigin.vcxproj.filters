@@ -31,14 +31,14 @@
     <Filter Include="Engine Files\Patterns\Command">
       <UniqueIdentifier>{5f208f43-096f-458f-979d-690a5771e3de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine Files\Patterns\State">
-      <UniqueIdentifier>{7cf010df-b579-4b13-8b67-f2fb285b2927}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Treasure">
       <UniqueIdentifier>{56efc3b9-8cf9-4699-b0d7-775865910662}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine Files\Patterns\SoundSystem">
       <UniqueIdentifier>{87df1ddc-f33f-46f9-97f9-08c8e3322e1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Files\Patterns\SoundSystem\State">
+      <UniqueIdentifier>{7cf010df-b579-4b13-8b67-f2fb285b2927}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -145,7 +145,7 @@
       <Filter>Engine Files\Patterns\Command</Filter>
     </ClInclude>
     <ClInclude Include="PlayerState.h">
-      <Filter>Engine Files\Patterns\State</Filter>
+      <Filter>Engine Files\Patterns\SoundSystem\State</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Engine Files\Singletons</Filter>
@@ -175,9 +175,12 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="GoldStateMachine.h">
-      <Filter>Engine Files\Patterns\State</Filter>
+      <Filter>Engine Files\Patterns\SoundSystem\State</Filter>
     </ClInclude>
     <ClInclude Include="FireBallComponent.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="NobbinManager.h">
       <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
@@ -273,7 +276,7 @@
       <Filter>Engine Files\Patterns\Command</Filter>
     </ClCompile>
     <ClCompile Include="PlayerState.cpp">
-      <Filter>Engine Files\Patterns\State</Filter>
+      <Filter>Engine Files\Patterns\SoundSystem\State</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Engine Files\Singletons</Filter>
@@ -303,9 +306,12 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="GoldStateMachine.cpp">
-      <Filter>Engine Files\Patterns\State</Filter>
+      <Filter>Engine Files\Patterns\SoundSystem\State</Filter>
     </ClCompile>
     <ClCompile Include="FireBallComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="NobbinManager.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>

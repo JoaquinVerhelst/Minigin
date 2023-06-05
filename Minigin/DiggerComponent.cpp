@@ -25,7 +25,14 @@ namespace dae
 
 	void DiggerComponent::Update()
 	{
+
+
 		CharacterComponent::Update();
+
+
+		World::GetInstance().BreakWorld(GetOwner(), { m_CellSize.x - 1.f,m_CellSize.y - 1.f });
+
+
 	}
 
 
