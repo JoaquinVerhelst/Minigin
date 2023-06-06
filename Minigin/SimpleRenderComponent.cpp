@@ -16,19 +16,15 @@ dae::SimpleRenderComponent::SimpleRenderComponent(GameObject* owner, const std::
 	m_Text(""),
 	m_Font(nullptr),
 	m_DoOnce{ true },
-	m_IsBackground{isBackground},
 	m_SourceRect{},
 	m_ScaleX{1},
 	m_ScaleY{ 1 },
 	m_Angle{ 0 },
-	m_Flip{ SDL_FLIP_NONE}
+	m_Flip{ SDL_FLIP_NONE},
+	m_Position{0,0},
+	m_IsBackground{ isBackground }
 {
 	m_Texture = std::make_unique<Texture2D>(filePath);
-
-	if (m_IsBackground)
-	{
-		SetTextureBackgound();
-	}
 
 
 	m_SourceRect = { 0,0, m_Texture->GetSize().x, m_Texture->GetSize().y };
@@ -45,12 +41,14 @@ dae::SimpleRenderComponent::SimpleRenderComponent(GameObject* owner, const std::
 	m_Font(font),
 	m_Texture(nullptr),
 	m_DoOnce{ true },
-	m_IsBackground{ false },
 	m_SourceRect{},
 	m_ScaleX{ 1 },
 	m_ScaleY{ 1 },
 	m_Angle{ 0 },
-	m_Flip{ SDL_FLIP_NONE }
+	m_Flip{ SDL_FLIP_NONE },
+	m_Position{ 0,0 },
+	m_IsBackground{ false  }
+
 {
 	UpdateText();
 }
@@ -76,7 +74,7 @@ void dae::SimpleRenderComponent::Render() const
 
 	if (!m_Text.empty())
 	{
-		Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
+		Renderer::GetInstance().RenderTexture(*m_Texture, pos.x + m_Position.x, pos.y + m_Position.y);
 	}
 	if (!m_IsBackground)
 	{
@@ -143,27 +141,7 @@ void dae::SimpleRenderComponent::UpdateText()
 	m_Texture = std::make_unique<Texture2D>(texture);
 }
 
-void dae::SimpleRenderComponent::SetTextureBackgound()
-{
 
-	//Renderer::GetInstance().SetBackgroundTexture(m_Texture->GetSDLTexture());
-
-}
-
-//DOESNT WORK
-void dae::SimpleRenderComponent::CalculateScaleByGrid()
-{
-	//DONT WORK
-	glm::vec2 cellSize = World::GetInstance().GetCellSize();
-
-	m_ScaleX = static_cast<int>(cellSize.x) / m_SourceRect.w;
-
-	m_ScaleY = static_cast<int>(cellSize.y) / m_SourceRect.h;
-
-
-
-
-}
 
 void dae::SimpleRenderComponent::SetScale(int scaleX, int scaleY)
 {

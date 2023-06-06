@@ -4,7 +4,7 @@
 #include "GameObject.h"
 #include "HealthComponent.h"
 #include <iostream>
-
+#include "World.h"
 
 dae::HealthBarComponent::HealthBarComponent(GameObject* owner, const std::string& filePath )
     : HealthBarComponent(owner, filePath, false)
@@ -38,7 +38,6 @@ dae::HealthBarComponent::~HealthBarComponent()
     if (m_HealthComponent)
     {
         m_HealthComponent->removeAllObservers();
-       //delete m_HealthComponent;
         m_HealthComponent = nullptr;
     }
 
@@ -97,7 +96,7 @@ void dae::HealthBarComponent::OnNotify(const GameObject& entity, Event event)
 
     if (event == Event::PlayerDie && &entity == GetOwner())
     {
-        // World player is dead
-        std::cout << "DEAD" << '\n';
+        World::GetInstance().PlayerDied();
+        //std::cout << "DEAD" << '\n';
     }
 }

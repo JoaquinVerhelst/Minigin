@@ -16,8 +16,9 @@ namespace dae
 
     class SimpleRenderComponent : public Component {
     public:
-        explicit SimpleRenderComponent(GameObject* owner, const std::string& filePath, bool isBackground = false);
-        explicit SimpleRenderComponent(GameObject* owner, const std::string& text, const std::shared_ptr<Font>& font, bool needUpdating);
+
+        SimpleRenderComponent(GameObject* owner, const std::string& filePath, bool isbackground = false);
+        SimpleRenderComponent(GameObject* owner, const std::string& text, const std::shared_ptr<Font>& font, bool needUpdating);
 
         ~SimpleRenderComponent();
 
@@ -41,8 +42,7 @@ namespace dae
 
         std::shared_ptr<Texture2D> GetTexture();
         void UpdateText();
-        void SetTextureBackgound();
-        void CalculateScaleByGrid();
+
         void SetScale(int scaleX, int scaleY);
         //void SetScale(const glm::vec2& scale); // Not yet Implemented
 
@@ -51,6 +51,9 @@ namespace dae
         void SetFlip(SDL_RendererFlip flip) { m_Flip = flip; }
 
         void SetAngleAndFlip(float angle, SDL_RendererFlip flip);
+
+        void SetPosition(glm::vec2 pos) { m_Position = pos; }
+        glm::vec2 GetPosition() { return m_Position; }
 
     private:
 
@@ -71,7 +74,7 @@ namespace dae
         float m_Angle;
         SDL_RendererFlip m_Flip;
 
-
+        glm::vec2 m_Position;
 
         //glm::vec2 m_Scale;  // Not yet Implemented
 

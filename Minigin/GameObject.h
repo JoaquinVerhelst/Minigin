@@ -111,9 +111,9 @@ namespace dae
 	inline T& GameObject::AddComponent(TArgs&&... mArgs)
 	{
 
-		if (HasComponent<T>()) {
-			throw std::runtime_error("Error: Component of this Type" + std::string(typeid(T).name()) + "is already attached to this GameObject!");
-		}
+		//if (HasComponent<T>()) {
+		//	throw std::runtime_error("Error: Component of this Type" + std::string(typeid(T).name()) + "is already attached to this GameObject!");
+		//}
 
 		std::shared_ptr<T> newComponent = std::make_shared<T>(this, std::forward<TArgs>( mArgs)...);
 		//newComponent->SetOwner(this);

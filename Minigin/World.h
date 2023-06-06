@@ -70,29 +70,41 @@ namespace dae
 		std::vector<GridCell*> GetWorldGrid();
 
 
-		void PlaceTreasure(std::shared_ptr<GameObject> treasure, int gridIndex);
-		void PlaceGameObject(std::shared_ptr<GameObject> gameobject, int gridIndex);
-		void PlaceGameObject(GameObject* gameobject, int gridIndex);
+
 
 
 		void BreakGridIndexes(std::vector<int> gridIndexes);
 
 		void SetGameMode(GameModeTypes gameMode);
+		GameModeTypes GetGameMode() { return m_CurrentGameMode; }
 
 		void ResetAndLoadWorld(int index);
-
+		void ResetGameMode();
+		void ResetLevel();
 		void PlayerDied();
+
+
+		void PlaceGameObject(GameObject* gameobject, int gridIndex);
+
+		std::vector<std::shared_ptr<GameObject>> GetPlayers() { return m_Players; }
 
 		void LoadSinglePlayer();
 		void LoadCoop();
 		void LoadVersus();
+
+		bool IsGameLost() { return m_GameOver; }
+		void SetGameLost(bool resetGame) { m_GameOver = resetGame; }
 	private:
 
 
+		void PlaceTreasure(std::shared_ptr<GameObject> treasure, int gridIndex);
+		void PlaceGameObject(std::shared_ptr<GameObject> gameobject, int gridIndex);
 
 
 
 		std::vector<std::shared_ptr<GameObject>> m_Players;
+		std::shared_ptr<GameObject> m_NobbinPlayer;
+
 
 		std::vector<GridCell*> m_Grid;
 		int m_Rows;
@@ -100,6 +112,8 @@ namespace dae
 		int m_CellWidth;
 		int m_CellHeight;
 
+		int m_PlayersDead;
+		bool m_GameOver;
 
 		std::vector<std::shared_ptr<GameObject>> m_Treasure;
 

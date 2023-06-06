@@ -247,12 +247,28 @@ namespace dae
 			tempKeyBind.command = command;
 			tempKeyBind.inputID = inputID;
 			tempKeyBind.isPressed = false;
-			m_KeyBinds.emplace_back(tempKeyBind);
+			m_KeyBinds.emplace_back(tempKeyBind);	
 		}
 
 
 
-		bool IsKeyBoardKey(SDL_Scancode key, SDL_EventType type )
+		bool IsKeyBoardKey(SDL_KeyCode key, SDL_EventType type )
+		{
+			for (size_t i = 0; i < GetFrameEvents().size(); i++)
+			{
+				if (GetFrameEvents()[i].type == static_cast<unsigned>(type))
+				{
+					if (GetFrameEvents()[i].key.keysym.sym == key)
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		bool IsKeyBoardKey(SDL_Scancode key, SDL_EventType type)
 		{
 			for (size_t i = 0; i < GetFrameEvents().size(); i++)
 			{
@@ -315,6 +331,31 @@ namespace dae
 			m_QuitGame = quitgame;
 		}
 
+
+		std::string GetPressedKeyString()
+		{
+
+			for (size_t i = 0; i < GetFrameEvents().size(); i++)
+			{
+				if (GetFrameEvents()[i].type == SDL_KEYUP)
+				{
+					SDL_Keycode keyCode = GetFrameEvents()[i].key.keysym.sym;
+					if ((keyCode >= SDLK_a && keyCode <= SDLK_z))
+					{
+						const char* keyName = SDL_GetKeyName(keyCode);
+						return keyName;
+					}
+				}
+			}
+			
+
+			return ""; // Return an empty string if no key is currently pressed
+		}
+
+		void ResetInput()
+		{
+			m_Players.clear();
+		}
 
 	};
 
@@ -379,9 +420,24 @@ namespace dae
 
 
 
+	void InputManager::ResetInput()
+	{
+		pImpl->ResetInput();
+	}
+
 	bool InputManager::IsKeyBoardKey(SDL_Scancode key, SDL_EventType type)
 	{
 		return pImpl->IsKeyBoardKey(key, type);
+	}
+
+	bool InputManager::IsKeyBoardKey(SDL_KeyCode key, SDL_EventType type)
+	{
+		return pImpl->IsKeyBoardKey(key, type);
+	}
+
+	std::string InputManager::GetPressedKeyString()
+	{
+		return pImpl->GetPressedKeyString();
 	}
 
 	glm::ivec2 InputManager::GetMouseLocation()

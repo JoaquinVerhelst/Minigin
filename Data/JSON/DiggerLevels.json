@@ -139,8 +139,8 @@
 					156,
 					228
 				],
-				"player1PosIndex": 110,
-				"player2PosIndex": 180
+				"player1PosIndex": 109,
+				"player2PosIndex": 179
 			}
 		},
 		{
@@ -300,8 +300,8 @@
 					185,
 					244
 				],
-				"player1PosIndex": 150,
-				"player2PosIndex": 90
+				"player1PosIndex": 107,
+				"player2PosIndex": 177
 			}
 		},
 		{
@@ -400,9 +400,22 @@
 					177,
 					179
 				],
-				"goldIndexs": [45,49,115,119,185,189,240],
-				"player1PosIndex": 150,
-				"player2PosIndex": 90
+				"goldIndexs": [ 45, 49, 115, 119, 185, 189, 240 ],
+				"player1PosIndex": 212,
+				"player2PosIndex": 223
+			}
+			
+		},
+		{
+			"levelInfo": {
+				"name": "HighScoreMenu",
+				"backgroundFilepath": "../Data/Sprites/HighScoreScreen.png",
+				"worldType": "HighScore",
+				"brokenWorldIndexs": [],
+				"emeraldIndexs": [],
+				"goldIndexs": [],
+				"player1PosIndex": 0,
+				"player2PosIndex": 0
 			}
 		}
 	]

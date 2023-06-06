@@ -1,22 +1,28 @@
 {
-	"singlePlayer": [
-		{
-			"name": "Joa",
-			"score": 500
-		}
-	],
-	"coop": [
-		{
-			"name1": "Joa",
-			"score1": 500,
-			"name2": "Joa",
-			"score2": 500
-		}
-	],
-	"versus": [
-		{
-			"name": "Joa",
-			"score": 500
-		}
-	]
+        "coop": [
+                {
+                        "name1": " ALEJ",
+                        "name2": " JOAQ",
+                        "score1": 1250,
+                        "score2": 1325
+                }
+        ],
+        "singleplayer": [
+                {
+                        "name": " JOEEDSLKKKKJJJJ",
+                        "score": 0
+                },
+                {
+                        "name": " SSSSSS",
+                        "score": 50
+                },
+                {
+                        "name": " MANP",
+                        "score": 0
+                },
+                {
+                        "name": " WHATT",
+                        "score": 0
+                }
+        ]
 }

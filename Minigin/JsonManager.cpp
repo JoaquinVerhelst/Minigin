@@ -18,7 +18,7 @@
 #include "ScoreComponent.h"
 #include "ScoreDisplayComponent.h"
 #include "NobbinComponent.h"
-
+#include "HighScoreComponent.h"
 using json = nlohmann::json;
 
 
@@ -55,6 +55,12 @@ namespace dae
 
             auto menuButtons = std::make_shared<dae::GameObject>();
             menuButtons->AddComponent<MenuComponent>();
+
+
+
+            auto highScore = std::make_shared<dae::GameObject>();
+            highScore->AddComponent<HighScoreComponent>();
+
 
 
             const auto& fpsInfo = generalInfo["fps"];
@@ -135,7 +141,7 @@ namespace dae
                 }
                 else if (worldType == "HighScore")
                 {
-
+                    level.Add(highScore);
 
                     currentLevel->worldType = World::WorldTypes::HighScore;
                 }
@@ -163,8 +169,8 @@ namespace dae
         }
 	}
 
-	std::vector<HighscoreEntry> dae::JsonManager::LoadHighscoresFromJson(const std::string& filePath)
-	{
+    std::vector<HighscoreEntry> JsonManager::LoadHighscoresForSinglePlayer(const std::string& filePath)
+    {
         std::ifstream file(filePath);
         if (!file.is_open())
         {
@@ -180,7 +186,7 @@ namespace dae
             std::vector<HighscoreEntry> highscores;
 
             // Extract highscores from JSON
-            const json& entries = jsonData["entries"];
+            const json& entries = jsonData["singleplayer"];
             for (const auto& entry : entries)
             {
                 HighscoreEntry highscore;
@@ -197,36 +203,132 @@ namespace dae
             std::cout << "Error: " << ex.what() << std::endl;
             return std::vector<HighscoreEntry>();
         }
-	}
+    }
 
-	void dae::JsonManager::SaveHighscoresToJson(const std::string& filePath, const std::vector<HighscoreEntry>& highscores)
-	{
-        json jsonData;
-
-        // Convert highscores to JSON
-        for (const auto& entry : highscores)
+    std::vector<HighscoreEntryCoop> JsonManager::LoadHighscoresForCoop(const std::string& filePath)
+    {
+        std::ifstream file(filePath);
+        if (!file.is_open())
         {
-            json entryJson;
-            entryJson["name"] = entry.name;
-            entryJson["score"] = entry.score;
-            jsonData["entries"].push_back(entryJson);
+            std::cout << "Failed to open JSON file: " << filePath << std::endl;
+            return std::vector<HighscoreEntryCoop>();
         }
 
-        std::ofstream file(filePath);
-        if (file.is_open())
+        try
         {
-            file << jsonData.dump(4); // Write JSON data to file with indentation
+            json jsonData;
+            file >> jsonData;
+
+            std::vector<HighscoreEntryCoop> highscores;
+
+            // Extract highscores from JSON
+            const json& entries = jsonData["coop"];
+            for (const auto& entry : entries)
+            {
+                HighscoreEntryCoop highscore;
+
+                highscore.name1 = entry["name1"];
+                highscore.score1 = entry["score1"];
+
+                highscore.name2 = entry["name2"];
+                highscore.score2 = entry["score2"];
+
+                highscores.push_back(highscore);
+            }
+
+            return highscores;
+        }
+        catch (const json::exception& ex)
+        {
+            std::cout << "Failed to parse JSON file: " << filePath << std::endl;
+            std::cout << "Error: " << ex.what() << std::endl;
+            return std::vector<HighscoreEntryCoop>();
+        }
+    }
+
+    void JsonManager::SaveHighscoresToSinglePlayer(const std::string& filePath, const HighscoreEntry& highscores)
+    {
+        json jsonData;
+
+        // Load existing JSON data from file
+        std::ifstream inputFile(filePath);
+        if (inputFile.is_open())
+        {
+            inputFile >> jsonData;
+            inputFile.close();
+        }
+        else
+        {
+            std::cout << "Failed to open JSON file for loading: " << filePath << std::endl;
+            return;
+        }
+
+        // Convert highscores to JSON
+        json entryJson;
+        entryJson["name"] = highscores.name;
+        entryJson["score"] = highscores.score;
+        jsonData["singleplayer"].push_back(entryJson);
+
+        // Write updated JSON data to file
+        std::ofstream outputFile(filePath);
+        if (outputFile.is_open())
+        {
+            outputFile << jsonData.dump(4); // Write JSON data to file with indentation
+            outputFile.close();
             std::cout << "Highscores saved to JSON file: " << filePath << std::endl;
         }
         else
         {
             std::cout << "Failed to open JSON file for saving: " << filePath << std::endl;
         }
-	}
+    }
 
-    std::shared_ptr<GameObject> JsonManager::LoadPlayer()
+    void JsonManager::SaveHighscoresToCoop(const std::string& filePath, const HighscoreEntryCoop& highscores)
     {
-        ++m_AmountOfPlayers;
+        
+        json jsonData;
+
+        // Load existing JSON data from file
+        std::ifstream inputFile(filePath);
+        if (inputFile.is_open())
+        {
+            inputFile >> jsonData;
+            inputFile.close();
+        }
+        else
+        {
+            std::cout << "Failed to open JSON file for loading: " << filePath << std::endl;
+            return;
+        }
+
+        // Convert highscores to JSON
+        json entryJson;
+
+        entryJson["name1"] = highscores.name1;
+        entryJson["score1"] = highscores.score1;
+        entryJson["name2"] = highscores.name2;
+        entryJson["score2"] = highscores.score2;
+
+        jsonData["coop"].push_back(entryJson);
+
+        // Write updated JSON data to file
+        std::ofstream outputFile(filePath);
+        if (outputFile.is_open())
+        {
+            outputFile << jsonData.dump(8); // Write JSON data to file with indentation
+            outputFile.close();
+            std::cout << "Highscores saved to JSON file: " << filePath << std::endl;
+        }
+        else
+        {
+            std::cout << "Failed to open JSON file for saving: " << filePath << std::endl;
+        }
+    }
+
+
+    std::shared_ptr<GameObject> JsonManager::LoadPlayer(int index)
+    {
+
 
         std::ifstream file(m_JsonFilePath);
         if (!file.is_open())
@@ -253,7 +355,7 @@ namespace dae
 
             json pos;
 
-            if (m_AmountOfPlayers == 1)
+            if (index == 0)
                 pos = health["healthBarPosition1"];
             else
                 pos = health["healthBarPosition2"];
@@ -268,7 +370,7 @@ namespace dae
             player1->AddComponent<ScoreDisplayComponent>(font2);
 
 
-            if (m_AmountOfPlayers == 1)
+            if (index == 0)
                 pos = score["position1"];
             else
                 pos = score["position2"];
@@ -289,7 +391,6 @@ namespace dae
 
     std::shared_ptr<GameObject> JsonManager::LoadNobbinPlayer()
     {
-        ++m_AmountOfPlayers;
 
         std::ifstream file(m_JsonFilePath);
         if (!file.is_open())

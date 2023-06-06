@@ -121,12 +121,12 @@ namespace dae
 		}
 		else if (IsPointInRect(m_MousePos, m_HighScoreButton.shape))
 		{
-			std::cout << "HIGHSCORE";
+
 			SceneManager::GetInstance().NextSceneByIndex(4);
 		}
 		else if (IsPointInRect(m_MousePos, m_QuitButton.shape))
 		{
-			std::cout << "QUIT";
+
 			InputManager::GetInstance().QuitGame(true);
 		}
 	}

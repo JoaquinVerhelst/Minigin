@@ -47,15 +47,23 @@ void dae::SceneManager::Render()
 
 void dae::SceneManager::NextScene()
 {
-	std::cout << "NEXT LEVEL" << '\n';
+	//std::cout << "NEXT LEVEL" << '\n';
 
 
-	++m_CurrentId;
 
-	if (m_CurrentId >= m_scenes.size())
+
+
+	if (m_CurrentId == 3)
+	{
+		m_CurrentId = 1;
+	}
+	else if (m_CurrentId >= m_scenes.size() - 1)
 	{
 		m_CurrentId = 0;
-
+	}
+	else
+	{
+		++m_CurrentId;
 	}
 
 	World::GetInstance().ResetAndLoadWorld(m_CurrentId);
@@ -72,6 +80,8 @@ void dae::SceneManager::NextSceneByIndex(int index)
 
 	m_CurrentId = index;
 
+
+	World::GetInstance().ResetAndLoadWorld(m_CurrentId);
 }
 
 dae::LevelInfo* dae::SceneManager::GetSceneLevelInfo(int sceneIndex)

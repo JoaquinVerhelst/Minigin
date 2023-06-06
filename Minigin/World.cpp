@@ -15,6 +15,8 @@
 #include "Scene.h"
 #include "JsonManager.h"
 
+#include "InputManager.h"
+
 using namespace dae;
 
 
@@ -49,12 +51,13 @@ void World::Init(int rows, int columns, SDL_Window* window)
     m_Rows = rows;
     m_Columns = columns;
 
-
+    m_GameOver = false;
+    m_PlayersDead = 0;
 
     m_CellWidth = width / m_Rows;
     m_CellHeight = height / m_Columns;
 
-
+    m_NobbinPlayer = nullptr;
 
     glm::ivec2 pos = {};
     int index = 0;
@@ -328,22 +331,11 @@ void dae::World::SetGameMode(GameModeTypes gameMode)
 void dae::World::ResetAndLoadWorld(int index)
 {
 
-    //Reset(); ///////////////////////////////////////////////////////////////////////////////////////////////
-
-    for (size_t i = 0; i < m_Grid.size(); i++)
-    {
-        m_Grid[i]->isCellBroken = false;
-    }
-
-    SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), Renderer::GetInstance().GetCanvas());
-    SDL_RenderClear(Renderer::GetInstance().GetSDLRenderer());
-
-    m_Treasure.clear();
-    SceneManager::GetInstance().GetScene(index)->RemoveTreasures();
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     m_CurrentWorldIndex = index;
+
+
+    ResetLevel();
 
 
     LevelInfo* currentLevelInfo = SceneManager::GetInstance().GetSceneLevelInfo(m_CurrentWorldIndex);
@@ -422,26 +414,69 @@ void dae::World::ResetAndLoadWorld(int index)
 
 }
 
-void dae::World::PlayerDied()
+
+void dae::World::ResetGameMode()
 {
-    if (m_CurrentGameMode == GameModeTypes::SinglePlayer)
+    for (size_t i = 0; i < m_Players.size(); i++)
     {
-        // TODO : stop and save highscore
-    }    
-    if (m_CurrentGameMode == GameModeTypes::Coop)
+        m_Players[i]->Destroy();
+    }
+    m_Players.clear();
+    m_NobbinPlayer = nullptr;
+    InputManager::GetInstance().ResetInput();
+}
+
+void dae::World::ResetLevel()
+{
+    for (size_t i = 0; i < m_Grid.size(); i++)
     {
-        // TODO : stop and save highscore
+        m_Grid[i]->isCellBroken = false;
     }
 
+    SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), Renderer::GetInstance().GetCanvas());
+    SDL_RenderClear(Renderer::GetInstance().GetSDLRenderer());
 
-    ResetAndLoadWorld(0);
+    m_Treasure.clear();
+    SceneManager::GetInstance().GetScene(m_CurrentWorldIndex)->RemoveTreasures();
+}
+
+
+void dae::World::PlayerDied()
+{
+    ++m_PlayersDead;
+
+    if (m_PlayersDead == m_Players.size())
+    {
+        if (m_CurrentGameMode == GameModeTypes::SinglePlayer)
+        {
+            m_GameOver = true;
+            SceneManager::GetInstance().NextSceneByIndex(4);
+            m_PlayersDead = 0;
+            return;
+        }
+        if (m_CurrentGameMode == GameModeTypes::Coop)
+        {
+            m_GameOver = true;
+            SceneManager::GetInstance().NextSceneByIndex(4);
+            m_PlayersDead = 0;
+            return;
+        }
+        else
+        {
+            ResetAndLoadWorld(0);
+            m_PlayersDead = 0;
+            return;
+        }
+    }
 }
 
 void dae::World::LoadSinglePlayer()
 {
-    m_Players.clear();
 
-    auto player = JsonManager::GetInstance().LoadPlayer();
+    ResetGameMode();
+
+
+    auto player = JsonManager::GetInstance().LoadPlayer(0);
     m_Players.emplace_back(player);
 
 
@@ -458,13 +493,13 @@ void dae::World::LoadSinglePlayer()
 
 void dae::World::LoadCoop()
 {
-    m_Players.clear();
+    ResetGameMode();
 
 
-    auto player1 = JsonManager::GetInstance().LoadPlayer();
+    auto player1 = JsonManager::GetInstance().LoadPlayer(0);
     m_Players.emplace_back(player1);
 
-    auto player2 = JsonManager::GetInstance().LoadPlayer();
+    auto player2 = JsonManager::GetInstance().LoadPlayer(1);
     m_Players.emplace_back(player2);
 
 
@@ -482,13 +517,13 @@ void dae::World::LoadCoop()
 
 void dae::World::LoadVersus()
 {
-    m_Players.clear();
+    ResetGameMode();
 
-    auto player1 = JsonManager::GetInstance().LoadPlayer();
+    auto player1 = JsonManager::GetInstance().LoadPlayer(0);
     m_Players.emplace_back(player1);
 
     auto player2 = JsonManager::GetInstance().LoadNobbinPlayer();
-    m_Players.emplace_back(player2);
+    m_NobbinPlayer = player2;
 
 
     auto scenes = SceneManager::GetInstance().GetScenes();

@@ -67,9 +67,12 @@ namespace dae
 		void ClearFrameEvents();
 
 
-
+		void ResetInput();
 
 		bool IsKeyBoardKey(SDL_Scancode key, SDL_EventType type);
+		bool IsKeyBoardKey(SDL_KeyCode key, SDL_EventType type);
+		std::string GetPressedKeyString();
+
 		glm::ivec2 GetMouseLocation();
 		bool GetMouseAction( SDL_EventType type);
 

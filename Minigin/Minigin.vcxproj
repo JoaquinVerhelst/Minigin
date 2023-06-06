@@ -226,6 +226,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="GoldComponent.h" />
     <ClInclude Include="GoldStateMachine.h" />
     <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="HighScoreComponent.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_opengl2.h" />
@@ -275,6 +276,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="GoldComponent.cpp" />
     <ClCompile Include="GoldStateMachine.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
+    <ClCompile Include="HighScoreComponent.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
