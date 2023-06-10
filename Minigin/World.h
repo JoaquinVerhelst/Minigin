@@ -35,13 +35,6 @@ namespace dae
 			Versus
 		};
 
-		enum class WorldTypes
-		{
-			Default,
-			Menu,
-			Level,
-			HighScore
-		};
 
 		~World();
 		void Init(int rows, int columns, SDL_Window* window);

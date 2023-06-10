@@ -1,28 +1,32 @@
 {
-        "coop": [
-                {
-                        "name1": " ALEJ",
-                        "name2": " JOAQ",
-                        "score1": 1250,
-                        "score2": 1325
-                }
-        ],
-        "singleplayer": [
-                {
-                        "name": " JOEEDSLKKKKJJJJ",
-                        "score": 0
-                },
-                {
-                        "name": " SSSSSS",
-                        "score": 50
-                },
-                {
-                        "name": " MANP",
-                        "score": 0
-                },
-                {
-                        "name": " WHATT",
-                        "score": 0
-                }
-        ]
+    "coop": [
+        {
+            "name1": " ALEJ",
+            "name2": " JOAQ",
+            "score1": 1250,
+            "score2": 1325
+        }
+    ],
+    "singleplayer": [
+        {
+            "name": " JOEEDSLKKKKJJJJ",
+            "score": 0
+        },
+        {
+            "name": " SSSSSS",
+            "score": 50
+        },
+        {
+            "name": " MANP",
+            "score": 0
+        },
+        {
+            "name": " WHATT",
+            "score": 0
+        },
+        {
+            "name": "BOB",
+            "score": 650
+        }
+    ]
 }

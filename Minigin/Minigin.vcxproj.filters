@@ -81,14 +81,8 @@
     <ClInclude Include="Singleton.h">
       <Filter>Engine Files\Singletons</Filter>
     </ClInclude>
-    <ClInclude Include="FPSComponent.h">
-      <Filter>Engine Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RotatorComponent.h">
-      <Filter>Engine Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imgui_impl_sdl2.h">
       <Filter>Engine Files\ImGui</Filter>
@@ -123,32 +117,8 @@
     <ClInclude Include="Subject.h">
       <Filter>Engine Files\Patterns\Observer</Filter>
     </ClInclude>
-    <ClInclude Include="DiggerComponent.h">
-      <Filter>Engine Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="HealthBarComponent.h">
-      <Filter>Engine Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="HealthComponent.h">
-      <Filter>Engine Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ScoreComponent.h">
-      <Filter>Engine Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ScoreDisplayComponent.h">
-      <Filter>Engine Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="CharacterComponent.h">
-      <Filter>Engine Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Command.h">
       <Filter>Engine Files\Patterns\Command</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerState.h">
-      <Filter>Engine Files\Patterns\State</Filter>
-    </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>Engine Files\Singletons</Filter>
     </ClInclude>
     <ClInclude Include="SoundSystem.h">
       <Filter>Engine Files\Patterns\SoundSystem</Filter>
@@ -159,35 +129,65 @@
     <ClInclude Include="ShapeComponent.h">
       <Filter>Engine Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="CharacterComponent.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerState.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DiggerComponent.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
     <ClInclude Include="EmeraldComponent.h">
-      <Filter>Game\Treasure</Filter>
-    </ClInclude>
-    <ClInclude Include="TreasureComponent.h">
-      <Filter>Game\Treasure</Filter>
-    </ClInclude>
-    <ClInclude Include="GoldComponent.h">
-      <Filter>Game\Treasure</Filter>
-    </ClInclude>
-    <ClInclude Include="NobbinComponent.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="MenuComponent.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="GoldStateMachine.h">
-      <Filter>Engine Files\Patterns\State</Filter>
+      <Filter>Engine Files</Filter>
     </ClInclude>
     <ClInclude Include="FireBallComponent.h">
-      <Filter>Game</Filter>
+      <Filter>Engine Files</Filter>
     </ClInclude>
-    <ClInclude Include="NobbinManager.h">
-      <Filter>Game</Filter>
+    <ClInclude Include="FPSComponent.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GoldComponent.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GoldStateMachine.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthBarComponent.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthComponent.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScoreComponent.h">
+      <Filter>Engine Files</Filter>
     </ClInclude>
     <ClInclude Include="JsonManager.h">
       <Filter>Engine Files</Filter>
     </ClInclude>
-    <ClInclude Include="HighScoreComponent.h">
-      <Filter>Game</Filter>
+    <ClInclude Include="MenuComponent.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NobbinComponent.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NobbinManager.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RotatorComponent.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreComponent.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreDisplayComponent.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TreasureComponent.h">
+      <Filter>Engine Files</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Engine Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -215,14 +215,8 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Engine Files</Filter>
     </ClCompile>
-    <ClCompile Include="FPSComponent.cpp">
-      <Filter>Engine Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RotatorComponent.cpp">
-      <Filter>Engine Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Engine Files</Filter>
@@ -251,41 +245,14 @@
     <ClCompile Include="Minigin.cpp">
       <Filter>Engine Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
     <ClCompile Include="Font.cpp">
       <Filter>Engine Files</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Engine Files</Filter>
     </ClCompile>
-    <ClCompile Include="DiggerComponent.cpp">
-      <Filter>Engine Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="HealthBarComponent.cpp">
-      <Filter>Engine Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="HealthComponent.cpp">
-      <Filter>Engine Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreComponent.cpp">
-      <Filter>Engine Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreDisplayComponent.cpp">
-      <Filter>Engine Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="CharacterComponent.cpp">
-      <Filter>Engine Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Command.cpp">
       <Filter>Engine Files\Patterns\Command</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerState.cpp">
-      <Filter>Engine Files\Patterns\State</Filter>
-    </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Engine Files\Singletons</Filter>
     </ClCompile>
     <ClCompile Include="SoundSystem.cpp">
       <Filter>Engine Files\Patterns\SoundSystem</Filter>
@@ -296,34 +263,64 @@
     <ClCompile Include="ShapeComponent.cpp">
       <Filter>Engine Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="EmeraldComponent.cpp">
-      <Filter>Game\Treasure</Filter>
+    <ClCompile Include="CharacterComponent.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="TreasureComponent.cpp">
-      <Filter>Game\Treasure</Filter>
+    <ClCompile Include="PlayerState.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="DiggerComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="EmeraldComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBallComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSComponent.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="GoldComponent.cpp">
-      <Filter>Game\Treasure</Filter>
+      <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="NobbinComponent.cpp">
+    <ClCompile Include="GoldStateMachine.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthBarComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="HighScoreComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonManager.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="MenuComponent.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="GoldStateMachine.cpp">
-      <Filter>Engine Files\Patterns\State</Filter>
-    </ClCompile>
-    <ClCompile Include="FireBallComponent.cpp">
+    <ClCompile Include="NobbinComponent.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="NobbinManager.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="JsonManager.cpp">
-      <Filter>Engine Files</Filter>
+    <ClCompile Include="RotatorComponent.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="HighScoreComponent.cpp">
+    <ClCompile Include="ScoreComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreDisplayComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="TreasureComponent.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>

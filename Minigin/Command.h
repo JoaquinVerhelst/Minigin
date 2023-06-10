@@ -68,31 +68,31 @@ namespace dae
 	};
 
 
-	class SelfDamageCommand : public Command
-	{
-	public:
+	//class SelfDamageCommand : public Command
+	//{
+	//public:
 
-		SelfDamageCommand() = default;
+	//	SelfDamageCommand() = default;
 
-		void Execute(GameObject* actor, InputType type) override;
-
-
-	private:
-	};
+	//	void Execute(GameObject* actor, InputType type) override;
 
 
-
-	class AddScoreCommand : public Command
-	{
-	public:
-
-		AddScoreCommand() = default;
-
-		void Execute(GameObject* actor, InputType type) override;
+	//private:
+	//};
 
 
-	private:
-	};
+
+	//class AddScoreCommand : public Command
+	//{
+	//public:
+
+	//	AddScoreCommand() = default;
+
+	//	void Execute(GameObject* actor, InputType type) override;
+
+
+	//private:
+	//};
 
 
 }

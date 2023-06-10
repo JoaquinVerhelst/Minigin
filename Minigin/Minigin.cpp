@@ -23,7 +23,9 @@ SDL_Window* g_window{};
 
 
 
+#include "JsonManager.h"
 
+#include "World.h"
 
 
 void PrintSDLVersion()
@@ -103,6 +105,13 @@ void dae::Minigin::Run(const std::function<void()>& load)
 {
 	load();
 
+
+	JsonManager::GetInstance().LoadLevelsFromJson("../Data/JSON/DiggerLevels.json");
+
+	World::GetInstance().ResetAndLoadWorld(0);
+
+
+
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
@@ -132,17 +141,13 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto* walkDown = new VerticalWalkCommand(0);
 	auto* walkRight = new HorizontalWalkCommand(0);
 	auto* walkLeft = new HorizontalWalkCommand(1);
-	auto* Selfdamage = new SelfDamageCommand();
-	auto* addScore = new AddScoreCommand();
 
 	input.AddControllerBinding(InputManager::ControllerButton::DPadUp, walkUp, Command::InputType::Pressed);
 	input.AddControllerBinding(InputManager::ControllerButton::DPadDown, walkDown, Command::InputType::Pressed);
 	input.AddControllerBinding(InputManager::ControllerButton::DPadRight, walkRight, Command::InputType::Pressed);
 	input.AddControllerBinding(InputManager::ControllerButton::DPadLeft, walkLeft, Command::InputType::Pressed);
 
-	input.AddControllerBinding(InputManager::ControllerButton::ButtonB, Selfdamage, Command::InputType::Up);
 
-	input.AddControllerBinding(InputManager::ControllerButton::ButtonA, addScore, Command::InputType::Up);
 
 
 	input.AddKeyBinding(SDL_SCANCODE_W, walkUp, 0);
@@ -189,8 +194,8 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	delete walkDown;
 	delete walkRight;
 	delete walkLeft;
-	delete Selfdamage;
-	delete addScore;
+
+
 
 }
 

@@ -129,7 +129,7 @@ namespace dae
                     level.Add(menuButtons);
 
 
-                    currentLevel->worldType = World::WorldTypes::Menu;
+                    currentLevel->worldType = WorldTypes::Menu;
 
                 }
                 else if (worldType == "Level")
@@ -137,13 +137,13 @@ namespace dae
                     level.Add(UIDisplay);
 
 
-                    currentLevel->worldType = World::WorldTypes::Level;
+                    currentLevel->worldType = WorldTypes::Level;
                 }
                 else if (worldType == "HighScore")
                 {
                     level.Add(highScore);
 
-                    currentLevel->worldType = World::WorldTypes::HighScore;
+                    currentLevel->worldType = WorldTypes::HighScore;
                 }
 
 

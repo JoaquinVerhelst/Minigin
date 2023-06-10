@@ -1,12 +1,21 @@
 #pragma once
 #include "SceneManager.h"
 #include <vector>
-#include "World.h"
 
 
 namespace dae
 {
 	class GameObject;
+
+	enum class WorldTypes
+	{
+		Default,
+		Menu,
+		Level,
+		HighScore
+	};
+
+
 
 	struct LevelInfo
 	{
@@ -14,7 +23,7 @@ namespace dae
 		{
 			name = "";
 			background = nullptr;
-			worldType = World::WorldTypes::Default;
+			worldType = WorldTypes::Default;
 			player1 = nullptr;
 			player1PosIndex = 0;
 			player2 = nullptr;
@@ -28,7 +37,7 @@ namespace dae
 		std::string name;
 		std::string backgroundFilepath;
 
-		World::WorldTypes worldType;
+		WorldTypes worldType;
 
 		int player1PosIndex;
 

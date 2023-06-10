@@ -42,44 +42,44 @@ namespace dae
 
 
 
-	void SelfDamageCommand::Execute(GameObject* actor, InputType inputType)
-	{
-		if (inputType == InputType::Up)
-		{
-			HealthComponent& healthComp = actor->GetComponent<HealthComponent>();
+	//void SelfDamageCommand::Execute(GameObject* actor, InputType inputType)
+	//{
+	//	if (inputType == InputType::Up)
+	//	{
+	//		HealthComponent& healthComp = actor->GetComponent<HealthComponent>();
 
-			if (healthComp.GetHealth() == 0)
-			{
-				healthComp.SetHealth(0);
-			}
-			else
-			{
-				healthComp.SetHealth(healthComp.GetHealth() - 1);
-			}
-
-
+	//		if (healthComp.GetHealth() == 0)
+	//		{
+	//			healthComp.SetHealth(0);
+	//		}
+	//		else
+	//		{
+	//			healthComp.SetHealth(healthComp.GetHealth() - 1);
+	//		}
 
 
 
 
-			SoundServiceLocator::GetSoundSystem().Play(0, 1.0f);
+
+
+	//		SoundServiceLocator::GetSoundSystem().Play(0, 1.0f);
 
 
 
-		}
-	}
+	//	}
+	//}
 
 
-	void AddScoreCommand::Execute(GameObject* actor, InputType inputType)
-	{
-		if (inputType == InputType::Up)
-		{
-			ScoreComponent& scoreComp = actor->GetComponent<ScoreComponent>();
+	//void AddScoreCommand::Execute(GameObject* actor, InputType inputType)
+	//{
+	//	if (inputType == InputType::Up)
+	//	{
+	//		ScoreComponent& scoreComp = actor->GetComponent<ScoreComponent>();
 
-			scoreComp.AddScore(100);
+	//		scoreComp.AddScore(100);
 
-		}
-	}
+	//	}
+	//}
 
 
 

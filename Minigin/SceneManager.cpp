@@ -50,10 +50,13 @@ void dae::SceneManager::NextScene()
 	//std::cout << "NEXT LEVEL" << '\n';
 
 
+	//for (size_t i = 0; i < m_scenes.size(); i++)
+	//{
+	//	m_scenes[i]->GetLevelInfo().w
+	//}
 
 
-
-	if (m_CurrentId == 3)
+	if (m_CurrentId == m_scenes.size() - 1)
 	{
 		m_CurrentId = 1;
 	}
