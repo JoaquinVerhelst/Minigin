@@ -48,6 +48,10 @@ namespace dae {
 		void SaveHighscoresToCoop(const std::string& filePath, const HighscoreEntryCoop& highscore);
 
 
+
+
+		std::shared_ptr<GameObject> LoadNobbin();
+
 		std::shared_ptr<GameObject> LoadPlayer(int index);
 
 		std::shared_ptr<GameObject> LoadNobbinPlayer();

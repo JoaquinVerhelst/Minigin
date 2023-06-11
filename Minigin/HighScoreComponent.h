@@ -44,6 +44,7 @@ namespace dae
 		void AddHighScore(std::string name, int score);
 		void AddHighScoreCoop(std::string name, int score, int index);
 
+
 		void SaveHighScore();
 
 		void CheckInput();

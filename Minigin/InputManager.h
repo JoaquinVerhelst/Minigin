@@ -60,8 +60,8 @@ namespace dae
 		~InputManager();
 
 
-		void AddControllerBinding(ControllerButton button, Command* command, Command::InputType inputType);
-		void AddKeyBinding(SDL_Scancode button, Command* command, int inputID);
+		void AddControllerBinding(ControllerButton button, std::shared_ptr<Command> command, Command::InputType inputType);
+		void AddKeyBinding(SDL_Scancode button, std::shared_ptr<Command> command, int inputID);
 
 
 		void ClearFrameEvents();

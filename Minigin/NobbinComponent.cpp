@@ -39,7 +39,7 @@ namespace dae
 
         std::vector<int> availableDirections;
 
-        if (m_CurrentCell->id + 1 <= gridSize && grid[m_CurrentCell->id + 1]->isCellBroken && m_WalkDirection != 1)
+        if (m_CurrentCell->id + 1 <= gridSize - 1 && grid[m_CurrentCell->id + 1]->isCellBroken && m_WalkDirection != 1)
         {
             availableDirections.push_back(0); // down
         }
@@ -51,7 +51,7 @@ namespace dae
         {
             availableDirections.push_back(2); // left
         }
-        if (m_CurrentCell->id + 14 <= gridSize && grid[m_CurrentCell->id + 14]->isCellBroken && m_WalkDirection != 2)
+        if (m_CurrentCell->id + 14 <= gridSize - 1 && grid[m_CurrentCell->id + 14]->isCellBroken && m_WalkDirection != 2)
         {
             availableDirections.push_back(3); // right
         }
@@ -68,11 +68,11 @@ namespace dae
             m_Counter = 0;
 
 
-            for (size_t i = 0; i < availableDirections.size(); i++)
-            {
-                std::cout << " " << availableDirections[i];
-            }
-            std::cout << '\n';
+            //for (size_t i = 0; i < availableDirections.size(); i++)
+            //{
+            //    std::cout << " " << availableDirections[i];
+            //}
+            //std::cout << '\n';
 
 
 
@@ -150,10 +150,7 @@ namespace dae
 
         if (cell && cell != m_CurrentCell && cell->isCellBroken)
         {
-            m_CurrentCell->temp = false;
             m_CurrentCell = cell;
-            m_CurrentCell->temp = true;
-
             CalculateMovement();
         }
     }
@@ -195,6 +192,9 @@ namespace dae
             //    CalculateBounceBack();
             //}
         }
+
+
+
 	}
 
 
@@ -206,7 +206,6 @@ namespace dae
         glm::vec3 currentPos = GetOwner()->GetPosition().GetPosition();
         GridCell* cell = World::GetInstance().GetOverlappedCell(currentPos, glm::vec2(1, 1));
         m_CurrentCell = cell;
-        m_CurrentCell->temp = true;
 
         CalculateMovement();
 	}
@@ -228,6 +227,11 @@ namespace dae
 
         //float offset = 0.05f;
 
+        //if (CheckBorders())
+        //{
+
+        //}
+
         if (m_CurrentState->GetType() == PlayerStateType::VerticalWalk)
         {
             if (m_Direction == 0)
@@ -235,8 +239,11 @@ namespace dae
 
                 m_CurrentCell = World::GetInstance().GetOverlappedCell(glm::vec2(currentPos.x + m_CellSize.x/2, currentPos.y), glm::vec2(1, 1));
 
+                std::cout << "Gridsize: " << gridSize << '\n';
 
-                if (m_CurrentCell->id + 1 <= gridSize && grid[m_CurrentCell->id + 1]->isCellBroken)
+                std::cout << "id: " << m_CurrentCell->id + 1 << '\n';
+
+                if (m_CurrentCell->id + 1 <= gridSize - 1 && grid[m_CurrentCell->id + 1]->isCellBroken)
                 {
                     return true;
                 }
@@ -268,7 +275,7 @@ namespace dae
             {
                 m_CurrentCell = World::GetInstance().GetOverlappedCell(glm::vec2(currentPos.x, currentPos.y + m_CellSize.x / 2), glm::vec2(1, 1));
 
-                if (m_CurrentCell->id + 14 <= gridSize && grid[m_CurrentCell->id + 14]->isCellBroken)
+                if (m_CurrentCell->id + 14 <= gridSize - 1 && grid[m_CurrentCell->id + 14]->isCellBroken)
                 {
                     return true;
                 }

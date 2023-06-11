@@ -22,11 +22,14 @@ int dae::HealthComponent::GetHealth()
 
 void dae::HealthComponent::SetHealth(int health)
 {
-	m_CurrentHealth = health;
-	notify(*GetOwner(), Event::PlayerHealthChanged);
-
-	if (m_CurrentHealth == 0)
+	if (health == -1)
 	{
 		notify(*GetOwner(), Event::PlayerDie);
 	}
+	else
+	{
+		m_CurrentHealth = health;
+	}
+
+	notify(*GetOwner(), Event::PlayerHealthChanged);
 }

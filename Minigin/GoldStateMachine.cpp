@@ -102,7 +102,7 @@ namespace dae
 
 	bool FallingGoldState::HandleCollision(GameObject* playerActor, GameObject* )
 	{
-		playerActor->GetComponent<CharacterComponent>().SetState(new DeadState());
+		playerActor->GetComponent<CharacterComponent>().GetDamaged();
 		return false;
 	}
 

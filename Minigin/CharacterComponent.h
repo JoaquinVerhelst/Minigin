@@ -46,28 +46,32 @@ namespace dae
 
 		int GetInputID() { return m_InputID; }
 
-		void CheckBorders();
+		bool CheckBorders();
 
 		PlayerState* GetState() { return m_CurrentState; }
-		void SetState(PlayerState* newState);
+
 
 		glm::vec2 CalculateWalk(int direction, int cellSize, float x, float y);
 		GridCell* GetCurrentCell() { return m_CurrentCell; }
 
 		virtual void GetDamaged();
-		virtual void Shoot();
+		virtual void UseSpecialty() {};
 		virtual void Respawn();
 		virtual void UpdateDeath();
+		virtual void SetIsDead() {};
 
 		virtual void CalculateMovement() {};
 		virtual void CalculateCell() {};
 	protected:
 
+		void SetState(PlayerState* newState);
+
+
 		int m_Direction;
 		int m_InputID;
 		float m_WalkSpeed;
 		bool m_ControlledByPlayer;
-
+		bool m_IsDead;
 
 		PlayerState* m_CurrentState;
 

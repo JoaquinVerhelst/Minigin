@@ -40,6 +40,22 @@ namespace dae
 	}
 
 
+	void MuteCommand::Execute(GameObject* , InputType type)
+	{
+		if (type == InputType::Up)
+		{
+			SoundServiceLocator::GetSoundSystem().MuteSound();
+		}
+
+	}
+
+	void UseSpecialtyCommand::Execute(GameObject* actor, InputType type)
+	{
+		if (type == InputType::Up)
+		{
+			actor->GetComponent<CharacterComponent>().UseSpecialty();
+		}
+	}
 
 
 	//void SelfDamageCommand::Execute(GameObject* actor, InputType inputType)
@@ -80,6 +96,10 @@ namespace dae
 
 	//	}
 	//}
+
+
+
+
 
 
 

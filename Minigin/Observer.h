@@ -12,7 +12,8 @@ namespace dae
 		PlayerDie,
 		PlayerWin,
 		PlayerHealthChanged,
-		PlayerScoreChanged
+		PlayerScoreChanged,
+		NobbinDied
 	};
 
 

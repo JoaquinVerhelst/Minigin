@@ -19,6 +19,7 @@
 #include "ScoreDisplayComponent.h"
 #include "NobbinComponent.h"
 #include "HighScoreComponent.h"
+#include "NobbinManager.h"
 using json = nlohmann::json;
 
 
@@ -83,10 +84,6 @@ namespace dae
                 auto& level = dae::SceneManager::GetInstance().CreateScene(levelInfoJson["name"]);
 
 
-                //add general stuff based on type
-                // 
-
-
 
                 LevelInfo* currentLevel = new LevelInfo();
 
@@ -119,6 +116,8 @@ namespace dae
                 currentLevel->player1PosIndex = levelInfoJson["player1PosIndex"];
                 currentLevel->player2PosIndex = levelInfoJson["player2PosIndex"];
 
+                currentLevel->nobbinManagerPos = levelInfoJson["nobbinManagerPos"];
+                currentLevel->nobbinAmount = levelInfoJson["nobbinAmount"];
 
 
                 std::string worldType = levelInfoJson["worldType"];
@@ -135,9 +134,16 @@ namespace dae
                 else if (worldType == "Level")
                 {
                     level.Add(UIDisplay);
-
-
                     currentLevel->worldType = WorldTypes::Level;
+
+
+
+                    auto nobbinManager = std::make_shared<dae::GameObject>();
+                    nobbinManager->AddComponent<NobbinManager>(levelInfoJson["nobbinAmount"], levelInfoJson["nobbinManagerPos"]);
+
+                    currentLevel->nobbinManager = nobbinManager;
+
+                    level.Add(nobbinManager);
                 }
                 else if (worldType == "HighScore")
                 {
@@ -325,6 +331,40 @@ namespace dae
         }
     }
 
+
+    std::shared_ptr<GameObject> JsonManager::LoadNobbin()
+    {
+
+        std::ifstream file(m_JsonFilePath);
+        if (!file.is_open())
+        {
+            std::cout << "Failed to open JSON file: " << m_JsonFilePath << std::endl;
+            return std::shared_ptr<GameObject>{};
+        }
+
+        try
+        {
+            json jsonData;
+            file >> jsonData;
+
+
+            const auto& nobbinInfo = jsonData["general"]["nobbin"];
+
+            auto nobbin = std::make_shared<dae::GameObject>();
+            nobbin->AddComponent<dae::SimpleRenderComponent>(nobbinInfo["spritepath"]);
+            nobbin->AddComponent<NobbinComponent>(nobbinInfo["speed"]).Init();
+
+;
+
+            return nobbin;
+        }
+        catch (const json::exception& ex)
+        {
+            std::cout << "Failed to parse JSON file: " << m_JsonFilePath << std::endl;
+            std::cout << "Error: " << ex.what() << std::endl;
+            return std::shared_ptr<GameObject>{};
+        }
+    }
 
     std::shared_ptr<GameObject> JsonManager::LoadPlayer(int index)
     {

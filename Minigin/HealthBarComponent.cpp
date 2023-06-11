@@ -96,7 +96,6 @@ void dae::HealthBarComponent::OnNotify(const GameObject& entity, Event event)
 
     if (event == Event::PlayerDie && &entity == GetOwner())
     {
-        World::GetInstance().PlayerDied();
-        //std::cout << "DEAD" << '\n';
+        World::GetInstance().PlayerDied(GetOwner());
     }
 }

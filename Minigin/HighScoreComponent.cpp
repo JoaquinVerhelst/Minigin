@@ -6,6 +6,7 @@
 #include "Renderer.h"
 #include "InputManager.h"
 #include "ScoreComponent.h"
+#include <algorithm>
 
 dae::HighScoreComponent::HighScoreComponent(GameObject* owner)
 	:Component(owner)
@@ -35,7 +36,10 @@ void dae::HighScoreComponent::Update()
 	{
 		if (m_DoOnce)
 		{
-			m_DisplayText = "Player1: ";
+
+			auto players = World::GetInstance().GetPlayers();
+
+			m_DisplayText = "Score: " + std::to_string(players[0]->GetComponent<ScoreComponent>().GetScore()) + "  Player1: ";
 			m_DoOnce = false;
 			m_TextBox->SetText(m_DisplayText + m_NameText);
 		}
@@ -117,8 +121,17 @@ void dae::HighScoreComponent::UpdateHighScoreList()
 	auto font = ResourceManager::GetInstance().LoadFont("../Data/Lingua.otf", 30);
 
 	//Sort
+	std::sort(highScoreSinglePlayer.begin(), highScoreSinglePlayer.end(), [](const HighscoreEntry& a, const HighscoreEntry& b)
+		{
+			return a.score > b.score;
+		});
 
-
+	std::sort(highScoreCoop.begin(), highScoreCoop.end(), [](const HighscoreEntryCoop& a, const HighscoreEntryCoop& b)
+		{
+			int totalScore1 = a.score1 + a.score2;
+			int totalScore2 = b.score1 + b.score2;
+			return totalScore1 > totalScore2;
+		});
 
 	GetOwner()->AddComponent<SimpleRenderComponent>(m_NameText, font, false).SetPosition({ 400.f, 600.f });
 	m_TextBox = &GetOwner()->GetComponent<SimpleRenderComponent>();
@@ -216,7 +229,7 @@ void dae::HighScoreComponent::SaveHighScore()
 		AddHighScoreCoop(m_NameText, players[0]->GetComponent<ScoreComponent>().GetScore(), 0);
 
 		m_NameText = " ";
-		m_DisplayText = "Player2: ";
+		m_DisplayText = "Score: " + std::to_string(players[1]->GetComponent<ScoreComponent>().GetScore()) + "  Player2: ";
 		m_TextBox->SetText(m_DisplayText + m_NameText);
 	}
 }

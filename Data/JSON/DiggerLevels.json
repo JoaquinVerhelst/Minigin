@@ -37,11 +37,19 @@
 				"size": 30,
 				"position": [ 900, 20 ]
 			}
+		},
+		"nobbin": {
+			"speed": 75,
+			"spritepath": "../Data/Sprites/Enemy.png",
+			"health": {
+			},
+			"score": {
+				"fontpath": "../Data/Lingua.otf",
+				"size": 30,
+				"position": [ 900, 20 ]
+			}
 		}
 	},
-
-
-
 	"levels": [
 		{
 			"levelInfo": {
@@ -52,7 +60,9 @@
 				"emeraldIndexs": [],
 				"goldIndexs": [],
 				"player1PosIndex": 0,
-				"player2PosIndex": 0
+				"player2PosIndex": 0,
+				"nobbinManagerPos": 0,
+				"nobbinAmount": 0
 			}
 		},
 		{
@@ -139,8 +149,10 @@
 					156,
 					228
 				],
-				"player1PosIndex": 109,
-				"player2PosIndex": 179
+				"player1PosIndex": 54,
+				"player2PosIndex": 222,
+				"nobbinManagerPos": 269,
+				"nobbinAmount": 4
 			}
 		},
 		{
@@ -226,8 +238,6 @@
 					240,
 					243,
 					251,
-					254,
-					257,
 					265,
 					268,
 					269,
@@ -240,7 +250,9 @@
 					276,
 					277,
 					278,
-					279
+					279,
+					254,
+					257
 				],
 				"emeraldIndexs": [
 					35,
@@ -301,7 +313,9 @@
 					244
 				],
 				"player1PosIndex": 107,
-				"player2PosIndex": 177
+				"player2PosIndex": 177,
+				"nobbinManagerPos": 268,
+				"nobbinAmount": 5
 			}
 		},
 		{
@@ -402,9 +416,11 @@
 				],
 				"goldIndexs": [ 45, 49, 115, 119, 185, 189, 240 ],
 				"player1PosIndex": 212,
-				"player2PosIndex": 223
+				"player2PosIndex": 223,
+				"nobbinManagerPos": 269,
+				"nobbinAmount": 6
 			}
-			
+
 		},
 		{
 			"levelInfo": {
@@ -415,7 +431,9 @@
 				"emeraldIndexs": [],
 				"goldIndexs": [],
 				"player1PosIndex": 0,
-				"player2PosIndex": 0
+				"player2PosIndex": 0,
+				"nobbinManagerPos": 0,
+				"nobbinAmount": 0
 			}
 		}
 	]

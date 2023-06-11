@@ -9,11 +9,13 @@
 #include "SimpleRenderComponent.h"
 #include "CharacterComponent.h"
 
+#include "DiggerComponent.h"
 #include "EmeraldComponent.h"
 #include "GoldComponent.h"
 #include "TreasureComponent.h"
 #include "Scene.h"
 #include "JsonManager.h"
+#include "NobbinManager.h"
 
 #include "InputManager.h"
 
@@ -58,6 +60,8 @@ void World::Init(int rows, int columns, SDL_Window* window)
     m_CellHeight = height / m_Columns;
 
     m_NobbinPlayer = nullptr;
+    m_Emeralds = 0;
+
 
     glm::ivec2 pos = {};
     int index = 0;
@@ -72,9 +76,6 @@ void World::Init(int rows, int columns, SDL_Window* window)
             cell->id = index;
             cell->isCellBroken = false;
             cell->position = pos;
-
-
-            cell->temp = false;
 
             ++index;
             m_Grid.emplace_back(cell);
@@ -107,33 +108,13 @@ void World::Render() const
                 SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 0, 0, 0, 255);
                 SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
             }
-         
-            if (m_Grid[i]->temp)
-            {
-                int x = static_cast<int>(m_Grid[i]->position.x);
-                int y = static_cast<int>(m_Grid[i]->position.y);
-
-                rect = { x , y, m_CellWidth, m_CellHeight };
-                SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255);
-                SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
-            }
+        
 
         }
     }
 
     SDL_SetRenderTarget(Renderer::GetInstance().GetSDLRenderer(), nullptr);
-    for (size_t i = 0; i < m_Grid.size(); i++)
-    {
-        if (m_Grid[i]->temp)
-        {
-            int x = static_cast<int>(m_Grid[i]->position.x);
-            int y = static_cast<int>(m_Grid[i]->position.y);
-            SDL_Rect rect = { x , y, m_CellWidth, m_CellHeight };
-            SDL_SetRenderDrawColor(Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255);
-            SDL_RenderFillRect(Renderer::GetInstance().GetSDLRenderer(), &rect);
-        }
 
-    }
 }
 
 void dae::World::Reset()
@@ -158,6 +139,8 @@ void dae::World::Update()
             m_Count = 0;
         }
     }
+
+
 
 
 
@@ -188,10 +171,9 @@ size_t dae::World::GetOverlappedTreasureIndex(const glm::vec2& position, const g
     for (size_t i = 0; i < m_Treasure.size(); i++)
     {
         const glm::vec2& treasurePos = m_Treasure[i]->GetPosition().GetPosition();
-        const glm::vec2& treasureShape = m_Treasure[i]->GetShape();
 
-        if (position.x + size.x > treasurePos.x && position.x < treasurePos.x + treasureShape.x &&
-            position.y + size.y > treasurePos.y && position.y < treasurePos.y + treasureShape.y)
+        if (position.x + size.x > treasurePos.x && position.x < treasurePos.x + m_CellWidth &&
+            position.y + size.y > treasurePos.y && position.y < treasurePos.y + m_CellHeight)
         {
             return i;
         }
@@ -200,6 +182,9 @@ size_t dae::World::GetOverlappedTreasureIndex(const glm::vec2& position, const g
 
     return static_cast<size_t>(-1);
 }
+
+
+
 
 GridCell* dae::World::GetOverlappedUnbrokenCell(const glm::vec2& position, const glm::vec2& size) const
 {
@@ -259,8 +244,18 @@ bool dae::World::CheckForTreasure(GameObject* actor, const glm::vec2& size)
     {
         if (m_Treasure[treasureIndex]->GetComponent<TreasureComponent>().HandleCollision(actor))
         {
+            if (m_Treasure[treasureIndex]->HasComponent<EmeraldComponent>())
+                --m_Emeralds;
+            
+
             m_Treasure[treasureIndex]->Destroy();
             m_Treasure.erase(m_Treasure.begin() + treasureIndex);
+
+
+            if (m_Emeralds == 0)
+                SceneManager::GetInstance().NextScene();
+            
+            
 
             return false;
 
@@ -271,6 +266,23 @@ bool dae::World::CheckForTreasure(GameObject* actor, const glm::vec2& size)
     }
 
     return false;
+}
+
+GameObject* dae::World::GetIsOverlappingTreasure(const glm::vec2& position, const glm::vec2& size) const
+{
+    for (size_t i = 0; i < m_Treasure.size(); i++)
+    {
+        const glm::vec2& treasurePos = m_Treasure[i]->GetPosition().GetPosition();
+
+        if (position.x + size.x > treasurePos.x && position.x < treasurePos.x + m_CellWidth &&
+            position.y + size.y > treasurePos.y && position.y < treasurePos.y + m_CellHeight)
+        {
+            return m_Treasure[i].get();
+        }
+
+    }
+
+    return nullptr;
 }
 
 glm::vec2 dae::World::GetCellSize()
@@ -298,6 +310,8 @@ void dae::World::PlaceTreasure(std::shared_ptr<GameObject> treasure, int gridInd
 
 }
 
+
+
 void dae::World::PlaceGameObject(std::shared_ptr<GameObject> gameobject, int gridIndex)
 {
     gameobject->SetPosition(m_Grid[gridIndex]->position.x, m_Grid[gridIndex]->position.y);
@@ -307,6 +321,7 @@ void dae::World::PlaceGameObject(GameObject* gameobject, int gridIndex)
 {
     gameobject->SetPosition(m_Grid[gridIndex]->position.x, m_Grid[gridIndex]->position.y);
 }
+
 
 void dae::World::BreakGridIndexes(std::vector<int> gridIndexes)
 {
@@ -336,7 +351,7 @@ void dae::World::ResetAndLoadWorld(int index)
 
 
     ResetLevel();
-
+    m_Emeralds = 0;
 
     LevelInfo* currentLevelInfo = SceneManager::GetInstance().GetSceneLevelInfo(m_CurrentWorldIndex);
     //auto treasures = SceneManager::GetInstance().GetSceneTreasure(m_CurrentWorldIndex);
@@ -354,17 +369,35 @@ void dae::World::ResetAndLoadWorld(int index)
     {
         for (size_t i = 0; i < m_Players.size(); i++)
         {
-            m_Players[i]->GetComponent<CharacterComponent>().SetState(new IdleState());
-
-            if (i == 0)
+            if (m_Players[i]->GetComponent<DiggerComponent>().GetState()->GetType() != PlayerStateType::Dead)
             {
-                PlaceGameObject(m_Players[i], currentLevelInfo->player1PosIndex);
+
+                m_Players[i]->GetComponent<CharacterComponent>().Init();
+
+
+                if (i == 0)
+                {
+                    PlaceGameObject(m_Players[i], currentLevelInfo->player1PosIndex);
+                }
+                else
+                {
+                    PlaceGameObject(m_Players[i], currentLevelInfo->player2PosIndex);
+                }
+
             }
             else
             {
-                PlaceGameObject(m_Players[i], currentLevelInfo->player2PosIndex);
+                m_Players[i]->SetPosition(-600, -800);
             }
+        }
 
+        if (m_CurrentGameMode != GameModeTypes::Versus)
+        {
+            currentLevelInfo->nobbinManager->GetComponent<NobbinManager>().Reset();
+        }
+        else
+        {
+            currentLevelInfo->nobbinManager->GetComponent<NobbinManager>().Disable();
         }
     }
   
@@ -381,6 +414,8 @@ void dae::World::ResetAndLoadWorld(int index)
         SceneManager::GetInstance().GetScene(m_CurrentWorldIndex)->AddTreasure(go);
 
         World::GetInstance().PlaceTreasure(go, currentLevelInfo->emeraldIndexs[i]);
+
+        ++m_Emeralds;
     }
 
 
@@ -399,21 +434,21 @@ void dae::World::ResetAndLoadWorld(int index)
 
 
 
-
-
-    //TODO : If all players are dead -> end
-    // TODO : If all emeralds are gone -> Next level
-    // todo If all enemy dead -> next level
-
-
-
-
+    // todo If all enemy dead -> next level 
 
     UpdateWorld();
 
 
 }
 
+void dae::World::LoadNobbinManager()
+{
+
+
+
+
+
+}
 
 void dae::World::ResetGameMode()
 {
@@ -422,7 +457,7 @@ void dae::World::ResetGameMode()
         m_Players[i]->Destroy();
     }
     m_Players.clear();
-    m_NobbinPlayer = nullptr;
+    m_NobbinPlayer.reset();
     InputManager::GetInstance().ResetInput();
 }
 
@@ -441,33 +476,53 @@ void dae::World::ResetLevel()
 }
 
 
-void dae::World::PlayerDied()
+void dae::World::PlayerDied(GameObject* player)
 {
-    ++m_PlayersDead;
 
-    if (m_PlayersDead == m_Players.size())
+
+    for (size_t i = 0; i < m_Players.size(); i++)
     {
-        if (m_CurrentGameMode == GameModeTypes::SinglePlayer)
+        if (m_Players[i].get() == player)
         {
-            m_GameOver = true;
-            SceneManager::GetInstance().NextSceneByIndex(4);
-            m_PlayersDead = 0;
-            return;
-        }
-        if (m_CurrentGameMode == GameModeTypes::Coop)
-        {
-            m_GameOver = true;
-            SceneManager::GetInstance().NextSceneByIndex(4);
-            m_PlayersDead = 0;
-            return;
-        }
-        else
-        {
-            ResetAndLoadWorld(0);
-            m_PlayersDead = 0;
-            return;
+
+            m_Players[i]->SetPosition(-600, -800);
+            m_Players[i]->GetComponent<DiggerComponent>().SetIsDead();
+
+            
+
+            ++m_PlayersDead;
+
+            if (m_PlayersDead == m_Players.size())
+            {
+                if (m_CurrentGameMode == GameModeTypes::SinglePlayer)
+                {
+                    m_GameOver = true;
+                    SceneManager::GetInstance().NextSceneByIndex(4);
+                    m_PlayersDead = 0;
+                    return;
+                }
+                if (m_CurrentGameMode == GameModeTypes::Coop)
+                {
+                    m_GameOver = true;
+                    SceneManager::GetInstance().NextSceneByIndex(4);
+                    m_PlayersDead = 0;
+                    return;
+                }
+                else
+                {
+                    ResetAndLoadWorld(0);
+                    m_PlayersDead = 0;
+                    return;
+                }
+            }
+
+
+
         }
     }
+
+
+
 }
 
 void dae::World::LoadSinglePlayer()

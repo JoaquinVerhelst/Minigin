@@ -215,17 +215,25 @@ dae::PlayerState* dae::IdleState::HandleInput(Command::InputType , PlayerStateTy
 	}
 }
 
+bool dae::IdleState::CheckCollision(GameObject* actor, CharacterComponent* character)
+{
+	auto cellSize = character->GetCellSize();
+
+
+	if (World::GetInstance().CheckForTreasure(actor, { cellSize.x - 1.f,cellSize.y - 1.f }))
+	{
+		return true;
+	}
+
+	return false;
+}
+
 
 //----------- DEAD --------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void dae::DeadState::UpdateSprite(GameObject* actor, int )
+void dae::DeadState::UpdateSprite(GameObject*, int )
 {
-	SimpleRenderComponent& simpleRender = actor->GetComponent<SimpleRenderComponent>();
-	simpleRender.SetAngleAndFlip(0.f, SDL_FLIP_NONE);
-	simpleRender.SetTexture("../Data/Sprites/Death.png");
-
-	actor->GetComponent<CharacterComponent>().GetDamaged();
 }
 
 dae::PlayerState* dae::DeadState::HandleInput(Command::InputType , PlayerStateType )
@@ -233,7 +241,26 @@ dae::PlayerState* dae::DeadState::HandleInput(Command::InputType , PlayerStateTy
 	return nullptr;
 }
 
-void dae::DeadState::Update(GameObject* , CharacterComponent* character)
+void dae::DeadState::Update(GameObject* , CharacterComponent* )
+{
+
+}
+
+
+
+void dae::DamagedState::UpdateSprite(GameObject* actor, int)
+{
+	SimpleRenderComponent& simpleRender = actor->GetComponent<SimpleRenderComponent>();
+	simpleRender.SetAngleAndFlip(0.f, SDL_FLIP_NONE);
+	simpleRender.SetTexture("../Data/Sprites/Death.png");
+}
+
+dae::PlayerState* dae::DamagedState::HandleInput(Command::InputType, PlayerStateType)
+{
+	return nullptr;
+}
+
+void dae::DamagedState::Update(GameObject*, CharacterComponent* character)
 {
 	character->UpdateDeath();
 }

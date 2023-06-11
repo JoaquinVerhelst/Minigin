@@ -67,6 +67,24 @@ namespace dae
 		int m_Direction;
 	};
 
+	class MuteCommand : public Command
+	{
+	public:
+		//0 = up, 1 = down
+
+		void Execute(GameObject* actor, InputType type) override;
+	};
+
+	class UseSpecialtyCommand : public Command
+	{
+	public:
+		//0 = up, 1 = down
+
+		void Execute(GameObject* actor, InputType type) override;
+	};
+
+
+
 
 	//class SelfDamageCommand : public Command
 	//{

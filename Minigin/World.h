@@ -16,8 +16,6 @@ namespace dae
 		int id;
 		glm::vec2 position;
 		bool isCellBroken;
-
-		bool temp;
 	};
 
 
@@ -56,6 +54,9 @@ namespace dae
 
 		//returns true if it collides with treasure that cannot be pushed
 		bool CheckForTreasure(GameObject* actor, const glm::vec2& size);
+		GameObject* GetIsOverlappingTreasure(const glm::vec2& position, const glm::vec2& size) const;
+
+
 
 		glm::vec2 GetCellSize();
 
@@ -74,11 +75,11 @@ namespace dae
 		void ResetAndLoadWorld(int index);
 		void ResetGameMode();
 		void ResetLevel();
-		void PlayerDied();
+		void PlayerDied(GameObject* player);
 
-
+		void PlaceGameObject(std::shared_ptr<GameObject> gameobject, int gridIndex);
 		void PlaceGameObject(GameObject* gameobject, int gridIndex);
-
+		void PlaceEnemy(GameObject* gameobject, int gridIndex);
 		std::vector<std::shared_ptr<GameObject>> GetPlayers() { return m_Players; }
 
 		void LoadSinglePlayer();
@@ -91,7 +92,7 @@ namespace dae
 
 
 		void PlaceTreasure(std::shared_ptr<GameObject> treasure, int gridIndex);
-		void PlaceGameObject(std::shared_ptr<GameObject> gameobject, int gridIndex);
+		void LoadNobbinManager();
 
 
 
@@ -116,6 +117,8 @@ namespace dae
 		GameModeTypes m_CurrentGameMode;
 
 		int m_CurrentWorldIndex;
+
+		int m_Emeralds;
 	};
 
 

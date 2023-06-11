@@ -31,6 +31,9 @@ namespace dae
 			brokenWorldIndexs = {};
 			emeraldIndexs = {};
 			goldIndexs = {};
+			nobbinManagerPos = 0;
+			nobbinAmount = 0;
+			nobbinManager = nullptr;
 		}
 
 
@@ -40,8 +43,8 @@ namespace dae
 		WorldTypes worldType;
 
 		int player1PosIndex;
-
 		int player2PosIndex;
+
 		std::vector<int> brokenWorldIndexs;
 		std::vector<int> emeraldIndexs;
 		std::vector<int> goldIndexs;
@@ -50,9 +53,11 @@ namespace dae
 		std::shared_ptr<GameObject> background;
 		std::shared_ptr<GameObject> player1;
 		std::shared_ptr<GameObject> player2;
+		std::shared_ptr<GameObject> nobbinManager;
 
-		//enemyManager 
-		//enemyManagerPos
+		int nobbinManagerPos;
+		int nobbinAmount;
+		
 	};
 
 	class Scene final

@@ -27,16 +27,19 @@ namespace dae
 
 
 		void GetDamaged() override;
-		void Shoot() override;
+		void UseSpecialty() override;
 		void Respawn() override;
 		void UpdateDeath() override;
+		void SetIsDead() override;
+
 	private:
 
+		void SpawnFireBall();
 
 		bool m_IsDamaged;
 		float m_DeathCounter;
 		float m_DeathTime;
-
+		std::shared_ptr<GameObject> m_FireBall;
 
 
 	};

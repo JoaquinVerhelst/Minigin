@@ -128,37 +128,44 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	std::cout << '\n';
 	std::cout << '\n';
 
-	std::cout << "Player1 Controls: Controller 1 DPad and WASD" << '\n';
-	std::cout << "Player2 Controls: Controller 2 DPad and arrow keys" << '\n';
+	std::cout << "Player1 Controls: " << '\n';
+	std::cout << "Movement: Controller 1 DPad and WASD" << '\n';
+	std::cout << "Use Specialty: space bar" << '\n';
 
-	std::cout << "Add Score =  ButtonA" << '\n';
 
-	std::cout << "remove Health =  ButtonB" << '\n';
 
+	std::cout << "Player2 Controls: " << '\n'; 
+	std::cout << "Movement: Controller 2 DPad and arrow keys" << '\n';
+	std::cout << "Use Specialty: RCTRL" << '\n';
+
+
+	std::cout << "KeyBoard: " << '\n';
+	std::cout << "P key: mute sound" << '\n';
+	std::cout << "F1 key: Next Level" << '\n';
 	//Temporary way for initializition  TODO: Change The Command -> no objects
 
-	auto* walkUp = new VerticalWalkCommand(1);
-	auto* walkDown = new VerticalWalkCommand(0);
-	auto* walkRight = new HorizontalWalkCommand(0);
-	auto* walkLeft = new HorizontalWalkCommand(1);
-
-	input.AddControllerBinding(InputManager::ControllerButton::DPadUp, walkUp, Command::InputType::Pressed);
-	input.AddControllerBinding(InputManager::ControllerButton::DPadDown, walkDown, Command::InputType::Pressed);
-	input.AddControllerBinding(InputManager::ControllerButton::DPadRight, walkRight, Command::InputType::Pressed);
-	input.AddControllerBinding(InputManager::ControllerButton::DPadLeft, walkLeft, Command::InputType::Pressed);
 
 
+	input.AddControllerBinding(InputManager::ControllerButton::DPadUp, std::make_shared<VerticalWalkCommand>(1), Command::InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadDown, std::make_shared<VerticalWalkCommand>(0), Command::InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadRight, std::make_shared<HorizontalWalkCommand>(0), Command::InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadLeft, std::make_shared<HorizontalWalkCommand>(1), Command::InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::ButtonA, std::make_shared<UseSpecialtyCommand>(), Command::InputType::Up);
+
+	input.AddKeyBinding(SDL_SCANCODE_W, std::make_shared<VerticalWalkCommand>(1), 0);
+	input.AddKeyBinding(SDL_SCANCODE_S, std::make_shared<VerticalWalkCommand>(0), 0);
+	input.AddKeyBinding(SDL_SCANCODE_A, std::make_shared<HorizontalWalkCommand>(1), 0);
+	input.AddKeyBinding(SDL_SCANCODE_D, std::make_shared<HorizontalWalkCommand>(0), 0);
+	input.AddKeyBinding(SDL_SCANCODE_SPACE, std::make_shared<UseSpecialtyCommand>(), 0);
+
+	input.AddKeyBinding(SDL_SCANCODE_P, std::make_shared<MuteCommand>(), -1);
 
 
-	input.AddKeyBinding(SDL_SCANCODE_W, walkUp, 0);
-	input.AddKeyBinding(SDL_SCANCODE_S, walkDown, 0);
-	input.AddKeyBinding(SDL_SCANCODE_A, walkLeft, 0);
-	input.AddKeyBinding(SDL_SCANCODE_D, walkRight, 0);
-
-	input.AddKeyBinding(SDL_SCANCODE_UP, walkUp, 1);
-	input.AddKeyBinding(SDL_SCANCODE_DOWN, walkDown, 1);
-	input.AddKeyBinding(SDL_SCANCODE_LEFT, walkLeft, 1);
-	input.AddKeyBinding(SDL_SCANCODE_RIGHT, walkRight, 1);
+	input.AddKeyBinding(SDL_SCANCODE_UP, std::make_shared<VerticalWalkCommand>(1), 1);
+	input.AddKeyBinding(SDL_SCANCODE_DOWN, std::make_shared<VerticalWalkCommand>(0), 1);
+	input.AddKeyBinding(SDL_SCANCODE_LEFT, std::make_shared<HorizontalWalkCommand>(1), 1);
+	input.AddKeyBinding(SDL_SCANCODE_RIGHT, std::make_shared<HorizontalWalkCommand>(0), 1);
+	input.AddKeyBinding(SDL_SCANCODE_RCTRL, std::make_shared<UseSpecialtyCommand>(), 0);
 
 
 
@@ -185,16 +192,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		input.GetInstance().ClearFrameEvents();
 
 	}
-
-
-
-
-
-	delete walkUp;
-	delete walkDown;
-	delete walkRight;
-	delete walkLeft;
-
 
 
 }

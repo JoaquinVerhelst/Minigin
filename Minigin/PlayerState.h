@@ -13,6 +13,7 @@ namespace dae
 		Idle,
 		HorizontalWalk,
 		VerticalWalk,
+		Damaged,
 		Dead
 
 	};
@@ -84,6 +85,23 @@ namespace dae
 		~IdleState() = default;
 		void UpdateSprite(GameObject* actor, int direction) override;
 		PlayerState* HandleInput( Command::InputType inputType, PlayerStateType newStateType) override;
+		bool CheckCollision(GameObject* actor, CharacterComponent* character) override;
+	};
+
+
+	class DamagedState : public PlayerState
+	{
+	public:
+
+		DamagedState()
+		{
+			m_Type = PlayerStateType::Damaged;
+		}
+
+		~DamagedState() = default;
+		void UpdateSprite(GameObject* actor, int direction) override;
+		PlayerState* HandleInput(Command::InputType inputType, PlayerStateType newStateType) override;
+		void Update(GameObject* actor, CharacterComponent* character) override;
 	};
 
 
@@ -93,7 +111,7 @@ namespace dae
 
 		DeadState()
 		{
-			m_Type = PlayerStateType::Idle;
+			m_Type = PlayerStateType::Dead;
 		}
 
 		~DeadState() = default;

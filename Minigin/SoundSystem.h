@@ -30,6 +30,7 @@ namespace dae
 		virtual void AddSound(const char* path, sound_id id = -1) = 0;
 		virtual void PlayMusic(const char* path) = 0;
 		virtual void SetMusicVolume(int volume) = 0;
+		virtual void MuteSound() = 0;
 	};
 
 
@@ -56,6 +57,7 @@ namespace dae
 
 		void SetMusicVolume(int volume);
 
+		void MuteSound();
 
 
 	private:
@@ -81,6 +83,8 @@ namespace dae
 		void AddSound(const char* path, sound_id id = -1) override;
 		void PlayMusic(const char* path) override;
 		void SetMusicVolume(int volume);
+		void MuteSound();
+
 	};
 
 }

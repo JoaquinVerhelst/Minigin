@@ -28,15 +28,14 @@ namespace dae
 
 		struct KeyBind
 		{
-			Command* command;
+			std::shared_ptr<Command> command;
 			SDL_Scancode button;
 			int inputID;
-			bool isPressed;
 		};
 
 		struct ControllerBind
 		{
-			Command* command;
+			std::shared_ptr<Command> command;
 			ControllerButton button;
 			Command::InputType inputType;
 		};
@@ -186,14 +185,15 @@ namespace dae
 			const Uint8* keystate = SDL_GetKeyboardState(NULL);
 			for (size_t i = 0; i < m_KeyBinds.size(); i++)
 			{
+
 				if (m_KeyBinds[i].inputID < m_Players.size())
 				{
 					if (keystate[m_KeyBinds[i].button])
 					{
 						m_KeyBinds[i].command->Execute(m_Players[m_KeyBinds[i].inputID], Command::InputType::Pressed);
-						m_KeyBinds[i].isPressed = true;
 					}
 				}
+
 			}
 		}
 
@@ -218,8 +218,13 @@ namespace dae
 			
 			for (size_t j = 0; j < m_KeyBinds.size(); j++)
 			{
-				if (m_KeyBinds[j].inputID < m_Players.size() && IsKeyBoardKey(m_KeyBinds[j].button, SDL_KEYUP))
+				if (m_KeyBinds[j].inputID == -1 && IsKeyBoardKey(m_KeyBinds[j].button, SDL_KEYUP))
+				{
+					m_KeyBinds[j].command->Execute(nullptr, Command::InputType::Up);
+				}
+				else if (m_KeyBinds[j].inputID < m_Players.size() && IsKeyBoardKey(m_KeyBinds[j].button, SDL_KEYUP))
 					m_KeyBinds[j].command->Execute(m_Players[m_KeyBinds[j].inputID], Command::InputType::Up);
+
 			}
 
 			return true;
@@ -228,11 +233,11 @@ namespace dae
 
 
 
-		void AddControllerBinding(InputManager::ControllerButton button, Command* command, Command::InputType inputType)
+		void AddControllerBinding(InputManager::ControllerButton button, std::shared_ptr<Command> command, Command::InputType inputType)
 		{
 			ControllerBind tempControllerBind{};
 			tempControllerBind.button = button;
-			tempControllerBind.command = command;
+			tempControllerBind.command = std::move(command);
 			tempControllerBind.inputType = inputType;
 
 			m_ControllerBinds.emplace_back(tempControllerBind);
@@ -240,13 +245,12 @@ namespace dae
 		}
 
 
-		void AddKeyBinding(SDL_Scancode button, Command* command, int inputID)
+		void AddKeyBinding(SDL_Scancode button, std::shared_ptr<Command> command, int inputID)
 		{
 			KeyBind tempKeyBind{};
 			tempKeyBind.button = button;
-			tempKeyBind.command = command;
+			tempKeyBind.command = std::move(command);
 			tempKeyBind.inputID = inputID;
-			tempKeyBind.isPressed = false;
 			m_KeyBinds.emplace_back(tempKeyBind);	
 		}
 
@@ -403,14 +407,14 @@ namespace dae
 		delete pImpl;
 	}
 
-	void InputManager::AddControllerBinding(ControllerButton button, Command* command, Command::InputType inputType)
+	void InputManager::AddControllerBinding(ControllerButton button, std::shared_ptr<Command> command, Command::InputType inputType)
 	{
-		pImpl->AddControllerBinding(button, command, inputType);
+		pImpl->AddControllerBinding(button, std::move(command), inputType);
 	}
 
-	void InputManager::AddKeyBinding(SDL_Scancode button, Command* command, int inputID)
+	void InputManager::AddKeyBinding(SDL_Scancode button, std::shared_ptr<Command> command, int inputID)
 	{
-		pImpl->AddKeyBinding(button, command, inputID);
+		pImpl->AddKeyBinding(button, std::move(command), inputID);
 	}
 
 	void InputManager::ClearFrameEvents()

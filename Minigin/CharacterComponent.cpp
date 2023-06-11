@@ -27,6 +27,7 @@ namespace dae
 		, m_Direction{0}
 		, m_CurrentCell{ nullptr }
 		, m_ControlledByPlayer{ isControlledByPlayer }
+		, m_IsDead{ false }
 	{
 
 		if (isControlledByPlayer)
@@ -95,29 +96,32 @@ namespace dae
 		SetState(new IdleState());
 	}
 
-	void CharacterComponent::CheckBorders()
+	bool CharacterComponent::CheckBorders()
 	{
 		auto pos = GetPosition();
 
 		if (pos.y <= 2 * m_CellSize.y)
 		{
 			GetOwner()->SetPosition(pos.x, pos.y + 0.1f);
-
+			return false;
 		}
 		if (pos.y + m_CellSize.y >= 720)
 		{
 			GetOwner()->SetPosition(pos.x, pos.y - 0.1f);
-
+			return false;
 		}
 		if (pos.x <= 0)
 		{
 			GetOwner()->SetPosition(pos.x + 0.1f, pos.y);
-
+			return false;
 		}
 		if (pos.x + m_CellSize.y >= 1080)
 		{
 			GetOwner()->SetPosition(pos.x - 0.1f, pos.y);
+			return false;
 		}
+
+		return true;
 	}
 
 	void CharacterComponent::SetState(PlayerState* newState)
@@ -158,10 +162,6 @@ namespace dae
 	{
 	}
 
-
-	void CharacterComponent::Shoot()
-	{
-	}
 
 	void CharacterComponent::Respawn()
 	{

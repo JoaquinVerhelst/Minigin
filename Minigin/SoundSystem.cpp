@@ -40,7 +40,8 @@ namespace dae
 
         std::vector<AudioClip*> m_AudioClips;
         Mix_Music* m_BackgroundMusic;
-
+        bool m_SoundMuted;
+        int m_Volume;
 
         //Threads
         std::thread m_thread;
@@ -96,6 +97,7 @@ namespace dae
 
         void SetMusicVolume(int volume);
 
+        void MuteSound();
 
 
         void EnqueueTask(std::function<void()> task)
@@ -121,8 +123,8 @@ namespace dae
     {
         
         m_stop = false;
-
-
+        m_SoundMuted = false;
+        m_Volume = 0;
 
         // Initialize SDL and SDL_mixer
         SDL_Init(SDL_INIT_AUDIO);
@@ -135,9 +137,9 @@ namespace dae
         AddSound("../Data/Sound/Damage.wav");
         AddSound("../Data/Sound/Collect.wav");
         AddSound("../Data/Sound/GoldBreaking.wav");
-        //PlayMusic("../Data/Sound/LadyMaria.mp3");
+        PlayMusic("../Data/Sound/LadyMaria.mp3");
 
-        //SetMusicVolume(32);
+        SetMusicVolume(32);
         
 
         m_thread = std::thread([this] { WorkerThread(); });
@@ -301,11 +303,26 @@ namespace dae
             volume = 128;
         }
 
+        m_Volume = volume;
 
-        Mix_VolumeMusic(volume);
+        Mix_VolumeMusic(m_Volume);
     }
 
-
+    void dae::SDL_SoundSystem::SDL_SoundSystemImpl::MuteSound()
+    {
+        if (!m_SoundMuted)
+        {
+            Mix_Volume(-1, 0);
+            Mix_VolumeMusic(0);
+            m_SoundMuted = true;
+        }
+        else
+        {
+            Mix_Volume(-1, MIX_MAX_VOLUME);
+            Mix_VolumeMusic(m_Volume);
+            m_SoundMuted = false;
+        }
+    }
 
 
 
@@ -351,6 +368,11 @@ namespace dae
     void SDL_SoundSystem::SetMusicVolume(int volume)
     {
         pImpl->SetMusicVolume(volume);
+    }
+
+    void SDL_SoundSystem::MuteSound()
+    {
+        pImpl->MuteSound();
     }
 
 
@@ -410,6 +432,9 @@ namespace dae
         m_SoundSystem->SetMusicVolume(volume);
     }
 
-
+    void dae::LoggingSoundSystem::MuteSound()
+    {
+        m_SoundSystem->MuteSound();
+    }
 
 }

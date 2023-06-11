@@ -37,6 +37,10 @@ void dae::ScoreComponent::AddEmeraldScore(int score)
 	{
 		HealthComponent& comp = GetOwner()->GetComponent<HealthComponent>();
 		comp.SetHealth(comp.GetHealth() + 1);
+
+		//magic number -> Add 250 score when 8 emeralds picked up
+		m_CurrentScore += 250;
+		notify(*GetOwner(), Event::PlayerScoreChanged);
 	}
 }
 
