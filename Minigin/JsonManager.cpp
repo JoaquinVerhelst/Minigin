@@ -351,7 +351,7 @@ namespace dae
             const auto& nobbinInfo = jsonData["general"]["nobbin"];
 
             auto nobbin = std::make_shared<dae::GameObject>();
-            nobbin->AddComponent<dae::SimpleRenderComponent>(nobbinInfo["spritepath"]);
+            nobbin->AddComponent<dae::SimpleRenderComponent>(nobbinInfo["sprites"]["enemySprite"]);
             nobbin->AddComponent<NobbinComponent>(nobbinInfo["speed"]).Init();
 
 ;
@@ -386,7 +386,7 @@ namespace dae
 
             auto player1 = std::make_shared<dae::GameObject>();
             player1->AddComponent<DiggerComponent>(player["speed"]);
-            player1->AddComponent<dae::SimpleRenderComponent>(player["spritepath"]);
+            player1->AddComponent<dae::SimpleRenderComponent>(player["sprites"]["playerSprite"]);
 
             const json health = player["health"];
 
@@ -418,6 +418,17 @@ namespace dae
 
             player1->GetComponent<ScoreDisplayComponent>().SetStartPosition(pos[0], pos[1]);
 
+
+            DiggerComponent::PlayerSprites sprites{};
+            sprites.playerSprite = player["sprites"]["playerSprite"];
+            sprites.deathSprite = player["sprites"]["deathSprite"];
+            sprites.reloadingSprite = player["sprites"]["reloadingSprite"];
+            sprites.fireBallSprite = player["sprites"]["fireBallSprite"];
+
+
+            player1->GetComponent<DiggerComponent>().SetSprites(sprites);
+
+
             return player1;
 
         }
@@ -448,33 +459,17 @@ namespace dae
 
             auto enemyPlayer = std::make_shared<dae::GameObject>();
 
-            enemyPlayer->AddComponent<dae::SimpleRenderComponent>(playerEnemyJson["spritepath"]);
+
+
+            enemyPlayer->AddComponent<dae::SimpleRenderComponent>(playerEnemyJson["sprites"]["enemySprite"]);
             enemyPlayer->AddComponent<NobbinComponent>(playerEnemyJson["speed"], true);
-            const json health = playerEnemyJson["health"];
 
-            enemyPlayer->AddComponent<HealthComponent>(health["amount"]);
-            enemyPlayer->AddComponent<HealthBarComponent>(health["healthBarSpritepath"]);
+            NobbinComponent::NobbinSprites sprites{};
+            sprites.enemySprite = playerEnemyJson["sprites"]["enemySprite"];
+            sprites.rageSprite = playerEnemyJson["sprites"]["rageSprite"];
 
+            enemyPlayer->GetComponent<NobbinComponent>().SetSprites(sprites);
 
-
-            json pos = health["healthBarPosition"];
-
-            enemyPlayer->GetComponent<HealthBarComponent>().SetStartPosition(pos[0], pos[1]);
-
-
-            const json score = playerEnemyJson["score"];
-            auto font2 = dae::ResourceManager::GetInstance().LoadFont(score["fontpath"], score["size"]);
-
-            enemyPlayer->AddComponent<ScoreComponent>();
-            enemyPlayer->AddComponent<ScoreDisplayComponent>(font2);
-
-
-
-            pos = score["position"];
-
-
-
-            enemyPlayer->GetComponent<ScoreDisplayComponent>().SetStartPosition(pos[0], pos[1]);
 
             return enemyPlayer;
 

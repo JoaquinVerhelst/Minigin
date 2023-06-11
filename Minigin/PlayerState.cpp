@@ -1,19 +1,20 @@
 #include "PlayerState.h"
 #include <iostream>
-#include "CharacterComponent.h"
 #include "SimpleRenderComponent.h"
 #include "GameObject.h"
 #include "World.h"
+#include "CharacterComponent.h"
+#include "DiggerComponent.h"
 
 //-----------HORIZINTAL WALK-----------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void dae::HorizontalWalkState::UpdateSprite(GameObject* actor, int direction)
+void dae::HorizontalWalkState::UpdateSprite(GameObject* actor, Direction direction)
 {
 
 	SimpleRenderComponent& simpleRender = actor->GetComponent<SimpleRenderComponent>();
 
-	if (direction == 0)
+	if (direction == Direction::Right)
 	{
 		simpleRender.SetAngleAndFlip(0.f, SDL_FLIP_NONE);
 	}
@@ -23,7 +24,7 @@ void dae::HorizontalWalkState::UpdateSprite(GameObject* actor, int direction)
 	}
 }
 
-dae::PlayerState* dae::HorizontalWalkState::HandleInput(Command::InputType inputType, PlayerStateType newStateType)
+dae::CharacterState* dae::HorizontalWalkState::HandleInput(Command::InputType inputType, PlayerStateType newStateType)
 {
 	if (inputType == Command::InputType::Up)
 	{
@@ -44,8 +45,22 @@ void dae::HorizontalWalkState::Update(GameObject* actor, CharacterComponent* cha
 {
 
 	glm::vec3 currentPos = character->GetPosition();
+	auto direction = character->GetDirection();
 
-	auto vec = character->CalculateWalk(character->GetDirection(), character->GetCellSize().y, currentPos.y, currentPos.x);
+	glm::vec2 vec;
+
+	if (direction == Direction::Right)
+	{
+		vec = character->CalculateWalk(0, character->GetCellSize().y, currentPos.y, currentPos.x);
+	}
+	else
+	{
+		vec = character->CalculateWalk(1, character->GetCellSize().y, currentPos.y, currentPos.x);
+	}
+
+
+
+
 	actor->SetPosition(vec.y, vec.x);
 
 }
@@ -59,7 +74,7 @@ bool dae::HorizontalWalkState::CheckCollision(GameObject* actor, CharacterCompon
 	if (World::GetInstance().CheckForTreasure(actor, { cellSize.x - 1.f ,cellSize.y - 1.f }))
 	{
 
-		if (character->GetDirection() == 0)
+		if (character->GetDirection() == Direction::Right)
 		{
 			actor->SetPosition(currentPos.x - offset, currentPos.y);
 		}
@@ -79,9 +94,9 @@ void dae::HorizontalWalkState::CalculateDirection(GameObject* actor, CharacterCo
 
 	auto cell = character->GetCurrentCell();
 
-	if (character->GetDirection() == 0)
+	if (character->GetDirection() == Direction::Left)
 	{
-		if (currentPos.x >= cell->position.x )
+		if (currentPos.x >= cell->position.x)
 		{
 			character->CalculateCell();
 		}
@@ -93,18 +108,19 @@ void dae::HorizontalWalkState::CalculateDirection(GameObject* actor, CharacterCo
 			character->CalculateCell();
 		}
 	}
+
 }
 
 
 //-----------VERTICAL WALK-------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void dae::VerticalWalkState::UpdateSprite(GameObject* actor, int direction)
+void dae::VerticalWalkState::UpdateSprite(GameObject* actor, Direction direction)
 {
 
 	SimpleRenderComponent& simpleRender = actor->GetComponent<SimpleRenderComponent>();
 
-	if (direction == 0)
+	if (direction == Direction::Down)
 	{
 		simpleRender.SetAngleAndFlip(90.f, SDL_FLIP_NONE);
 	}
@@ -114,7 +130,7 @@ void dae::VerticalWalkState::UpdateSprite(GameObject* actor, int direction)
 	}
 }
 
-dae::PlayerState* dae::VerticalWalkState::HandleInput(Command::InputType inputType, PlayerStateType newStateType)
+dae::CharacterState* dae::VerticalWalkState::HandleInput(Command::InputType inputType, PlayerStateType newStateType)
 {
 
 	if (inputType == Command::InputType::Up)
@@ -136,7 +152,21 @@ void dae::VerticalWalkState::Update(GameObject* actor, CharacterComponent* chara
 {
 	glm::vec3 currentPos = character->GetPosition();
 
-	auto vec = character->CalculateWalk(character->GetDirection(), character->GetCellSize().x, currentPos.x, currentPos.y);
+	auto direction = character->GetDirection();
+
+	glm::vec2 vec;
+
+	if (direction == Direction::Down)
+	{
+		vec = character->CalculateWalk(0, character->GetCellSize().x, currentPos.x, currentPos.y);
+	}
+	else
+	{
+		vec = character->CalculateWalk(1, character->GetCellSize().x, currentPos.x, currentPos.y);
+	}
+
+
+
 	actor->SetPosition(vec.x, vec.y);
 }
 
@@ -144,17 +174,17 @@ bool dae::VerticalWalkState::CheckCollision(GameObject* actor, CharacterComponen
 {
 	auto cellSize = character->GetCellSize();
 	glm::vec3 currentPos = character->GetPosition();
+	float offset = 0.5f;
 
-
-	if (World::GetInstance().CheckForTreasure(actor, { cellSize.x - 1.f,cellSize.y - 1.f }))
+	if (World::GetInstance().CheckForTreasure(actor, { cellSize.x,cellSize.y }))
 	{
-		if (character->GetDirection() == 0)
+		if (character->GetDirection() == Direction::Down)
 		{
-			actor->SetPosition(currentPos.x, currentPos.y - 0.5f);
+			actor->SetPosition(currentPos.x, currentPos.y - offset);
 		}
 		else
 		{
-			actor->SetPosition(currentPos.x, currentPos.y + 0.5f);
+			actor->SetPosition(currentPos.x, currentPos.y + offset);
 		}
 		return true;
 	}
@@ -170,11 +200,10 @@ void dae::VerticalWalkState::CalculateDirection(GameObject* actor, CharacterComp
 	auto cell = character->GetCurrentCell();
 
 
-	if (character->GetDirection() == 0)
+	if (character->GetDirection() == Direction::Down)
 	{
 		if (currentPos.y >= cell->position.y)
 		{
-
 			character->CalculateCell();
 		}
 	}
@@ -192,14 +221,14 @@ void dae::VerticalWalkState::CalculateDirection(GameObject* actor, CharacterComp
 //----------- IDLE --------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void dae::IdleState::UpdateSprite(GameObject* , int )
+void dae::IdleState::UpdateSprite(GameObject* , Direction)
 {
 	//actor->GetComponent<SimpleRenderComponent>().SetFlip(SDL_FLIP_NONE);
 	//actor->GetComponent<SimpleRenderComponent>().SetAngle(0.f);
 }
 
 
-dae::PlayerState* dae::IdleState::HandleInput(Command::InputType , PlayerStateType newStateType)
+dae::CharacterState* dae::IdleState::HandleInput(Command::InputType , PlayerStateType newStateType)
 {
 	if (newStateType == PlayerStateType::HorizontalWalk)
 	{
@@ -220,7 +249,7 @@ bool dae::IdleState::CheckCollision(GameObject* actor, CharacterComponent* chara
 	auto cellSize = character->GetCellSize();
 
 
-	if (World::GetInstance().CheckForTreasure(actor, { cellSize.x - 1.f,cellSize.y - 1.f }))
+	if (World::GetInstance().CheckForTreasure(actor, { cellSize.x ,cellSize.y  }))
 	{
 		return true;
 	}
@@ -232,30 +261,32 @@ bool dae::IdleState::CheckCollision(GameObject* actor, CharacterComponent* chara
 //----------- DEAD --------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void dae::DeadState::UpdateSprite(GameObject*, int )
+void dae::DeadState::UpdateSprite(GameObject*, Direction )
 {
 }
 
-dae::PlayerState* dae::DeadState::HandleInput(Command::InputType , PlayerStateType )
+dae::CharacterState* dae::DeadState::HandleInput(Command::InputType , PlayerStateType )
 {
 	return nullptr;
 }
 
 void dae::DeadState::Update(GameObject* , CharacterComponent* )
 {
-
 }
 
 
+//----------- DAMAGED --------------------------------------------------------------------------
+/////////////////////////////////////////////////////////////////////////////////////////////
 
-void dae::DamagedState::UpdateSprite(GameObject* actor, int)
+
+void dae::DamagedState::UpdateSprite(GameObject* actor, Direction)
 {
 	SimpleRenderComponent& simpleRender = actor->GetComponent<SimpleRenderComponent>();
 	simpleRender.SetAngleAndFlip(0.f, SDL_FLIP_NONE);
-	simpleRender.SetTexture("../Data/Sprites/Death.png");
+	simpleRender.SetTexture(actor->GetComponent<DiggerComponent>().GetSprites().deathSprite);
 }
 
-dae::PlayerState* dae::DamagedState::HandleInput(Command::InputType, PlayerStateType)
+dae::CharacterState* dae::DamagedState::HandleInput(Command::InputType, PlayerStateType)
 {
 	return nullptr;
 }

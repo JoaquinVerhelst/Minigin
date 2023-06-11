@@ -45,7 +45,7 @@ void dae::NobbinManager::Update()
 
 	}
 
-	if (m_NobbinAmountLeft == 0 && m_Nobbins.empty())
+	if (m_NobbinAmountLeft == 0 && m_Nobbins.empty() && World::GetInstance().GetGameMode() != World::GameModeTypes::Versus)
 	{
 		SceneManager::GetInstance().NextScene();
 	}
@@ -82,6 +82,17 @@ void dae::NobbinManager::Disable()
 {
 	m_Nobbins.clear();
 	m_NobbinAmountLeft = 0;
+}
+
+std::vector<std::shared_ptr<dae::GameObject>> dae::NobbinManager::GetNobbins()
+{
+	return m_Nobbins;
+}
+
+void dae::NobbinManager::DestroyNobbin(size_t index)
+{
+	SoundServiceLocator::GetSoundSystem().Play(0, 128.f);
+	m_Nobbins.erase(m_Nobbins.begin() + index);
 }
 
 void dae::NobbinManager::SpawnNobbin()
@@ -129,7 +140,14 @@ bool dae::NobbinManager::IsOverlappingWithTreasure()
 	{
 		auto treasure = World::GetInstance().GetIsOverlappingTreasure(m_Nobbins[i]->GetPosition().GetPosition(), { cellSize.x ,cellSize.y });
 
-		if (treasure && treasure->GetComponent<GoldComponent>().GetStateType() == GoldStateType::Falling)
+		if (treasure)
+			return false;
+
+		if (!treasure->HasComponent<GoldComponent>())
+			return false;
+
+	
+		if (treasure->GetComponent<GoldComponent>().GetStateType() == GoldStateType::Falling)
 		{
 
 			for (size_t j = 0; j < m_Players.size(); ++j)
@@ -137,8 +155,7 @@ bool dae::NobbinManager::IsOverlappingWithTreasure()
 				m_Players[j]->GetComponent<ScoreComponent>().AddEmeraldScore(250);
 			}
 
-			SoundServiceLocator::GetSoundSystem().Play(0, 128.f);
-			m_Nobbins.erase(m_Nobbins.begin() + i);
+			DestroyNobbin(i);
 
 			return true;
 

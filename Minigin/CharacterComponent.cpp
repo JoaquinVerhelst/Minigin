@@ -52,7 +52,7 @@ namespace dae
 	void CharacterComponent::HandleInput(Command::InputType inputType, PlayerStateType newStateType)
 	{
 
-		PlayerState* newState = m_CurrentState->HandleInput(inputType, newStateType);
+		CharacterState* newState = m_CurrentState->HandleInput(inputType, newStateType);
 
 		if (newState != nullptr)
 		{
@@ -124,7 +124,7 @@ namespace dae
 		return true;
 	}
 
-	void CharacterComponent::SetState(PlayerState* newState)
+	void CharacterComponent::SetState(CharacterState* newState)
 	{
 		if (m_CurrentState != nullptr)
 		{
@@ -179,7 +179,7 @@ namespace dae
 		return GetOwner()->GetPosition().GetPosition();
 	}
 
-	void CharacterComponent::SetDirection(int direction)
+	void CharacterComponent::SetDirection(Direction direction)
 	{
 		if (m_CurrentState->GetType() != PlayerStateType::Dead && m_Direction != direction)
 		{
@@ -188,7 +188,7 @@ namespace dae
 		}
 	}
 
-	int CharacterComponent::GetDirection()
+	Direction CharacterComponent::GetDirection()
 	{
 		return m_Direction;
 	}

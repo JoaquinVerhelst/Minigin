@@ -60,14 +60,14 @@ void dae::HealthBarComponent::Render() const
 
     if (m_IsReversed)
     {
-        for (size_t i = 0; i < m_CurrentHealth; i++)
+        for (int i = 0; i <= m_CurrentHealth - 1; i++)
         {
             Renderer::GetInstance().RenderTexture(*m_Texture, pos.x - textureSize.x * i - offset * i, pos.y);
         }
     }
     else
     {
-        for (size_t i = 0; i < m_CurrentHealth; i++)
+        for (int i = 0; i <= m_CurrentHealth - 1; i++)
         {
             Renderer::GetInstance().RenderTexture(*m_Texture, pos.x + textureSize.x * i + offset * i, pos.y);
         }

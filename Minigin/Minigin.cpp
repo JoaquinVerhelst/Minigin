@@ -14,7 +14,7 @@
 #include "World.h"
 #include <iostream>
 
-
+#include "CharacterComponent.h"
 #include "SoundServiceLocator.h"
 #include "SoundSystem.h"
 
@@ -146,26 +146,26 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 
 
-	input.AddControllerBinding(InputManager::ControllerButton::DPadUp, std::make_shared<VerticalWalkCommand>(1), Command::InputType::Pressed);
-	input.AddControllerBinding(InputManager::ControllerButton::DPadDown, std::make_shared<VerticalWalkCommand>(0), Command::InputType::Pressed);
-	input.AddControllerBinding(InputManager::ControllerButton::DPadRight, std::make_shared<HorizontalWalkCommand>(0), Command::InputType::Pressed);
-	input.AddControllerBinding(InputManager::ControllerButton::DPadLeft, std::make_shared<HorizontalWalkCommand>(1), Command::InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadUp, std::make_shared<VerticalWalkCommand>(Direction::Up), Command::InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadDown, std::make_shared<VerticalWalkCommand>(Direction::Down), Command::InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadRight, std::make_shared<HorizontalWalkCommand>(Direction::Right), Command::InputType::Pressed);
+	input.AddControllerBinding(InputManager::ControllerButton::DPadLeft, std::make_shared<HorizontalWalkCommand>(Direction::Left), Command::InputType::Pressed);
 	input.AddControllerBinding(InputManager::ControllerButton::ButtonA, std::make_shared<UseSpecialtyCommand>(), Command::InputType::Up);
 
-	input.AddKeyBinding(SDL_SCANCODE_W, std::make_shared<VerticalWalkCommand>(1), 0);
-	input.AddKeyBinding(SDL_SCANCODE_S, std::make_shared<VerticalWalkCommand>(0), 0);
-	input.AddKeyBinding(SDL_SCANCODE_A, std::make_shared<HorizontalWalkCommand>(1), 0);
-	input.AddKeyBinding(SDL_SCANCODE_D, std::make_shared<HorizontalWalkCommand>(0), 0);
+	input.AddKeyBinding(SDL_SCANCODE_W, std::make_shared<VerticalWalkCommand>(Direction::Up), 0);
+	input.AddKeyBinding(SDL_SCANCODE_S, std::make_shared<VerticalWalkCommand>(Direction::Down), 0);
+	input.AddKeyBinding(SDL_SCANCODE_A, std::make_shared<HorizontalWalkCommand>(Direction::Left), 0);
+	input.AddKeyBinding(SDL_SCANCODE_D, std::make_shared<HorizontalWalkCommand>(Direction::Right), 0);
 	input.AddKeyBinding(SDL_SCANCODE_SPACE, std::make_shared<UseSpecialtyCommand>(), 0);
 
 	input.AddKeyBinding(SDL_SCANCODE_P, std::make_shared<MuteCommand>(), -1);
 
 
-	input.AddKeyBinding(SDL_SCANCODE_UP, std::make_shared<VerticalWalkCommand>(1), 1);
-	input.AddKeyBinding(SDL_SCANCODE_DOWN, std::make_shared<VerticalWalkCommand>(0), 1);
-	input.AddKeyBinding(SDL_SCANCODE_LEFT, std::make_shared<HorizontalWalkCommand>(1), 1);
-	input.AddKeyBinding(SDL_SCANCODE_RIGHT, std::make_shared<HorizontalWalkCommand>(0), 1);
-	input.AddKeyBinding(SDL_SCANCODE_RCTRL, std::make_shared<UseSpecialtyCommand>(), 0);
+	input.AddKeyBinding(SDL_SCANCODE_UP, std::make_shared<VerticalWalkCommand>(Direction::Up), 1);
+	input.AddKeyBinding(SDL_SCANCODE_DOWN, std::make_shared<VerticalWalkCommand>(Direction::Down), 1);
+	input.AddKeyBinding(SDL_SCANCODE_LEFT, std::make_shared<HorizontalWalkCommand>(Direction::Left), 1);
+	input.AddKeyBinding(SDL_SCANCODE_RIGHT, std::make_shared<HorizontalWalkCommand>(Direction::Right), 1);
+	input.AddKeyBinding(SDL_SCANCODE_RCTRL, std::make_shared<UseSpecialtyCommand>(), 1);
 
 
 

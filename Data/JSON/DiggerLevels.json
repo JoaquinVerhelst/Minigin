@@ -10,7 +10,12 @@
 		},
 		"player": {
 			"speed": 75,
-			"spritepath": "../Data/Sprites/Player.png",
+			"sprites": {
+				"playerSprite": "../Data/Sprites/Player.png",
+				"deathSprite": "../Data/Sprites/Death.png",
+				"reloadingSprite": "../Data/Sprites/ReloadingPlayer.png",
+				"fireBallSprite": "../Data/Sprites/FireBall.png"
+			},
 			"health": {
 				"amount": 3,
 				"healthBarSpritepath": "../Data/Sprites/Player1.png",
@@ -26,18 +31,21 @@
 		},
 		"playerEnemy": {
 			"speed": 75,
-			"spritepath": "../Data/Sprites/Enemy.png",
-			"health": {
-				"amount": 3,
-				"healthBarSpritepath": "../Data/Sprites/Enemy.png",
-				"healthBarPosition": [ 900, 51 ]
+			"sprites": {
+				"enemySprite": "../Data/Sprites/Enemy.png",
+				"rageSprite": "../Data/Sprites/Hobbin.png"
 			},
-			"score": {
-				"fontpath": "../Data/Lingua.otf",
-				"size": 30,
-				"position": [ 900, 20 ]
-			}
-		},
+				"health": {
+					"amount": 3,
+					"healthBarSpritepath": "../Data/Sprites/Enemy.png",
+					"healthBarPosition": [ 900, 51 ]
+				},
+				"score": {
+					"fontpath": "../Data/Lingua.otf",
+					"size": 30,
+					"position": [ 900, 20 ]
+				}
+			},
 		"nobbin": {
 			"speed": 75,
 			"spritepath": "../Data/Sprites/Enemy.png",

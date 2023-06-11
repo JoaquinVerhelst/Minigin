@@ -66,9 +66,9 @@ void World::Init(int rows, int columns, SDL_Window* window)
     glm::ivec2 pos = {};
     int index = 0;
 
-    for (size_t r = 0; r < m_Rows; ++r)
+    for (int r = 0; r <= m_Rows - 1; ++r)
     {
-        for (size_t c = 0; c < m_Columns; ++c)
+        for (int c = 0; c <= m_Columns-1; ++c)
         {
             pos = { r * m_CellWidth, c * m_CellHeight };
 
@@ -76,6 +76,7 @@ void World::Init(int rows, int columns, SDL_Window* window)
             cell->id = index;
             cell->isCellBroken = false;
             cell->position = pos;
+            cell->hasTreasure = false;
 
             ++index;
             m_Grid.emplace_back(cell);
@@ -142,7 +143,19 @@ void dae::World::Update()
 
 
 
+    if (m_CurrentGameMode == GameModeTypes::Versus)
+    {
+        auto playerPos = m_Players[0]->GetPosition().GetPosition();
+        auto enemyPlayerPos = m_NobbinPlayer->GetPosition().GetPosition();
 
+
+        if (playerPos.x + m_CellWidth > enemyPlayerPos.x && playerPos.x < enemyPlayerPos.x + m_CellWidth &&
+            playerPos.y + m_CellHeight > enemyPlayerPos.y && playerPos.y < enemyPlayerPos.y + m_CellHeight)
+        {
+
+            m_Players[0]->GetComponent<DiggerComponent>().GetDamaged();
+        }
+    }
 
 }
 
@@ -302,10 +315,12 @@ std::vector<GridCell*> dae::World::GetWorldGrid()
 
 void dae::World::PlaceTreasure(std::shared_ptr<GameObject> treasure, int gridIndex)
 {
-    if (gridIndex >= 0 && gridIndex < m_Grid.size())
+    if (gridIndex >= 0 && gridIndex <= static_cast<int>(m_Grid.size() -1))
     {
         treasure->SetPosition(m_Grid[gridIndex]->position.x, m_Grid[gridIndex]->position.y);
         m_Treasure.emplace_back(treasure);
+
+        m_Grid[gridIndex]->hasTreasure = true;
     }
 
 }
@@ -328,7 +343,7 @@ void dae::World::BreakGridIndexes(std::vector<int> gridIndexes)
     for (size_t i = 0; i < gridIndexes.size(); i++)
     {
 
-        if (gridIndexes[i] >= m_Grid.size())
+        if (gridIndexes[i] >= static_cast<int>(m_Grid.size()))
             break;
 
         m_Grid[gridIndexes[i]]->isCellBroken = true;
@@ -367,36 +382,43 @@ void dae::World::ResetAndLoadWorld(int index)
     //Place players and set idle
     if (currentLevelInfo->worldType == WorldTypes::Level)
     {
-        for (size_t i = 0; i < m_Players.size(); i++)
-        {
-            if (m_Players[i]->GetComponent<DiggerComponent>().GetState()->GetType() != PlayerStateType::Dead)
-            {
-
-                m_Players[i]->GetComponent<CharacterComponent>().Init();
-
-
-                if (i == 0)
-                {
-                    PlaceGameObject(m_Players[i], currentLevelInfo->player1PosIndex);
-                }
-                else
-                {
-                    PlaceGameObject(m_Players[i], currentLevelInfo->player2PosIndex);
-                }
-
-            }
-            else
-            {
-                m_Players[i]->SetPosition(-600, -800);
-            }
-        }
 
         if (m_CurrentGameMode != GameModeTypes::Versus)
         {
             currentLevelInfo->nobbinManager->GetComponent<NobbinManager>().Reset();
+
+            for (size_t i = 0; i < m_Players.size(); i++)
+            {
+                if (m_Players[i]->GetComponent<DiggerComponent>().GetState()->GetType() != PlayerStateType::Dead)
+                {
+
+                    m_Players[i]->GetComponent<CharacterComponent>().Init();
+
+
+                    if (i == 0)
+                    {
+                        PlaceGameObject(m_Players[i], currentLevelInfo->player1PosIndex);
+                    }
+                    else
+                    {
+                        PlaceGameObject(m_Players[i], currentLevelInfo->player2PosIndex);
+                    }
+
+                }
+                else
+                {
+                    m_Players[i]->SetPosition(-600, -800);
+                }
+            }
+
         }
         else
         {
+            m_Players[0]->GetComponent<CharacterComponent>().Init();
+            PlaceGameObject(m_Players[0], currentLevelInfo->player1PosIndex);
+            PlaceGameObject(m_NobbinPlayer, currentLevelInfo->player2PosIndex);
+            
+
             currentLevelInfo->nobbinManager->GetComponent<NobbinManager>().Disable();
         }
     }
@@ -405,7 +427,7 @@ void dae::World::ResetAndLoadWorld(int index)
 
     auto go = std::make_shared<dae::GameObject>();
 
-    for (int i = 0; i < currentLevelInfo->emeraldIndexs.size(); ++i)
+    for (int i = 0; i <= static_cast<int>(currentLevelInfo->emeraldIndexs.size() -1); ++i)
     {
         go = std::make_shared<dae::GameObject>();
         go->AddComponent<SimpleRenderComponent>("../Data/Sprites/Emerald.png");
@@ -419,7 +441,7 @@ void dae::World::ResetAndLoadWorld(int index)
     }
 
 
-    for (int i = 0; i < currentLevelInfo->goldIndexs.size(); ++i)
+    for (int i = 0; i <= static_cast<int>(currentLevelInfo->goldIndexs.size() - 1); ++i)
     {
         go = std::make_shared<dae::GameObject>();
         go->AddComponent<SimpleRenderComponent>("../Data/Sprites/Gold.png");
@@ -430,25 +452,10 @@ void dae::World::ResetAndLoadWorld(int index)
         World::GetInstance().PlaceTreasure(go, currentLevelInfo->goldIndexs[i] );
     }
 
-    // place enemy Manager
-
-
-
-    // todo If all enemy dead -> next level 
 
     UpdateWorld();
-
-
 }
 
-void dae::World::LoadNobbinManager()
-{
-
-
-
-
-
-}
 
 void dae::World::ResetGameMode()
 {
@@ -456,8 +463,16 @@ void dae::World::ResetGameMode()
     {
         m_Players[i]->Destroy();
     }
+
     m_Players.clear();
-    m_NobbinPlayer.reset();
+
+    if (m_NobbinPlayer)
+    {
+        m_NobbinPlayer->Destroy();
+        m_NobbinPlayer = nullptr;
+    }
+
+
     InputManager::GetInstance().ResetInput();
 }
 
@@ -492,7 +507,7 @@ void dae::World::PlayerDied(GameObject* player)
 
             ++m_PlayersDead;
 
-            if (m_PlayersDead == m_Players.size())
+            if (m_PlayersDead == static_cast<int>(m_Players.size()))
             {
                 if (m_CurrentGameMode == GameModeTypes::SinglePlayer)
                 {
@@ -510,7 +525,7 @@ void dae::World::PlayerDied(GameObject* player)
                 }
                 else
                 {
-                    ResetAndLoadWorld(0);
+                    SceneManager::GetInstance().NextSceneByIndex(0);
                     m_PlayersDead = 0;
                     return;
                 }
@@ -579,7 +594,6 @@ void dae::World::LoadVersus()
 
     auto player2 = JsonManager::GetInstance().LoadNobbinPlayer();
     m_NobbinPlayer = player2;
-
 
     auto scenes = SceneManager::GetInstance().GetScenes();
 

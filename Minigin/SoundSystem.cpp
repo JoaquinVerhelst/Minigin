@@ -176,7 +176,7 @@ namespace dae
 
     void SDL_SoundSystem::SDL_SoundSystemImpl::Update()
     {
-        for (size_t i = 0; i < m_NumPending; ++i)
+        for (int i = 0; i <= m_NumPending - 1; ++i)
         {
 
             AudioClip* audioClip = m_AudioClips[m_Pending[i].id];

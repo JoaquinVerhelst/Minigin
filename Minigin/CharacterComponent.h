@@ -15,10 +15,22 @@ namespace dae
 	//class State;
 
 
+	enum class Direction
+	{
+		Up,
+		Down,
+		Left,
+		Right
+	};
+
 
 	class CharacterComponent : public Component
 	{
 	public:
+
+
+
+
 		CharacterComponent(GameObject* owner, float walkSpeed = { 50.f }, bool isControlledByPlayer =  false  );
 		~CharacterComponent();
 
@@ -39,8 +51,10 @@ namespace dae
 		//void VerticalWalk(int direction);
 
 		glm::vec3 GetPosition();
-		void SetDirection(int direction);
-		int GetDirection();
+		void SetDirection(Direction direction);
+		Direction GetDirection();
+
+
 
 		glm::ivec2 GetCellSize();
 
@@ -48,7 +62,7 @@ namespace dae
 
 		bool CheckBorders();
 
-		PlayerState* GetState() { return m_CurrentState; }
+		CharacterState* GetState() { return m_CurrentState; }
 
 
 		glm::vec2 CalculateWalk(int direction, int cellSize, float x, float y);
@@ -64,16 +78,16 @@ namespace dae
 		virtual void CalculateCell() {};
 	protected:
 
-		void SetState(PlayerState* newState);
+		void SetState(CharacterState* newState);
 
 
-		int m_Direction;
+		Direction m_Direction;
 		int m_InputID;
 		float m_WalkSpeed;
 		bool m_ControlledByPlayer;
 		bool m_IsDead;
 
-		PlayerState* m_CurrentState;
+		CharacterState* m_CurrentState;
 
 
 		glm::ivec2 m_CellSize;

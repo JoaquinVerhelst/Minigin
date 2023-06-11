@@ -20,6 +20,9 @@ namespace dae
 		, m_DeathTime{2.f}
 		, m_IsDamaged{ false }
 		, m_FireBall{ nullptr }
+		, m_ShootCount{0.f}
+		, m_ShootDelay{9.f}
+		, m_CanShoot{ true }
 	{
 		SetState(new IdleState);
 	}
@@ -32,13 +35,24 @@ namespace dae
 		CharacterComponent::Update();
 
 
-		World::GetInstance().BreakWorld(GetOwner(), { m_CellSize.x - 1.f,m_CellSize.y - 1.f });
+		World::GetInstance().BreakWorld(GetOwner(), { m_CellSize.x ,m_CellSize.y });
 
 		if (m_FireBall)
 		{
 			m_FireBall->Update();
 		}
 
+		if (!m_CanShoot)
+		{
+			m_ShootCount += Time::GetInstance().GetDeltaTime();
+			
+			if (m_ShootCount >= m_ShootDelay)
+			{
+				m_CanShoot = true;
+				m_ShootCount = 0;
+				GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_Sprites.playerSprite);
+			}
+		}
 	}
 
 
@@ -77,17 +91,43 @@ namespace dae
 
 	void DiggerComponent::UseSpecialty()
 	{
-
-		SpawnFireBall();
-
+		if (m_CanShoot)
+		{
+			SpawnFireBall();
+			GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_Sprites.reloadingSprite);
+			m_CanShoot = false;
+		}
 	}
 
 	void DiggerComponent::Respawn()
 	{
-		GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture("../Data/Sprites/Player.png");
+		GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_Sprites.playerSprite);
 		SetState(new IdleState());
 		m_DeathCounter = 0;
-		World::GetInstance().PlaceGameObject(GetOwner(), SceneManager::GetInstance().GetCurrentSceneLevelInfo()->player1PosIndex);
+
+		auto grid = World::GetInstance().GetWorldGrid();
+
+		auto max = grid.size();
+
+		bool finish = true;
+		int index = 0;
+
+		do
+		{
+			index = rand() % max;
+
+			if (!grid[index]->isCellBroken || !grid[index]->hasTreasure)
+			{
+				finish = false;
+			}
+
+
+		} while (finish);
+
+
+
+
+		World::GetInstance().PlaceGameObject(GetOwner(), index);
 		m_IsDamaged = 0;
 	}
 
@@ -111,39 +151,30 @@ namespace dae
 
 		auto pos = GetOwner()->GetPosition().GetPosition();
 	
-		FireBallComponent::Direction direction;
+		Direction direction;
 
-		if (GetState()->GetType() == PlayerStateType::VerticalWalk)
+
+		switch (m_Direction)
 		{
-			if (m_Direction == 0)
-			{
-				direction = FireBallComponent::Direction::Up;
-			}
-			else
-			{
-				direction = FireBallComponent::Direction::Down;
-			}
+		case dae::Direction::Up:
+			direction = Direction::Down;
+			break;
+		case dae::Direction::Down:
+			direction = Direction::Up;
+			break;
+		case dae::Direction::Left:
+			direction = Direction::Right;
+			break;
+		case dae::Direction::Right:
+			direction = Direction::Left;
+			break;
 		}
-		else if (GetState()->GetType() == PlayerStateType::HorizontalWalk)
-		{
-			if (m_Direction == 0)
-			{
-				direction = FireBallComponent::Direction::Right;
-			}
-			else
-			{
-				direction = FireBallComponent::Direction::Left;
-			}
-		}
-
-
-
 
 
 
 		auto fireball = std::make_shared<dae::GameObject>();
-		fireball->AddComponent<dae::SimpleRenderComponent>("../Data/Sprites/FireBall.png");
-		fireball->AddComponent<FireBallComponent>(glm::vec2(pos.x + m_CellSize.x / 2, pos.y + m_CellSize.y / 2), direction);
+		fireball->AddComponent<dae::SimpleRenderComponent>(m_Sprites.fireBallSprite);
+		fireball->AddComponent<FireBallComponent>(GetOwner(), glm::vec2(pos.x + m_CellSize.x / 2, pos.y + m_CellSize.y / 2), direction);
 
 
 

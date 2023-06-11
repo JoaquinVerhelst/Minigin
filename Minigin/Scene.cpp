@@ -5,7 +5,8 @@ using namespace dae;
 
 unsigned int Scene::m_idCounter = 0;
 
-Scene::Scene(const std::string& name) : m_Name(name) {}
+Scene::Scene(const std::string& name) : m_Name(name), m_LevelInfo{ nullptr }
+{}
 
 Scene::~Scene()
 {
@@ -14,7 +15,7 @@ Scene::~Scene()
 
 void Scene::Add(std::shared_ptr<GameObject> object)
 {
-	m_Objects.emplace_back(std::move(object));
+	m_Objects.emplace_back(object);
 }
 
 void dae::Scene::SetLevelInfo(LevelInfo* levelInfo)
@@ -29,7 +30,7 @@ LevelInfo* dae::Scene::GetLevelInfo()
 
 void dae::Scene::AddTreasure(std::shared_ptr<GameObject> treasure)
 {
-	m_Treasures.emplace_back(std::move(treasure));
+	m_Treasures.emplace_back(treasure);
 }
 
 void dae::Scene::RemoveTreasures()

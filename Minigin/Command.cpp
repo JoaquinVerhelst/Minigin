@@ -13,7 +13,7 @@
 
 namespace dae
 {
-	dae::HorizontalWalkCommand::HorizontalWalkCommand(int direction)
+	dae::HorizontalWalkCommand::HorizontalWalkCommand(Direction direction)
 		:m_Direction{ direction }
 	{
 	}
@@ -27,7 +27,7 @@ namespace dae
 
 
 
-	VerticalWalkCommand::VerticalWalkCommand(int direction)
+	VerticalWalkCommand::VerticalWalkCommand(Direction direction)
 		:m_Direction{ direction }
 	{
 	}

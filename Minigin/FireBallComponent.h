@@ -10,23 +10,20 @@
 
 namespace dae
 {
+	enum class Direction;
+
 
 	class FireBallComponent final : public Component
 	{
 
 	public:
 
-		enum class Direction
-		{
-			Up,
-			Down,
-			Left,
-			Right
-		};
 
 
 
-		FireBallComponent(GameObject* owner, glm::vec2 position, Direction direction);
+
+		FireBallComponent(GameObject* owner, GameObject* digger,  glm::vec2 position, Direction direction);
+		~FireBallComponent();
 
 		void Update() override;
 		void Init() override;
@@ -44,7 +41,10 @@ namespace dae
 	private:
 
 		glm::vec2 m_Position;
+		glm::vec2 m_Size;
 		Direction m_Direction;
 		float m_Speed;
+		std::vector<std::shared_ptr<GameObject>> m_Nobbins;
+		GameObject* m_DiggerOwner;
 	};
 }

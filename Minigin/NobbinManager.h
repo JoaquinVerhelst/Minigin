@@ -11,7 +11,7 @@ namespace dae
 {
 	//class GameObject;
 
-	class NobbinManager final : public Component, public Subject
+	class NobbinManager final : public Component
 	{
 	public:
 
@@ -30,6 +30,10 @@ namespace dae
 
 		void Reset();
 		void Disable();
+
+		std::vector<std::shared_ptr<GameObject>> GetNobbins();
+		void DestroyNobbin(size_t index);
+
 	private:
 
 		void SpawnNobbin();

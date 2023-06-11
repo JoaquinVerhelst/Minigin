@@ -200,7 +200,7 @@ void dae::HighScoreComponent::SaveHighScore()
 	auto players = world.GetPlayers();
 	++m_PlayersSaved;
 
-	if (players.size() == m_PlayersSaved)
+	if (m_PlayersSaved == static_cast<int>(players.size()))
 	{
 
 

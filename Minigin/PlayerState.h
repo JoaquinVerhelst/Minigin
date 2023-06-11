@@ -3,10 +3,14 @@
 //#include "InputManager.h"
 #include "Command.h"
 
+
+
 namespace dae
 {
-
 	class CharacterComponent;
+	enum class Direction;
+
+
 
 	enum class PlayerStateType
 	{
@@ -15,18 +19,17 @@ namespace dae
 		VerticalWalk,
 		Damaged,
 		Dead
-
 	};
 
-	class PlayerState
+	class CharacterState
 	{
 	public:
 
 
-		PlayerState() = default;
-		virtual ~PlayerState() = default;
-		virtual void UpdateSprite(GameObject* actor, int direction) = 0;
-		virtual PlayerState* HandleInput(Command::InputType inputType, PlayerStateType newStateType) = 0;
+		CharacterState() = default;
+		virtual ~CharacterState() = default;
+		virtual void UpdateSprite(GameObject* actor, Direction direction) = 0;
+		virtual CharacterState* HandleInput(Command::InputType inputType, PlayerStateType newStateType) = 0;
 
 		virtual void Update(GameObject*, CharacterComponent*) {};
 		virtual bool CheckCollision(GameObject*, CharacterComponent*) { return false; };
@@ -40,7 +43,7 @@ namespace dae
 	};
 
 
-	class HorizontalWalkState : public PlayerState
+	class HorizontalWalkState : public CharacterState
 	{
 	public:
 		HorizontalWalkState()
@@ -49,14 +52,14 @@ namespace dae
 		}
 
 		~HorizontalWalkState() = default;
-		void UpdateSprite(GameObject* actor, int direction) override;
-		PlayerState* HandleInput( Command::InputType inputType, PlayerStateType newStateType) override;
+		void UpdateSprite(GameObject* actor, Direction direction) override;
+		CharacterState* HandleInput( Command::InputType inputType, PlayerStateType newStateType) override;
 		void Update(GameObject* actor, CharacterComponent* character) override;
 		bool CheckCollision(GameObject* actor, CharacterComponent* character) override;
 		void CalculateDirection(GameObject* actor , CharacterComponent* character ) override;
 	};
 
-	class VerticalWalkState : public PlayerState
+	class VerticalWalkState : public CharacterState
 	{
 	public:
 		VerticalWalkState()
@@ -65,15 +68,15 @@ namespace dae
 		}
 
 		~VerticalWalkState() = default;
-		void UpdateSprite(GameObject* actor, int direction) override;
-		PlayerState* HandleInput( Command::InputType inputType, PlayerStateType newStateType) override;
+		void UpdateSprite(GameObject* actor, Direction direction) override;
+		CharacterState* HandleInput( Command::InputType inputType, PlayerStateType newStateType) override;
 		void Update(GameObject* actor, CharacterComponent* character) override;
 		bool CheckCollision(GameObject* actor, CharacterComponent* character) override;
 		void CalculateDirection(GameObject* actor, CharacterComponent* character) override;
 	};
 
 
-	class IdleState : public PlayerState
+	class IdleState : public CharacterState
 	{
 	public:
 
@@ -83,13 +86,13 @@ namespace dae
 		}
 
 		~IdleState() = default;
-		void UpdateSprite(GameObject* actor, int direction) override;
-		PlayerState* HandleInput( Command::InputType inputType, PlayerStateType newStateType) override;
+		void UpdateSprite(GameObject* actor, Direction direction) override;
+		CharacterState* HandleInput( Command::InputType inputType, PlayerStateType newStateType) override;
 		bool CheckCollision(GameObject* actor, CharacterComponent* character) override;
 	};
 
 
-	class DamagedState : public PlayerState
+	class DamagedState : public CharacterState
 	{
 	public:
 
@@ -99,13 +102,13 @@ namespace dae
 		}
 
 		~DamagedState() = default;
-		void UpdateSprite(GameObject* actor, int direction) override;
-		PlayerState* HandleInput(Command::InputType inputType, PlayerStateType newStateType) override;
+		void UpdateSprite(GameObject* actor, Direction direction) override;
+		CharacterState* HandleInput(Command::InputType inputType, PlayerStateType newStateType) override;
 		void Update(GameObject* actor, CharacterComponent* character) override;
 	};
 
 
-	class DeadState : public PlayerState
+	class DeadState : public CharacterState
 	{
 	public:
 
@@ -115,9 +118,11 @@ namespace dae
 		}
 
 		~DeadState() = default;
-		void UpdateSprite(GameObject* actor, int direction) override;
-		PlayerState* HandleInput(Command::InputType inputType, PlayerStateType newStateType) override;
+		void UpdateSprite(GameObject* actor, Direction direction) override;
+		CharacterState* HandleInput(Command::InputType inputType, PlayerStateType newStateType) override;
 		void Update(GameObject* actor, CharacterComponent* character) override;
 	};
+
+
 
 }

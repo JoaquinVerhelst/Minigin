@@ -13,7 +13,7 @@ namespace dae
 	//	Right,
 	//	Left
 	//};
-
+	enum class Direction;
 
 	class Command
 	{
@@ -41,14 +41,14 @@ namespace dae
 	{
 	public:
 		//0 = left, 1 = right
-		HorizontalWalkCommand(int direction);
+		HorizontalWalkCommand(Direction direction);
 
 		void Execute(GameObject* actor, InputType type) override;
 
 
 	private:
 
-		int m_Direction;
+		Direction m_Direction;
 	};
 
 
@@ -57,14 +57,14 @@ namespace dae
 	{
 	public:
 		//0 = up, 1 = down
-		VerticalWalkCommand(int direction);
+		VerticalWalkCommand(Direction direction);
 
 		void Execute(GameObject* actor, InputType type) override;
 
 
 	private:
 
-		int m_Direction;
+		Direction m_Direction;
 	};
 
 	class MuteCommand : public Command

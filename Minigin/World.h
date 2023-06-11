@@ -16,6 +16,7 @@ namespace dae
 		int id;
 		glm::vec2 position;
 		bool isCellBroken;
+		bool hasTreasure;
 	};
 
 
@@ -79,7 +80,6 @@ namespace dae
 
 		void PlaceGameObject(std::shared_ptr<GameObject> gameobject, int gridIndex);
 		void PlaceGameObject(GameObject* gameobject, int gridIndex);
-		void PlaceEnemy(GameObject* gameobject, int gridIndex);
 		std::vector<std::shared_ptr<GameObject>> GetPlayers() { return m_Players; }
 
 		void LoadSinglePlayer();
@@ -90,35 +90,31 @@ namespace dae
 		void SetGameLost(bool resetGame) { m_GameOver = resetGame; }
 	private:
 
-
 		void PlaceTreasure(std::shared_ptr<GameObject> treasure, int gridIndex);
-		void LoadNobbinManager();
-
-
 
 		std::vector<std::shared_ptr<GameObject>> m_Players;
 		std::shared_ptr<GameObject> m_NobbinPlayer;
 
 
 		std::vector<GridCell*> m_Grid;
-		int m_Rows;
-		int m_Columns;
-		int m_CellWidth;
-		int m_CellHeight;
+		int m_Rows = 0;
+		int m_Columns = 0;
+		int m_CellWidth = 0;
+		int m_CellHeight = 0;
 
-		int m_PlayersDead;
-		bool m_GameOver;
+		int m_PlayersDead = 0;
+		bool m_GameOver = 0;
 
 		std::vector<std::shared_ptr<GameObject>> m_Treasure;
 
-		bool m_UpdateTexture;
+		bool m_UpdateTexture = 0;
 		float m_Count = 0;
 
 		GameModeTypes m_CurrentGameMode;
 
-		int m_CurrentWorldIndex;
+		int m_CurrentWorldIndex = 0;
 
-		int m_Emeralds;
+		int m_Emeralds = 0;
 	};
 
 

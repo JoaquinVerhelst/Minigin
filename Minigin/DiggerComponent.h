@@ -11,7 +11,19 @@ namespace dae
 
 	class DiggerComponent final : public CharacterComponent
 	{
+
 	public:
+
+		struct PlayerSprites
+		{
+			std::string playerSprite;
+			std::string deathSprite;
+			std::string fireBallSprite;
+			std::string reloadingSprite;
+		};
+
+
+
 		void Update() override;
 		void Init() override;
 		void Render() const override;
@@ -31,7 +43,8 @@ namespace dae
 		void Respawn() override;
 		void UpdateDeath() override;
 		void SetIsDead() override;
-
+		PlayerSprites GetSprites() { return m_Sprites; }
+		void SetSprites(PlayerSprites sprites) { m_Sprites = sprites; }
 	private:
 
 		void SpawnFireBall();
@@ -41,6 +54,10 @@ namespace dae
 		float m_DeathTime;
 		std::shared_ptr<GameObject> m_FireBall;
 
+		PlayerSprites m_Sprites;
 
+		float m_ShootCount;
+		float m_ShootDelay;
+		bool m_CanShoot;
 	};
 }

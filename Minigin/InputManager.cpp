@@ -186,7 +186,7 @@ namespace dae
 			for (size_t i = 0; i < m_KeyBinds.size(); i++)
 			{
 
-				if (m_KeyBinds[i].inputID < m_Players.size())
+				if (m_KeyBinds[i].inputID <= static_cast<int>(m_Players.size() - 1))
 				{
 					if (keystate[m_KeyBinds[i].button])
 					{
@@ -222,7 +222,7 @@ namespace dae
 				{
 					m_KeyBinds[j].command->Execute(nullptr, Command::InputType::Up);
 				}
-				else if (m_KeyBinds[j].inputID < m_Players.size() && IsKeyBoardKey(m_KeyBinds[j].button, SDL_KEYUP))
+				else if (m_KeyBinds[j].inputID <= static_cast<int>(m_Players.size() - 1) && IsKeyBoardKey(m_KeyBinds[j].button, SDL_KEYUP))
 					m_KeyBinds[j].command->Execute(m_Players[m_KeyBinds[j].inputID], Command::InputType::Up);
 
 			}
@@ -237,7 +237,7 @@ namespace dae
 		{
 			ControllerBind tempControllerBind{};
 			tempControllerBind.button = button;
-			tempControllerBind.command = std::move(command);
+			tempControllerBind.command = command;
 			tempControllerBind.inputType = inputType;
 
 			m_ControllerBinds.emplace_back(tempControllerBind);
@@ -249,7 +249,7 @@ namespace dae
 		{
 			KeyBind tempKeyBind{};
 			tempKeyBind.button = button;
-			tempKeyBind.command = std::move(command);
+			tempKeyBind.command = command;
 			tempKeyBind.inputID = inputID;
 			m_KeyBinds.emplace_back(tempKeyBind);	
 		}
@@ -409,12 +409,12 @@ namespace dae
 
 	void InputManager::AddControllerBinding(ControllerButton button, std::shared_ptr<Command> command, Command::InputType inputType)
 	{
-		pImpl->AddControllerBinding(button, std::move(command), inputType);
+		pImpl->AddControllerBinding(button, command, inputType);
 	}
 
 	void InputManager::AddKeyBinding(SDL_Scancode button, std::shared_ptr<Command> command, int inputID)
 	{
-		pImpl->AddKeyBinding(button, std::move(command), inputID);
+		pImpl->AddKeyBinding(button, command, inputID);
 	}
 
 	void InputManager::ClearFrameEvents()

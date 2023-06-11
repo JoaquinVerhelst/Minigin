@@ -56,11 +56,11 @@ void dae::SceneManager::NextScene()
 	//}
 
 
-	if (m_CurrentId == m_scenes.size() - 1)
+	if (m_CurrentId == static_cast<int>(m_scenes.size() - 1))
 	{
 		m_CurrentId = 1;
 	}
-	else if (m_CurrentId >= m_scenes.size() - 1)
+	else if (m_CurrentId >= static_cast<int>(m_scenes.size() - 1))
 	{
 		m_CurrentId = 0;
 	}
@@ -75,7 +75,7 @@ void dae::SceneManager::NextScene()
 
 void dae::SceneManager::NextSceneByIndex(int index)
 {
-	if (index >= m_scenes.size())
+	if (index >= static_cast<int>(m_scenes.size()))
 	{
 		m_CurrentId = 0;
 		return;

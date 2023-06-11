@@ -58,15 +58,28 @@ namespace dae
 		void Update(GameObject* goldActor, GoldComponent* goldComp) override;
 	};
 
-	class PushedGoldState : public GoldState
+	class PushedRightGoldState : public GoldState
 	{
 	public:
-		PushedGoldState()
+		PushedRightGoldState()
 		{
 			m_Type = GoldStateType::Pushed;
 		}
 
-		~PushedGoldState() = default;
+		~PushedRightGoldState() = default;
+		bool HandleCollision(GameObject* player, GameObject* gold) override;
+		void Update(GameObject* goldActor, GoldComponent* goldComp) override;
+	};
+
+	class PushedLeftGoldState : public GoldState
+	{
+	public:
+		PushedLeftGoldState()
+		{
+			m_Type = GoldStateType::Pushed;
+		}
+
+		~PushedLeftGoldState() = default;
 		bool HandleCollision(GameObject* player, GameObject* gold) override;
 		void Update(GameObject* goldActor, GoldComponent* goldComp) override;
 	};

@@ -1,0 +1,145 @@
+﻿  Digger.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\__msvc_chrono.hpp(643,40): error C3861: '_Xtime_get_ticks': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\__msvc_chrono.hpp(670,37): error C3861: '_Query_perf_frequency': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\__msvc_chrono.hpp(671,37): error C3861: '_Query_perf_counter': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\__msvc_chrono.hpp(698,48): error C2039: 'xtime': is not a member of '`global namespace''
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\__msvc_chrono.hpp(698): error C2065: 'xtime': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\__msvc_chrono.hpp(698,55): error C2065: '_Xt': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\__msvc_chrono.hpp(698,60): error C2988: unrecognizable template declaration/definition
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\__msvc_chrono.hpp(698,60): error C2059: syntax error: 'const'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\__msvc_chrono.hpp(699,28): error C2143: syntax error: missing ';' before '{'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\__msvc_chrono.hpp(699,28): error C2447: '{': missing function header (old-style formal list?)
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stdexcept(166,5): error C2641: cannot deduce template arguments for 'std::range_error'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xcall_once.h(34,21): error C2955: 'std::once_flag': use of class template requires template argument list
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xcall_once.h(20,30): message : see declaration of 'std::once_flag'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xcall_once.h(34,16): error C2955: 'std::once_flag': use of class template requires template argument list
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xcall_once.h(20,30): message : see declaration of 'std::once_flag'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\system_error(464,44): error C2955: 'std::runtime_error': use of class template requires template argument list
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stdexcept(101,33): message : see declaration of 'std::runtime_error'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\system_error(477,11): error C2614: 'std::_System_error': illegal member initialization: 'runtime_error' is not a base or member
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\system_error(525,40): error C2039: '__std_system_error_allocate_message': is not a member of '`global namespace''
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\system_error(524): error C3861: '__std_system_error_allocate_message': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\system_error(531,15): error C2039: '__std_system_error_deallocate_message': is not a member of '`global namespace''
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\system_error(531,1): error C3861: '__std_system_error_deallocate_message': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(440,37): error C3878: syntax error: unexpected token 'identifier' following 'expression'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\iosfwd(149,25): message : This diagnostic occurred in the compiler generated function 'const _Facet &std::use_facet(const std::locale &)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(440,37): message : error recovery skipped: 'identifier ( static_cast  . . . identifier'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\iosfwd(149,25): message : This diagnostic occurred in the compiler generated function 'const _Facet &std::use_facet(const std::locale &)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(440,82): error C2760: syntax error: ')' was unexpected here; expected ';'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\iosfwd(149,25): message : This diagnostic occurred in the compiler generated function 'const _Facet &std::use_facet(const std::locale &)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(440,82): error C3878: syntax error: unexpected token ')' following 'expression_statement'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\iosfwd(149,25): message : This diagnostic occurred in the compiler generated function 'const _Facet &std::use_facet(const std::locale &)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(440,82): error C3878: syntax error: unexpected token ')' following 'statement'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\iosfwd(149,25): message : This diagnostic occurred in the compiler generated function 'const _Facet &std::use_facet(const std::locale &)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(440,82): error C3878: syntax error: unexpected token ')' following 'statement_seq'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(440,82): message : missing one of:  '}' ?
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\iosfwd(149,25): message : This diagnostic occurred in the compiler generated function 'const _Facet &std::use_facet(const std::locale &)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(440,82): error C2760: syntax error: ')' was unexpected here; expected '}'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\iosfwd(149,25): message : This diagnostic occurred in the compiler generated function 'const _Facet &std::use_facet(const std::locale &)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(440,82): error C3878: syntax error: unexpected token ')' following 'compound_statement'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\iosfwd(149,25): message : This diagnostic occurred in the compiler generated function 'const _Facet &std::use_facet(const std::locale &)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(440,82): error C3878: syntax error: unexpected token ')' following 'selection_statement'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\iosfwd(149,25): message : This diagnostic occurred in the compiler generated function 'const _Facet &std::use_facet(const std::locale &)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(440,82): message : error recovery skipped: ') )'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\iosfwd(149,25): message : This diagnostic occurred in the compiler generated function 'const _Facet &std::use_facet(const std::locale &)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(445,29): error C2065: '_Pfmod': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\iosfwd(149,25): message : This diagnostic occurred in the compiler generated function 'const _Facet &std::use_facet(const std::locale &)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(448,13): error C2065: '_Pfmod': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\iosfwd(149,25): message : This diagnostic occurred in the compiler generated function 'const _Facet &std::use_facet(const std::locale &)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\xlocale(452,20): error C2065: '_Psave_guard': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\iosfwd(149,25): message : This diagnostic occurred in the compiler generated function 'const _Facet &std::use_facet(const std::locale &)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(70,5): error C7568: argument list missing after assumed function template 'atomic'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(71,5): error C7568: argument list missing after assumed function template 'atomic'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(72,5): error C7568: argument list missing after assumed function template '_Locked_pointer'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(75,5): error C7568: argument list missing after assumed function template 'atomic'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(76,16): error C3646: '_Stopping_thread': unknown override specifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(76,58): error C2059: syntax error: '='
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(76,61): error C2238: unexpected token(s) preceding ';'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(93,9): error C2065: '_Stopping_thread': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(93,28): error C3861: '_Thrd_id': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(96,1): error C3536: '_Head': cannot be used before it is initialized
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(98,23): error C2446: '==': no conversion from 'nullptr' to 'int'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(98,26): message : A native nullptr can only be converted to bool or, using reinterpret_cast, to an integral type
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(103,37): error C2672: 'std::exchange': no matching overloaded function found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\utility(753,18): message : could be '_Ty std::exchange(_Ty &,_Other &&) noexcept(<expr>)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(103,24): error C2737: '_Next': const object must be initialized
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(105): error C3536: '_Next': cannot be used before it is initialized
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(105,23): error C2446: '!=': no conversion from 'nullptr' to 'int'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(105,26): message : A native nullptr can only be converted to bool or, using reinterpret_cast, to an integral type
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(70): error C2439: 'std::_Stop_state::_Stop_tokens': member could not be initialized
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(70,22): message : see declaration of 'std::_Stop_state::_Stop_tokens'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(115,1): message : This diagnostic occurred in the compiler generated function 'std::_Stop_state::_Stop_state(void)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(180,28): message : see reference to function 'std::_Stop_state::_Stop_state(void)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(71): error C2439: 'std::_Stop_state::_Stop_sources': member could not be initialized
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(71,22): message : see declaration of 'std::_Stop_state::_Stop_sources'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(115,1): message : This diagnostic occurred in the compiler generated function 'std::_Stop_state::_Stop_state(void)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(180,28): message : see reference to function 'std::_Stop_state::_Stop_state(void)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(75): error C2439: 'std::_Stop_state::_Current_callback': member could not be initialized
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(75,40): message : see declaration of 'std::_Stop_state::_Current_callback'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(115,1): message : This diagnostic occurred in the compiler generated function 'std::_Stop_state::_Stop_state(void)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(180,28): message : see reference to function 'std::_Stop_state::_Stop_state(void)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(315,22): error C3536: '_Head': cannot be used before it is initialized
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(315,14): error C2446: '==': no conversion from 'int' to 'std::_Stop_callback_base *'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(315,17): message : Conversion from integral type to pointer type requires reinterpret_cast, C-style cast or parenthesized function-style cast
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(345,27): error C2039: '_Stopping_thread': is not a member of 'std::_Stop_state'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(69,8): message : see declaration of 'std::_Stop_state'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\stop_token(345,47): error C3861: '_Thrd_id': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(155,13): error C3646: '_Thr': unknown override specifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(155,17): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(53,15): error C3861: 'unique_ptr': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(51,35): message : This diagnostic occurred in the compiler generated function 'unsigned int std::thread::_Invoke(void *) noexcept'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(56,9): error C3861: '_Cnd_do_broadcast_at_thread_exit': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(56,41): message : '_Cnd_do_broadcast_at_thread_exit': function declaration must be available as none of the arguments depend on a template parameter
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(51,35): message : This diagnostic occurred in the compiler generated function 'unsigned int std::thread::_Invoke(void *) noexcept'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(70,113): error C2760: syntax error: '...' was unexpected here; expected ')'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(68,10): message : This diagnostic occurred in the compiler generated function 'void std::thread::_Start(_Fn &&,_Args &&...)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(70,116): error C3878: syntax error: unexpected token ')' following 'simple_declaration'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(68,10): message : This diagnostic occurred in the compiler generated function 'void std::thread::_Start(_Fn &&,_Args &&...)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(70,116): message : error recovery skipped: ')'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(68,10): message : This diagnostic occurred in the compiler generated function 'void std::thread::_Start(_Fn &&,_Args &&...)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(73,9): error C2065: '_Thr': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(68,10): message : This diagnostic occurred in the compiler generated function 'void std::thread::_Start(_Fn &&,_Args &&...)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(74,110): error C2065: '_Thr': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(68,10): message : This diagnostic occurred in the compiler generated function 'void std::thread::_Start(_Fn &&,_Args &&...)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(76,13): error C2065: '_Thr': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(68,10): message : This diagnostic occurred in the compiler generated function 'void std::thread::_Start(_Fn &&,_Args &&...)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(79,13): error C2065: '_Thr': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(68,10): message : This diagnostic occurred in the compiler generated function 'void std::thread::_Start(_Fn &&,_Args &&...)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(80,30): error C2065: '_RESOURCE_UNAVAILABLE_TRY_AGAIN': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(68,10): message : This diagnostic occurred in the compiler generated function 'void std::thread::_Start(_Fn &&,_Args &&...)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(43,25): error C2614: 'std::thread': illegal member initialization: '_Thr' is not a base or member
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(97,66): error C2039: '_Thr': is not a member of 'std::thread'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(37,19): message : see declaration of 'std::thread'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(97,50): error C2672: 'std::exchange': no matching overloaded function found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\utility(753,18): message : could be '_Ty std::exchange(_Ty &,_Other &&) noexcept(<expr>)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(97,40): error C2614: 'std::thread': illegal member initialization: '_Thr' is not a base or member
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(104,9): error C2065: '_Thr': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(104,37): error C2039: '_Thr': is not a member of 'std::thread'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(37,19): message : see declaration of 'std::thread'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(104,21): error C2672: 'std::exchange': no matching overloaded function found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\utility(753,18): message : could be '_Ty std::exchange(_Ty &,_Other &&) noexcept(<expr>)'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(112,19): error C2065: '_Thr': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(112,32): error C2039: '_Thr': is not a member of 'std::thread'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(37,19): message : see declaration of 'std::thread'
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(116,16): error C2065: '_Thr': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(121,30): error C2065: '_INVALID_ARGUMENT': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(121,13): error C3861: '_Throw_Cpp_error': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(124,13): error C2065: '_Thr': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(124,25): error C3861: '_Thrd_id': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(125,30): error C2065: '_RESOURCE_DEADLOCK_WOULD_OCCUR': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(125,13): error C3861: '_Throw_Cpp_error': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(128,24): error C2065: '_Thr': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(128,13): error C3861: '_Thrd_join': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(128,42): error C2065: '_Thrd_success': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(129,30): error C2065: '_NO_SUCH_PROCESS': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(129,13): error C3861: '_Throw_Cpp_error': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(132,9): error C2065: '_Thr': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(132,14): error C3079: an initializer list cannot be used as the right operand of this assignment operator
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(137,30): error C2065: '_INVALID_ARGUMENT': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(137,13): error C3861: '_Throw_Cpp_error': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(140,38): error C2065: '_Thr': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(140,25): error C3861: '_Thrd_detach': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(140,9): error C3861: '_Check_C_return': identifier not found
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(141,9): error C2065: '_Thr': undeclared identifier
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(141,14): error C3079: an initializer list cannot be used as the right operand of this assignment operator
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.36.32532\include\thread(141,1): fatal  error C1003: error count exceeds 100; stopping compilation

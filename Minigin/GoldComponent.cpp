@@ -119,14 +119,14 @@ void dae::GoldComponent::PushRight()
 	m_CurrentGridIndex += 14;
 
 
-	if (m_CurrentGridIndex >= grid.size())
+	if (m_CurrentGridIndex >= static_cast<int>(grid.size()))
 	{
 		m_CurrentGridIndex -= 14;
 		return;
 	}
 
 
-	SetState(new PushedGoldState());
+	SetState(new PushedRightGoldState());
 
 }
 
@@ -141,7 +141,7 @@ void dae::GoldComponent::PushLeft()
 		return;
 	}
 
-	SetState(new PushedGoldState());
+	SetState(new PushedLeftGoldState());
 
 }
 
