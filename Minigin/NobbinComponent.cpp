@@ -23,14 +23,16 @@ namespace dae
         , m_StartRage{false}
         , m_CoolDownTime{ 9.f }
         , m_CanRage{ true}
+        , m_Columns{}
 	{
 
-
-
+        m_Columns = World::GetInstance().GetColumns();
+        Init();
 	}
 
 	NobbinComponent::~NobbinComponent()
 	{
+        delete m_Sprites;
 	}
 
 
@@ -51,11 +53,11 @@ namespace dae
         {
             availableDirections.push_back(1); // up
         }
-        if (m_CurrentCell->id - 14 >= 0 && grid[m_CurrentCell->id - 14]->isCellBroken && m_Direction != Direction::Right)
+        if (m_CurrentCell->id - m_Columns >= 0 && grid[m_CurrentCell->id - m_Columns]->isCellBroken && m_Direction != Direction::Right)
         {
             availableDirections.push_back(2); // left
         }
-        if (m_CurrentCell->id + 14 <= gridSize - 1 && grid[m_CurrentCell->id + 14]->isCellBroken && m_Direction != Direction::Left)
+        if (m_CurrentCell->id + m_Columns <= gridSize - 1 && grid[m_CurrentCell->id + m_Columns]->isCellBroken && m_Direction != Direction::Left)
         {
             availableDirections.push_back(3); // right
         }
@@ -72,11 +74,11 @@ namespace dae
             m_Counter = 0;
 
 
-            //for (size_t i = 0; i < availableDirections.size(); i++)
-            //{
-            //    std::cout << " " << availableDirections[i];
-            //}
-            //std::cout << '\n';
+      /*      for (size_t i = 0; i < availableDirections.size(); i++)
+            {
+                std::cout << " " << availableDirections[i];
+            }
+            std::cout << '\n';*/
 
 
 
@@ -139,7 +141,7 @@ namespace dae
     {
         glm::vec3 currentPos = GetOwner()->GetPosition().GetPosition();
 
-        GridCell* cell = World::GetInstance().GetOverlappedCell(currentPos, glm::vec2(1, 1));
+        GridCell* cell = World::GetInstance().GetOverlappedCell(glm::vec2(currentPos.x + m_CellSize.x/2, currentPos.y + m_CellSize.y / 2), glm::vec2(1, 1));
 
 
         if (cell && cell != m_CurrentCell && cell->isCellBroken)
@@ -158,14 +160,20 @@ namespace dae
 
         if (!m_ControlledByPlayer)
         {
+
+
             m_Counter += deltaTime;
 
             m_CurrentState->CalculateDirection(GetOwner(), this);
 
-            if (m_CurrentCell->isCellBroken)
+            if (m_CurrentCell->isCellBroken && CalculateBounceBack())
             {
                 m_CurrentState->Update(GetOwner(), this);
             }
+            //else
+            //{
+            //    CalculateBounceBack();
+            //}
             
         }
         else
@@ -182,39 +190,38 @@ namespace dae
             {
                 m_CurrentState->Update(GetOwner(), this);
             }
-        }
 
-
-
-        if (m_StartRage)
-        {
-            World::GetInstance().BreakWorld(GetOwner(), m_CellSize);
-
-
-            m_RageCounter += deltaTime;
-
-            if (m_RageCounter >= m_RageTime)
+            if (m_StartRage)
             {
-                m_RageCounter = 0;
-                m_StartRage = false;
-                m_CanRage = false;
-                GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_Sprites.enemySprite);
+                World::GetInstance().BreakWorld(GetOwner(), m_CellSize);
+
+
+                m_RageCounter += deltaTime;
+
+                if (m_RageCounter >= m_RageTime)
+                {
+                    m_RageCounter = 0;
+                    m_StartRage = false;
+                    m_CanRage = false;
+                    GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_Sprites->enemySprite);
+                }
+            }
+            else if (!m_CanRage)
+            {
+                m_RageCounter += deltaTime;
+
+                if (m_RageCounter >= m_CoolDownTime)
+                {
+                    m_RageCounter = 0;
+                    m_CanRage = true;
+                }
             }
         }
-        else if (!m_CanRage)
-        {
-            m_RageCounter += deltaTime;
 
-            if (m_RageCounter >= m_CoolDownTime)
-            {
-                m_RageCounter = 0;
-                m_CanRage = true;
-            }
-        }
-        else
-        {
 
-        }
+
+
+
 
 	}
 
@@ -245,7 +252,7 @@ namespace dae
         if (!m_StartRage && m_CanRage)
         {
             m_StartRage = true;
-            GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_Sprites.rageSprite);
+            GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_Sprites->rageSprite);
         }
     }
 
@@ -283,7 +290,7 @@ namespace dae
         if (m_Direction == Direction::Left)
         {
             m_CurrentCell = World::GetInstance().GetOverlappedCell(glm::vec2(currentPos.x + m_CellSize.x - offset, currentPos.y + m_CellSize.x / 2), size);
-            if (m_CurrentCell && m_CurrentCell->id - 14 >= 0 && grid[m_CurrentCell->id - 14]->isCellBroken)
+            if (m_CurrentCell && m_CurrentCell->id - m_Columns >= 0 && grid[m_CurrentCell->id - m_Columns]->isCellBroken)
             {
                 return true;
             }
@@ -292,7 +299,7 @@ namespace dae
         {
             m_CurrentCell = World::GetInstance().GetOverlappedCell(glm::vec2(currentPos.x, currentPos.y + m_CellSize.x / 2), size);
 
-            if (m_CurrentCell && m_CurrentCell->id + 14 <= gridSize - 1 && grid[m_CurrentCell->id + 14]->isCellBroken)
+            if (m_CurrentCell && m_CurrentCell->id + m_Columns <= gridSize - 1 && grid[m_CurrentCell->id + m_Columns]->isCellBroken)
             {
                 return true;
             }

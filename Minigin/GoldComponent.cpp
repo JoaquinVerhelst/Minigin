@@ -15,14 +15,15 @@ dae::GoldComponent::GoldComponent(GameObject* owner, int gridindex, float pushsp
 	: TreasureComponent(owner)
 	, m_CurrentGridIndex{ gridindex }
 	, m_FallingDistance{ 0 }
-	, m_PushDirection{ -1 }
 	, m_WaitToFallCounter{ 0 }
 	, m_WaitToFallTime{ 2.f }
 	, m_CurrentState{ new IdleGoldState() }
 	, m_PushSpeed{pushspeed}
 	, m_FallSpeed{fallspeed}
+	, m_Columns{}
+	, m_BrokenSprite{""}
 {
-
+	m_Columns = World::GetInstance().GetColumns();
 }
 
 dae::GoldComponent::~GoldComponent()
@@ -61,20 +62,22 @@ bool dae::GoldComponent::HandleCollision(GameObject* actor)
 
 void dae::GoldComponent::CalculateFall()
 {
-	float fallingSpeed = 120.f;
+
 	auto pos = GetOwner()->GetPosition().GetPosition();
 	auto grid = World::GetInstance().GetWorldGrid();
 
-	GetOwner()->SetPosition(pos.x, pos.y + fallingSpeed * Time::GetInstance().GetDeltaTime());
+	GetOwner()->SetPosition(pos.x, pos.y + m_FallSpeed * Time::GetInstance().GetDeltaTime());
 
 	if (pos.y >= grid[m_CurrentGridIndex]->position.y)
 	{
-		GetOwner()->SetPosition(std::round(pos.x), std::round(pos.y + fallingSpeed * Time::GetInstance().GetDeltaTime()));
+		GetOwner()->SetPosition(std::round(pos.x), std::round(pos.y + m_FallSpeed * Time::GetInstance().GetDeltaTime()));
 
+		// falling 2 stories
 		if (m_FallingDistance >= 2)
 		{
+			// playing sound 2
 			SoundServiceLocator::GetSoundSystem().Play(2, 1.0f);
-			GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture("../Data/Sprites/GoldBroken.png");
+			GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_BrokenSprite);
 
 			SetState(new BrokenGoldState());
 		}
@@ -115,13 +118,12 @@ void dae::GoldComponent::CheckForFalling()
 void dae::GoldComponent::PushRight()
 {
 	auto grid = World::GetInstance().GetWorldGrid();
-	m_PushDirection = 0;
-	m_CurrentGridIndex += 14;
+	m_CurrentGridIndex += m_Columns;
 
 
 	if (m_CurrentGridIndex >= static_cast<int>(grid.size()))
 	{
-		m_CurrentGridIndex -= 14;
+		m_CurrentGridIndex -= m_Columns;
 		return;
 	}
 
@@ -132,12 +134,11 @@ void dae::GoldComponent::PushRight()
 
 void dae::GoldComponent::PushLeft()
 {
-	m_PushDirection = 1;
-	m_CurrentGridIndex -= 14;
+	m_CurrentGridIndex -= m_Columns;
 
 	if (m_CurrentGridIndex <= 0)
 	{
-		m_CurrentGridIndex += 14;
+		m_CurrentGridIndex += m_Columns;
 		return;
 	}
 
@@ -152,8 +153,6 @@ void dae::GoldComponent::SetState(dae::GoldState* newState)
 		delete m_CurrentState;
 		m_CurrentState = nullptr;
 	}
-
-	//std::cout << "new state" << newState <<  " " << int(newState->GetType() )<< '\n';
 
 	m_CurrentState = newState;
 }

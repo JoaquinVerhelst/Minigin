@@ -11,7 +11,7 @@ namespace dae
     class HealthComponent;
 
 
-    class HealthBarComponent : public Component, public Observer
+    class HealthBarComponent final : public Component, public Observer
     {
     public:
 

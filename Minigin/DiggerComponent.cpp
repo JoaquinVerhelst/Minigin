@@ -23,8 +23,14 @@ namespace dae
 		, m_ShootCount{0.f}
 		, m_ShootDelay{9.f}
 		, m_CanShoot{ true }
+		, m_Sprites{nullptr}
 	{
 		SetState(new IdleState);
+	}
+
+	DiggerComponent::~DiggerComponent()
+	{
+		delete m_Sprites;
 	}
 
 
@@ -50,7 +56,7 @@ namespace dae
 			{
 				m_CanShoot = true;
 				m_ShootCount = 0;
-				GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_Sprites.playerSprite);
+				GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_Sprites->playerSprite);
 			}
 		}
 	}
@@ -94,14 +100,14 @@ namespace dae
 		if (m_CanShoot)
 		{
 			SpawnFireBall();
-			GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_Sprites.reloadingSprite);
+			GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_Sprites->reloadingSprite);
 			m_CanShoot = false;
 		}
 	}
 
 	void DiggerComponent::Respawn()
 	{
-		GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_Sprites.playerSprite);
+		GetOwner()->GetComponent<SimpleRenderComponent>().SetTexture(m_Sprites->playerSprite);
 		SetState(new IdleState());
 		m_DeathCounter = 0;
 
@@ -173,7 +179,7 @@ namespace dae
 
 
 		auto fireball = std::make_shared<dae::GameObject>();
-		fireball->AddComponent<dae::SimpleRenderComponent>(m_Sprites.fireBallSprite);
+		fireball->AddComponent<dae::SimpleRenderComponent>(m_Sprites->fireBallSprite);
 		fireball->AddComponent<FireBallComponent>(GetOwner(), glm::vec2(pos.x + m_CellSize.x / 2, pos.y + m_CellSize.y / 2), direction);
 
 

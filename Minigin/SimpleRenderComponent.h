@@ -14,7 +14,7 @@ namespace dae
     class Font;
 
 
-    class SimpleRenderComponent : public Component {
+    class SimpleRenderComponent final: public Component {
     public:
 
         SimpleRenderComponent(GameObject* owner, const std::string& filePath, bool isbackground = false);

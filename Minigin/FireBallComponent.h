@@ -30,7 +30,7 @@ namespace dae
 		bool IsRenderer() override { return false; }
 
 		void CalculateMovement();
-		void CheckCollision();
+		bool CheckCollision(std::shared_ptr<GameObject> nobbin);
 
 		FireBallComponent(const FireBallComponent& other) = delete;
 		FireBallComponent(FireBallComponent&& other) = delete;
@@ -45,6 +45,7 @@ namespace dae
 		Direction m_Direction;
 		float m_Speed;
 		std::vector<std::shared_ptr<GameObject>> m_Nobbins;
+		std::shared_ptr<GameObject> m_NobbinPlayer;
 		GameObject* m_DiggerOwner;
 	};
 }

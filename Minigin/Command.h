@@ -37,7 +37,7 @@ namespace dae
 
 
 
-	class HorizontalWalkCommand : public Command
+	class HorizontalWalkCommand final : public Command
 	{
 	public:
 		//0 = left, 1 = right
@@ -53,7 +53,7 @@ namespace dae
 
 
 
-	class VerticalWalkCommand : public Command
+	class VerticalWalkCommand final : public Command
 	{
 	public:
 		//0 = up, 1 = down
@@ -67,7 +67,7 @@ namespace dae
 		Direction m_Direction;
 	};
 
-	class MuteCommand : public Command
+	class MuteCommand final : public Command
 	{
 	public:
 		//0 = up, 1 = down
@@ -75,7 +75,7 @@ namespace dae
 		void Execute(GameObject* actor, InputType type) override;
 	};
 
-	class UseSpecialtyCommand : public Command
+	class UseSpecialtyCommand final : public Command
 	{
 	public:
 		//0 = up, 1 = down

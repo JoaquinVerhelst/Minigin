@@ -57,45 +57,6 @@ namespace dae
 	{
 	}
 
-
-	//-----------PUSHED--------------------------------------------------------------------------
-	/////////////////////////////////////////////////////////////////////////////////////////////
-
-
-	//bool PushedGoldState::HandleCollision(GameObject* , GameObject* )
-	//{
-	//	return false;
-	//}
-
-	//void PushedGoldState::Update(GameObject* goldActor, GoldComponent* goldComp)
-	//{
-	//	auto pos = goldActor->GetPosition().GetPosition();
-	//	auto grid = World::GetInstance().GetWorldGrid();
-
-	//	float pushSpeed = goldComp->GetPushSpeed();
-
-
-	//	if (goldComp->GetPushDirection() == 0)
-	//	{
-	//		goldActor->SetPosition(pos.x + pushSpeed * Time::GetInstance().GetDeltaTime(), pos.y);
-
-	//		if (pos.x >= grid[goldComp->GetCurrentGridIndex()]->position.x)
-	//		{
-	//			goldComp->SetState(new IdleGoldState());
-	//		}
-
-	//	}
-	//	else
-	//	{
-	//		goldActor->SetPosition(pos.x - pushSpeed * Time::GetInstance().GetDeltaTime(), pos.y);
-
-	//		if (pos.x <= grid[goldComp->GetCurrentGridIndex()]->position.x)
-	//		{
-	//			goldComp->SetState(new IdleGoldState());
-	//		}
-	//	}
-	//}
-
 	//-----------FALLING--------------------------------------------------------------------------
 	//////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -20,7 +20,7 @@ namespace dae
 		void Render() const override;
 		bool IsRenderer() override { return true; }
 
-		NobbinManager(GameObject* owner, int amountOfNobbin, int gridIndex,  float timeTospawnNobbin = 10.f);
+		NobbinManager(GameObject* owner, int amountOfNobbin, int gridIndex,  float timeTospawnNobbin = 5.f);
 		~NobbinManager();
 
 		NobbinManager(const NobbinManager& other) = delete;
@@ -32,13 +32,20 @@ namespace dae
 		void Disable();
 
 		std::vector<std::shared_ptr<GameObject>> GetNobbins();
-		void DestroyNobbin(size_t index);
+		void DestroyNobbin(std::shared_ptr<GameObject> nobbin);
+
+
+		void SetNobbinPlayer(std::shared_ptr<GameObject> nobbinPlayer);
+
+		void CalculateNobbins();
+		void CalculateNobbinPlayer();
+
 
 	private:
 
 		void SpawnNobbin();
-		bool IsOverlappingWithPlayer();
-		bool IsOverlappingWithTreasure();
+		bool IsOverlappingWithPlayer(std::shared_ptr<GameObject> nobbin, std::shared_ptr<GameObject> player);
+		bool IsOverlappingWithTreasure(std::shared_ptr<GameObject> nobbin);
 
 		float m_Counter;
 		float m_TimeToSpawn;
@@ -49,5 +56,6 @@ namespace dae
 
 		std::vector<std::shared_ptr<GameObject>> m_Nobbins;
 		std::vector<std::shared_ptr<GameObject>> m_Players;
+		std::shared_ptr<GameObject> m_NobbinPlayer;
 	};
 }

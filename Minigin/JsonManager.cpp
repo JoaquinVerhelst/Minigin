@@ -20,6 +20,9 @@
 #include "NobbinComponent.h"
 #include "HighScoreComponent.h"
 #include "NobbinManager.h"
+
+#include "GoldComponent.h"
+#include "EmeraldComponent.h"
 using json = nlohmann::json;
 
 
@@ -332,6 +335,72 @@ namespace dae
     }
 
 
+    std::shared_ptr<GameObject> JsonManager::LoadGold(int worldIndex)
+    {
+        std::ifstream file(m_JsonFilePath);
+        if (!file.is_open())
+        {
+            std::cout << "Failed to open JSON file: " << m_JsonFilePath << std::endl;
+            return std::shared_ptr<GameObject>{};
+        }
+
+        try
+        {
+            json jsonData;
+            file >> jsonData;
+
+
+            const auto& goldInfo = jsonData["general"]["gold"];
+
+            auto gold = std::make_shared<dae::GameObject>();
+            gold->AddComponent<SimpleRenderComponent>(goldInfo["sprites"]["goldBagSprite"]);
+            gold->AddComponent<GoldComponent>(worldIndex, goldInfo["pushSpeed"], goldInfo["fallSpeed"]);
+
+            gold->GetComponent<GoldComponent>().SetSprites(goldInfo["sprites"]["goldBrokenSprite"]);
+
+
+            return gold;
+        }
+        catch (const json::exception& ex)
+        {
+            std::cout << "Failed to parse JSON file: " << m_JsonFilePath << std::endl;
+            std::cout << "Error: " << ex.what() << std::endl;
+            return std::shared_ptr<GameObject>{};
+        }
+    }
+
+
+    std::shared_ptr<GameObject> JsonManager::LoadEmerald()
+    {
+        std::ifstream file(m_JsonFilePath);
+        if (!file.is_open())
+        {
+            std::cout << "Failed to open JSON file: " << m_JsonFilePath << std::endl;
+            return std::shared_ptr<GameObject>{};
+        }
+
+        try
+        {
+            json jsonData;
+            file >> jsonData;
+
+
+            const auto& emeraldInfo = jsonData["general"]["emerald"];
+
+            auto emerald = std::make_shared<dae::GameObject>();
+            emerald->AddComponent<SimpleRenderComponent>(emeraldInfo["sprite"]);
+            emerald->AddComponent<EmeraldComponent>();
+
+
+            return emerald;
+        }
+        catch (const json::exception& ex)
+        {
+            std::cout << "Failed to parse JSON file: " << m_JsonFilePath << std::endl;
+            std::cout << "Error: " << ex.what() << std::endl;
+            return std::shared_ptr<GameObject>{};
+        }
+    }
     std::shared_ptr<GameObject> JsonManager::LoadNobbin()
     {
 
@@ -351,10 +420,16 @@ namespace dae
             const auto& nobbinInfo = jsonData["general"]["nobbin"];
 
             auto nobbin = std::make_shared<dae::GameObject>();
-            nobbin->AddComponent<dae::SimpleRenderComponent>(nobbinInfo["sprites"]["enemySprite"]);
-            nobbin->AddComponent<NobbinComponent>(nobbinInfo["speed"]).Init();
+            nobbin->AddComponent<dae::SimpleRenderComponent>(nobbinInfo["nobbinSprite"]);
+            nobbin->AddComponent<NobbinComponent>(nobbinInfo["speed"]);
 
 ;
+            NobbinComponent::NobbinSprites* sprites = new NobbinComponent::NobbinSprites();
+            sprites->enemySprite = nobbinInfo["nobbinSprite"];
+            sprites->rageSprite = nobbinInfo["hobbinSprite"];
+
+            nobbin->GetComponent<NobbinComponent>().SetSprites(sprites);
+
 
             return nobbin;
         }
@@ -419,11 +494,11 @@ namespace dae
             player1->GetComponent<ScoreDisplayComponent>().SetStartPosition(pos[0], pos[1]);
 
 
-            DiggerComponent::PlayerSprites sprites{};
-            sprites.playerSprite = player["sprites"]["playerSprite"];
-            sprites.deathSprite = player["sprites"]["deathSprite"];
-            sprites.reloadingSprite = player["sprites"]["reloadingSprite"];
-            sprites.fireBallSprite = player["sprites"]["fireBallSprite"];
+            DiggerComponent::PlayerSprites* sprites = new DiggerComponent::PlayerSprites();
+            sprites->playerSprite = player["sprites"]["playerSprite"];
+            sprites->deathSprite = player["sprites"]["deathSprite"];
+            sprites->reloadingSprite = player["sprites"]["reloadingSprite"];
+            sprites->fireBallSprite = player["sprites"]["fireBallSprite"];
 
 
             player1->GetComponent<DiggerComponent>().SetSprites(sprites);
@@ -464,9 +539,10 @@ namespace dae
             enemyPlayer->AddComponent<dae::SimpleRenderComponent>(playerEnemyJson["sprites"]["enemySprite"]);
             enemyPlayer->AddComponent<NobbinComponent>(playerEnemyJson["speed"], true);
 
-            NobbinComponent::NobbinSprites sprites{};
-            sprites.enemySprite = playerEnemyJson["sprites"]["enemySprite"];
-            sprites.rageSprite = playerEnemyJson["sprites"]["rageSprite"];
+
+            NobbinComponent::NobbinSprites* sprites = new NobbinComponent::NobbinSprites();
+            sprites->enemySprite = playerEnemyJson["sprites"]["enemySprite"];
+            sprites->rageSprite = playerEnemyJson["sprites"]["rageSprite"];
 
             enemyPlayer->GetComponent<NobbinComponent>().SetSprites(sprites);
 

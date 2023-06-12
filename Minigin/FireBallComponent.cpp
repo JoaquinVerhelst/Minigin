@@ -19,6 +19,8 @@ namespace dae
 		, m_Speed{ 100.f }
 		, m_Size{}
 		, m_DiggerOwner{ digger }
+		, m_NobbinPlayer{nullptr}
+		, m_Nobbins {nullptr}
 	{
 
 		m_Size = GetOwner()->GetComponent<SimpleRenderComponent>().GetTexture()->GetSize();
@@ -36,18 +38,41 @@ namespace dae
 	void dae::FireBallComponent::Update()
 	{
 		CalculateMovement();
-		CheckCollision();
+		for (size_t n = 0; n < m_Nobbins.size(); ++n)
+		{
+			if (CheckCollision(m_Nobbins[n]))
+			{
+				SceneManager::GetInstance().GetCurrentSceneLevelInfo()->nobbinManager->GetComponent<NobbinManager>().DestroyNobbin(m_Nobbins[n]);
+				m_Nobbins.erase(m_Nobbins.begin() + n);
+				GetOwner()->~GameObject();
+			}
+		}
+
+
+		if (m_NobbinPlayer != nullptr )
+		{
+			if (CheckCollision(m_NobbinPlayer))
+			{
+				World::GetInstance().PlaceGameObject(m_NobbinPlayer, static_cast<int>(World::GetInstance().GetWorldGrid().size() - 1));
+			}
+		}
 
 		if (World::GetInstance().IsOverlappingWithWorld(m_Position, m_Size))
 		{
 			GetOwner()->~GameObject();
 		}
+
+
+
+
+
 	}
 
 	void dae::FireBallComponent::Init()
 	{
 		LevelInfo* levelInfo = SceneManager::GetInstance().GetCurrentSceneLevelInfo();
 		m_Nobbins = levelInfo->nobbinManager->GetComponent<NobbinManager>().GetNobbins();
+		m_NobbinPlayer = World::GetInstance().GetNobbinPlayer();
 	}
 
 	void dae::FireBallComponent::CalculateMovement()
@@ -77,25 +102,20 @@ namespace dae
 		GetOwner()->SetPosition(m_Position.x, m_Position.y);
 	}
 
-	void dae::FireBallComponent::CheckCollision()
+	bool dae::FireBallComponent::CheckCollision(std::shared_ptr<GameObject> nobbin)
 	{
-		for (size_t n = 0; n < m_Nobbins.size(); ++n)
+
+		const glm::vec2& nobbinPos = nobbin->GetPosition().GetPosition();
+
+
+		if (m_Position.x + m_Size.x > nobbinPos.x && m_Position.x < nobbinPos.x + m_Size.x &&
+			m_Position.y + m_Size.y > nobbinPos.y && m_Position.y < nobbinPos.y + m_Size.y)
 		{
-			const glm::vec2& nobbin = m_Nobbins[n]->GetPosition().GetPosition();
-
-
-			if (m_Position.x + m_Size.x > nobbin.x && m_Position.x < nobbin.x + m_Size.x &&
-				m_Position.y + m_Size.y > nobbin.y && m_Position.y < nobbin.y + m_Size.y)
-			{
-				m_DiggerOwner->GetComponent<ScoreComponent>().AddEmeraldScore(250);
-				
-				SceneManager::GetInstance().GetCurrentSceneLevelInfo()->nobbinManager->GetComponent<NobbinManager>().DestroyNobbin(n);
-
-				m_Nobbins.erase(m_Nobbins.begin() + n);
-
-				GetOwner()->~GameObject();
-
-			}
+			m_DiggerOwner->GetComponent<ScoreComponent>().AddEmeraldScore(250);
+			return true;
 		}
+
+		return false;
+		
 	}
 }

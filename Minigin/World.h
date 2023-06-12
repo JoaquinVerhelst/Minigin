@@ -81,6 +81,7 @@ namespace dae
 		void PlaceGameObject(std::shared_ptr<GameObject> gameobject, int gridIndex);
 		void PlaceGameObject(GameObject* gameobject, int gridIndex);
 		std::vector<std::shared_ptr<GameObject>> GetPlayers() { return m_Players; }
+		std::shared_ptr<GameObject> GetNobbinPlayer();
 
 		void LoadSinglePlayer();
 		void LoadCoop();
@@ -88,6 +89,9 @@ namespace dae
 
 		bool IsGameLost() { return m_GameOver; }
 		void SetGameLost(bool resetGame) { m_GameOver = resetGame; }
+
+		int GetRows() { return m_Rows; }
+		int GetColumns() { return m_Columns; }
 	private:
 
 		void PlaceTreasure(std::shared_ptr<GameObject> treasure, int gridIndex);

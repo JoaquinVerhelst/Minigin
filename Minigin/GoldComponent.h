@@ -18,6 +18,7 @@ namespace dae
 	class GoldComponent final : public TreasureComponent
 	{
 	public:
+
 		GoldComponent(GameObject* owner, int gridIndex, float pushspeed = {50.f}, float fallspeed = {120.f});
 		~GoldComponent();
 
@@ -42,7 +43,6 @@ namespace dae
 		void PushRight();
 		void PushLeft();
 
-		int GetPushDirection() { return m_PushDirection; }
 		int GetCurrentGridIndex() { return m_CurrentGridIndex; }
 
 		void SetState(GoldState* newState);
@@ -52,6 +52,8 @@ namespace dae
 
 		GoldStateType GetStateType() { return m_CurrentState->GetType(); }
 
+		std::string GetSprites() { return m_BrokenSprite; }
+		void SetSprites(std::string sprites) { m_BrokenSprite = sprites; }
 	private:
 
 
@@ -62,13 +64,13 @@ namespace dae
 		float m_WaitToFallCounter;
 		GoldState* m_CurrentState;
 		
-
-
-		//0 is left, 1 is right
-		int m_PushDirection;
+		int m_Columns;
 
 		float m_PushSpeed;
 		float m_FallSpeed;
+
+		std::string m_BrokenSprite;
+
 	};
 }
 

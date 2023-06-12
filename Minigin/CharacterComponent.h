@@ -91,6 +91,7 @@ namespace dae
 
 
 		glm::ivec2 m_CellSize;
+		glm::vec2 m_WindowSize;
 
 		GridCell* m_CurrentCell;
 

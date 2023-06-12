@@ -30,7 +30,7 @@ namespace dae
 		bool IsRenderer() override { return true; }
 
 		DiggerComponent(GameObject* owner, float walksSpeed = {50.f});
-		~DiggerComponent() = default;
+		~DiggerComponent();
 
 		DiggerComponent(const DiggerComponent& other) = delete;
 		DiggerComponent(DiggerComponent&& other) = delete;
@@ -43,8 +43,9 @@ namespace dae
 		void Respawn() override;
 		void UpdateDeath() override;
 		void SetIsDead() override;
-		PlayerSprites GetSprites() { return m_Sprites; }
-		void SetSprites(PlayerSprites sprites) { m_Sprites = sprites; }
+
+		PlayerSprites* GetSprites() { return m_Sprites; }
+		void SetSprites(PlayerSprites* sprites) { m_Sprites = sprites; }
 	private:
 
 		void SpawnFireBall();
@@ -54,7 +55,7 @@ namespace dae
 		float m_DeathTime;
 		std::shared_ptr<GameObject> m_FireBall;
 
-		PlayerSprites m_Sprites;
+		PlayerSprites* m_Sprites;
 
 		float m_ShootCount;
 		float m_ShootDelay;

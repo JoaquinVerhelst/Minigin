@@ -32,7 +32,7 @@ namespace dae
 
 	};
 
-	class IdleGoldState : public GoldState
+	class IdleGoldState final: public GoldState
 	{
 	public:
 		IdleGoldState()
@@ -45,7 +45,7 @@ namespace dae
 		void Update(GameObject* goldActor, GoldComponent* goldComp) override;
 	};
 
-	class FallingGoldState : public GoldState
+	class FallingGoldState final : public GoldState
 	{
 	public:
 		FallingGoldState()
@@ -58,7 +58,7 @@ namespace dae
 		void Update(GameObject* goldActor, GoldComponent* goldComp) override;
 	};
 
-	class PushedRightGoldState : public GoldState
+	class PushedRightGoldState final : public GoldState
 	{
 	public:
 		PushedRightGoldState()
@@ -71,7 +71,7 @@ namespace dae
 		void Update(GameObject* goldActor, GoldComponent* goldComp) override;
 	};
 
-	class PushedLeftGoldState : public GoldState
+	class PushedLeftGoldState final : public GoldState
 	{
 	public:
 		PushedLeftGoldState()
@@ -84,7 +84,7 @@ namespace dae
 		void Update(GameObject* goldActor, GoldComponent* goldComp) override;
 	};
 
-	class BrokenGoldState : public GoldState
+	class BrokenGoldState final : public GoldState
 	{
 	public:
 		BrokenGoldState()

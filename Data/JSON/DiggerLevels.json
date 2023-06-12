@@ -34,28 +34,23 @@
 			"sprites": {
 				"enemySprite": "../Data/Sprites/Enemy.png",
 				"rageSprite": "../Data/Sprites/Hobbin.png"
-			},
-				"health": {
-					"amount": 3,
-					"healthBarSpritepath": "../Data/Sprites/Enemy.png",
-					"healthBarPosition": [ 900, 51 ]
-				},
-				"score": {
-					"fontpath": "../Data/Lingua.otf",
-					"size": 30,
-					"position": [ 900, 20 ]
-				}
-			},
+			}
+		},
 		"nobbin": {
 			"speed": 75,
-			"spritepath": "../Data/Sprites/Enemy.png",
-			"health": {
+			"nobbinSprite": "../Data/Sprites/Enemy.png",
+			"hobbinSprite": "../Data/Sprites/Hobbin.png"
+		},
+		"gold": {
+			"sprites": {
+				"goldBagSprite": "../Data/Sprites/Gold.png",
+				"goldBrokenSprite": "../Data/Sprites/GoldBroken.png"
 			},
-			"score": {
-				"fontpath": "../Data/Lingua.otf",
-				"size": 30,
-				"position": [ 900, 20 ]
-			}
+			"pushSpeed": 50,
+			"fallSpeed": 120
+		},
+		"emerald": {
+			"sprite": "../Data/Sprites/Emerald.png"
 		}
 	},
 	"levels": [

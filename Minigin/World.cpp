@@ -337,6 +337,16 @@ void dae::World::PlaceGameObject(GameObject* gameobject, int gridIndex)
     gameobject->SetPosition(m_Grid[gridIndex]->position.x, m_Grid[gridIndex]->position.y);
 }
 
+std::shared_ptr<GameObject> dae::World::GetNobbinPlayer()
+{
+    if (m_NobbinPlayer != nullptr)
+    {
+        return m_NobbinPlayer;
+    }
+
+    return std::shared_ptr<GameObject>();
+}
+
 
 void dae::World::BreakGridIndexes(std::vector<int> gridIndexes)
 {
@@ -420,6 +430,8 @@ void dae::World::ResetAndLoadWorld(int index)
             
 
             currentLevelInfo->nobbinManager->GetComponent<NobbinManager>().Disable();
+
+            currentLevelInfo->nobbinManager->GetComponent<NobbinManager>().SetNobbinPlayer(m_NobbinPlayer);
         }
     }
   
@@ -429,9 +441,7 @@ void dae::World::ResetAndLoadWorld(int index)
 
     for (int i = 0; i <= static_cast<int>(currentLevelInfo->emeraldIndexs.size() -1); ++i)
     {
-        go = std::make_shared<dae::GameObject>();
-        go->AddComponent<SimpleRenderComponent>("../Data/Sprites/Emerald.png");
-        go->AddComponent<EmeraldComponent>();
+        go = JsonManager::GetInstance().LoadEmerald();
 
         SceneManager::GetInstance().GetScene(m_CurrentWorldIndex)->AddTreasure(go);
 
@@ -443,9 +453,7 @@ void dae::World::ResetAndLoadWorld(int index)
 
     for (int i = 0; i <= static_cast<int>(currentLevelInfo->goldIndexs.size() - 1); ++i)
     {
-        go = std::make_shared<dae::GameObject>();
-        go->AddComponent<SimpleRenderComponent>("../Data/Sprites/Gold.png");
-        go->AddComponent<GoldComponent>(currentLevelInfo->goldIndexs[i] );
+        go = JsonManager::GetInstance().LoadGold(currentLevelInfo->goldIndexs[i]);
 
         SceneManager::GetInstance().GetScene(m_CurrentWorldIndex)->AddTreasure(go);
 

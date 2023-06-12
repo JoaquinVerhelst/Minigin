@@ -28,6 +28,7 @@ namespace dae
 		, m_CurrentCell{ nullptr }
 		, m_ControlledByPlayer{ isControlledByPlayer }
 		, m_IsDead{ false }
+		, m_WindowSize{}
 	{
 
 		if (isControlledByPlayer)
@@ -41,6 +42,14 @@ namespace dae
 		}
 
 		m_CellSize = World::GetInstance().GetCellSize();;
+
+		int width{};
+		int height{};
+
+		SDL_GetWindowSize(SDL_GL_GetCurrentWindow(), &width, &height);
+
+		m_WindowSize = glm::vec2(width, height);
+
 	}
 
 	CharacterComponent::~CharacterComponent()
@@ -99,25 +108,26 @@ namespace dae
 	bool CharacterComponent::CheckBorders()
 	{
 		auto pos = GetPosition();
+		float offset = 0.1f;
 
 		if (pos.y <= 2 * m_CellSize.y)
 		{
-			GetOwner()->SetPosition(pos.x, pos.y + 0.1f);
+			GetOwner()->SetPosition(pos.x, pos.y + offset);
 			return false;
 		}
-		if (pos.y + m_CellSize.y >= 720)
+		if (pos.y + m_CellSize.y >= m_WindowSize.y)
 		{
-			GetOwner()->SetPosition(pos.x, pos.y - 0.1f);
+			GetOwner()->SetPosition(pos.x, pos.y - offset);
 			return false;
 		}
 		if (pos.x <= 0)
 		{
-			GetOwner()->SetPosition(pos.x + 0.1f, pos.y);
+			GetOwner()->SetPosition(pos.x + offset, pos.y);
 			return false;
 		}
-		if (pos.x + m_CellSize.y >= 1080)
+		if (pos.x + m_CellSize.y >= m_WindowSize.x)
 		{
-			GetOwner()->SetPosition(pos.x - 0.1f, pos.y);
+			GetOwner()->SetPosition(pos.x - offset, pos.y);
 			return false;
 		}
 

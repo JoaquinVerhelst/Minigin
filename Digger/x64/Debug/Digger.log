@@ -1,2 +1,0 @@
-﻿Minigin.lib(InputManager.obj) : error LNK2019: unresolved external symbol XInputGetState referenced in function "public: bool __cdecl dae::InputManager::InputManagerImpl::ProcessInput(void)" (?ProcessInput@InputManagerImpl@InputManager@dae@@QEAA_NXZ)
-D:\Prog4Engine\minigin\x64\Debug\Digger.exe : fatal error LNK1120: 1 unresolved externals

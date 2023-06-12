@@ -94,7 +94,7 @@ void dae::HorizontalWalkState::CalculateDirection(GameObject* actor, CharacterCo
 
 	auto cell = character->GetCurrentCell();
 
-	if (character->GetDirection() == Direction::Left)
+	if (character->GetDirection() == Direction::Right)
 	{
 		if (currentPos.x >= cell->position.x)
 		{
@@ -209,7 +209,7 @@ void dae::VerticalWalkState::CalculateDirection(GameObject* actor, CharacterComp
 	}
 	else
 	{
-		if (currentPos.y + 50.f <= cell->position.y)
+		if (currentPos.y <= cell->position.y - character->GetCellSize().x + 10.f)
 		{
 			character->CalculateCell();
 		}
@@ -283,7 +283,7 @@ void dae::DamagedState::UpdateSprite(GameObject* actor, Direction)
 {
 	SimpleRenderComponent& simpleRender = actor->GetComponent<SimpleRenderComponent>();
 	simpleRender.SetAngleAndFlip(0.f, SDL_FLIP_NONE);
-	simpleRender.SetTexture(actor->GetComponent<DiggerComponent>().GetSprites().deathSprite);
+	simpleRender.SetTexture(actor->GetComponent<DiggerComponent>().GetSprites()->deathSprite);
 }
 
 dae::CharacterState* dae::DamagedState::HandleInput(Command::InputType, PlayerStateType)

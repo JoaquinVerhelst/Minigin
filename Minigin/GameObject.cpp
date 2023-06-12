@@ -18,6 +18,7 @@ dae::GameObject::GameObject()
 	, m_Parent{}
 	, m_WorldPosition{}
 	, m_PositionIsDirty{}
+	, m_Shape{}
 {
 }
 

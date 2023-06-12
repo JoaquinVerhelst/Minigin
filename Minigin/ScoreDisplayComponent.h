@@ -16,7 +16,7 @@ namespace dae
     class ScoreComponent;
 
 
-    class ScoreDisplayComponent : public Component, public Observer
+    class ScoreDisplayComponent final : public Component, public Observer
     {
     public:
 

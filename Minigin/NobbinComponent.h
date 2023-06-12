@@ -37,8 +37,8 @@ namespace dae
 
 		void UseSpecialty() override;
 
-		NobbinSprites GetSprites() { return m_Sprites; }
-		void SetSprites(NobbinSprites sprites) { m_Sprites = sprites; }
+		NobbinSprites* GetSprites() { return m_Sprites; }
+		void SetSprites(NobbinSprites* sprites) { m_Sprites = sprites; }
 
 	private:
 
@@ -49,7 +49,7 @@ namespace dae
 		float m_Counter;
 		float m_UpdateDirectionTime;
 
-		NobbinSprites m_Sprites;
+		NobbinSprites* m_Sprites;
 
 		float m_RageCounter;
 		float m_RageTime;
@@ -58,6 +58,7 @@ namespace dae
 		float m_CoolDownTime;
 		bool m_CanRage;
 
+		int m_Columns;
 
 		bool doonce = true;
 	};

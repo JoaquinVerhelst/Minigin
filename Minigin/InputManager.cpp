@@ -186,7 +186,7 @@ namespace dae
 			for (size_t i = 0; i < m_KeyBinds.size(); i++)
 			{
 
-				if (m_KeyBinds[i].inputID <= static_cast<int>(m_Players.size() - 1))
+				if (m_KeyBinds[i].inputID <= static_cast<int>(m_Players.size() - 1) && m_KeyBinds[i].inputID != -1)
 				{
 					if (keystate[m_KeyBinds[i].button])
 					{

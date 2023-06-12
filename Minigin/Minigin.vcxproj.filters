@@ -16,35 +16,38 @@
     <Filter Include="Engine Files\Components">
       <UniqueIdentifier>{a3d634cb-3f02-4073-b4e9-c17a043ee73c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine Files\Singletons">
-      <UniqueIdentifier>{9d27d9c8-1bbd-4ef3-a064-60ca6cb6d038}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine Files\ImGui">
       <UniqueIdentifier>{f75c3059-ba27-42cc-ae62-d7389346fd6a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine Files\Patterns">
       <UniqueIdentifier>{67c089fb-82f0-46ec-bdbf-bece62331515}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine Files\Patterns\Observer">
-      <UniqueIdentifier>{2ce43933-0415-4bb0-9bc9-b8ecba8569e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine Files\Patterns\Command">
-      <UniqueIdentifier>{5f208f43-096f-458f-979d-690a5771e3de}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Treasure">
       <UniqueIdentifier>{56efc3b9-8cf9-4699-b0d7-775865910662}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine Files\Patterns\SoundSystem">
-      <UniqueIdentifier>{87df1ddc-f33f-46f9-97f9-08c8e3322e1d}</UniqueIdentifier>
+    <Filter Include="Game\Components">
+      <UniqueIdentifier>{88a9666b-a06f-414f-9f76-a0f96d857459}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine Files\Patterns\State">
-      <UniqueIdentifier>{7cf010df-b579-4b13-8b67-f2fb285b2927}</UniqueIdentifier>
+    <Filter Include="Game\Characters">
+      <UniqueIdentifier>{687b5260-2d2c-4df0-b0fa-af9724010367}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Characters\Digger">
+      <UniqueIdentifier>{00a98865-d857-4de2-aca5-343022577bc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Characters\Nobbin">
+      <UniqueIdentifier>{ca64bc12-d6c2-49ff-ab70-9590bf4b86f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Managers">
+      <UniqueIdentifier>{a34170a2-e494-418d-a527-e2fe4a91a1f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Files\Managers">
+      <UniqueIdentifier>{9d27d9c8-1bbd-4ef3-a064-60ca6cb6d038}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine Files\Managers\SoundSystem">
+      <UniqueIdentifier>{87df1ddc-f33f-46f9-97f9-08c8e3322e1d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
     <ClInclude Include="Texture2D.h">
       <Filter>Engine Files</Filter>
     </ClInclude>
@@ -52,9 +55,6 @@
       <Filter>Engine Files</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextObject.h">
       <Filter>Engine Files</Filter>
     </ClInclude>
     <ClInclude Include="Minigin.h">
@@ -67,19 +67,19 @@
       <Filter>Engine Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>Engine Files\Singletons</Filter>
+      <Filter>Engine Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>Engine Files\Singletons</Filter>
+      <Filter>Engine Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
-      <Filter>Engine Files\Singletons</Filter>
+      <Filter>Engine Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Time.h">
-      <Filter>Engine Files\Singletons</Filter>
+      <Filter>Engine Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Singleton.h">
-      <Filter>Engine Files\Singletons</Filter>
+      <Filter>Engine Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Engine Files</Filter>
@@ -111,103 +111,103 @@
     <ClInclude Include="Font.h">
       <Filter>Engine Files</Filter>
     </ClInclude>
-    <ClInclude Include="Observer.h">
-      <Filter>Engine Files\Patterns\Observer</Filter>
-    </ClInclude>
-    <ClInclude Include="Subject.h">
-      <Filter>Engine Files\Patterns\Observer</Filter>
-    </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Engine Files\Patterns\Command</Filter>
-    </ClInclude>
     <ClInclude Include="SoundSystem.h">
-      <Filter>Engine Files\Patterns\SoundSystem</Filter>
+      <Filter>Engine Files\Managers\SoundSystem</Filter>
     </ClInclude>
     <ClInclude Include="SoundServiceLocator.h">
-      <Filter>Engine Files\Patterns\SoundSystem</Filter>
+      <Filter>Engine Files\Managers\SoundSystem</Filter>
     </ClInclude>
     <ClInclude Include="ShapeComponent.h">
       <Filter>Engine Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="CharacterComponent.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DiggerComponent.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EmeraldComponent.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FireBallComponent.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FPSComponent.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GoldComponent.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HealthBarComponent.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HealthComponent.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HighScoreComponent.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MenuComponent.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NobbinComponent.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RotatorComponent.h">
-      <Filter>Engine Files</Filter>
-    </ClInclude>
     <ClInclude Include="ScoreComponent.h">
-      <Filter>Engine Files</Filter>
+      <Filter>Game\Components</Filter>
     </ClInclude>
     <ClInclude Include="ScoreDisplayComponent.h">
-      <Filter>Engine Files</Filter>
+      <Filter>Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthBarComponent.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthComponent.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="RotatorComponent.h">
+      <Filter>Engine Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="FPSComponent.h">
+      <Filter>Engine Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScoreComponent.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuComponent.h">
+      <Filter>Game\Components</Filter>
     </ClInclude>
     <ClInclude Include="TreasureComponent.h">
-      <Filter>Engine Files</Filter>
+      <Filter>Engine Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="JsonManager.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="NobbinManager.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="GoldStateMachine.h">
-      <Filter>Game</Filter>
+    <ClInclude Include="CharacterComponent.h">
+      <Filter>Game\Characters</Filter>
     </ClInclude>
     <ClInclude Include="PlayerState.h">
-      <Filter>Game</Filter>
+      <Filter>Game\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="GoldStateMachine.h">
+      <Filter>Game\Treasure</Filter>
+    </ClInclude>
+    <ClInclude Include="EmeraldComponent.h">
+      <Filter>Game\Treasure</Filter>
+    </ClInclude>
+    <ClInclude Include="GoldComponent.h">
+      <Filter>Game\Treasure</Filter>
+    </ClInclude>
+    <ClInclude Include="DiggerComponent.h">
+      <Filter>Game\Characters\Digger</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBallComponent.h">
+      <Filter>Game\Characters\Digger</Filter>
+    </ClInclude>
+    <ClInclude Include="NobbinComponent.h">
+      <Filter>Game\Characters\Nobbin</Filter>
+    </ClInclude>
+    <ClInclude Include="NobbinManager.h">
+      <Filter>Game\Characters\Nobbin</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonManager.h">
+      <Filter>Game\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Game\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Engine Files\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Subject.h">
+      <Filter>Engine Files\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Engine Files\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Engine Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TextObject.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="SimpleRenderComponent.cpp">
       <Filter>Engine Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>Engine Files\Singletons</Filter>
+      <Filter>Engine Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
-      <Filter>Engine Files\Singletons</Filter>
+      <Filter>Engine Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
-      <Filter>Engine Files\Singletons</Filter>
+      <Filter>Engine Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="Time.cpp">
-      <Filter>Engine Files\Singletons</Filter>
+      <Filter>Engine Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="Texture2D.cpp">
       <Filter>Engine Files</Filter>
@@ -248,80 +248,83 @@
     <ClCompile Include="Font.cpp">
       <Filter>Engine Files</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>Engine Files\Patterns\Command</Filter>
-    </ClCompile>
     <ClCompile Include="SoundSystem.cpp">
-      <Filter>Engine Files\Patterns\SoundSystem</Filter>
+      <Filter>Engine Files\Managers\SoundSystem</Filter>
     </ClCompile>
     <ClCompile Include="SoundServiceLocator.cpp">
-      <Filter>Engine Files\Patterns\SoundSystem</Filter>
+      <Filter>Engine Files\Managers\SoundSystem</Filter>
     </ClCompile>
     <ClCompile Include="ShapeComponent.cpp">
       <Filter>Engine Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerState.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="GoldStateMachine.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="JsonManager.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="NobbinManager.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="CharacterComponent.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DiggerComponent.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EmeraldComponent.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FireBallComponent.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FPSComponent.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GoldComponent.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HealthBarComponent.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HealthComponent.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HighScoreComponent.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NobbinComponent.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MenuComponent.cpp">
-      <Filter>Engine Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RotatorComponent.cpp">
-      <Filter>Engine Files</Filter>
     </ClCompile>
     <ClCompile Include="ScoreComponent.cpp">
-      <Filter>Engine Files</Filter>
+      <Filter>Game\Components</Filter>
     </ClCompile>
     <ClCompile Include="ScoreDisplayComponent.cpp">
-      <Filter>Engine Files</Filter>
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthBarComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="RotatorComponent.cpp">
+      <Filter>Engine Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSComponent.cpp">
+      <Filter>Engine Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="HighScoreComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuComponent.cpp">
+      <Filter>Game\Components</Filter>
     </ClCompile>
     <ClCompile Include="TreasureComponent.cpp">
-      <Filter>Engine Files</Filter>
+      <Filter>Engine Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterComponent.cpp">
+      <Filter>Game\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerState.cpp">
+      <Filter>Game\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="GoldStateMachine.cpp">
+      <Filter>Game\Treasure</Filter>
+    </ClCompile>
+    <ClCompile Include="GoldComponent.cpp">
+      <Filter>Game\Treasure</Filter>
+    </ClCompile>
+    <ClCompile Include="EmeraldComponent.cpp">
+      <Filter>Game\Treasure</Filter>
+    </ClCompile>
+    <ClCompile Include="DiggerComponent.cpp">
+      <Filter>Game\Characters\Digger</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBallComponent.cpp">
+      <Filter>Game\Characters\Digger</Filter>
+    </ClCompile>
+    <ClCompile Include="NobbinComponent.cpp">
+      <Filter>Game\Characters\Nobbin</Filter>
+    </ClCompile>
+    <ClCompile Include="NobbinManager.cpp">
+      <Filter>Game\Characters\Nobbin</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonManager.cpp">
+      <Filter>Game\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Game\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Engine Files\Patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Engine Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

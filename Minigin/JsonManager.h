@@ -49,11 +49,11 @@ namespace dae {
 
 
 
+		std::shared_ptr<GameObject> LoadGold(int worldIndex);
+		std::shared_ptr<GameObject> LoadEmerald();
 
 		std::shared_ptr<GameObject> LoadNobbin();
-
 		std::shared_ptr<GameObject> LoadPlayer(int index);
-
 		std::shared_ptr<GameObject> LoadNobbinPlayer();
 	private:
 			

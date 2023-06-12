@@ -69,10 +69,6 @@ namespace dae
 		void UpdateWorldPosition();
 
 
-		//DEBUG
-
-		void SetDebug(bool active) { m_Debug = active; }
-
 	private:
 
 		void RemoveChild(std::shared_ptr<GameObject> go);

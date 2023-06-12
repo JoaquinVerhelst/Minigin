@@ -85,7 +85,7 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	ResourceManager::GetInstance().Init(dataPath);
 	World::GetInstance().Init(20, 14, g_window);
 
-	SoundServiceLocator::RegisterSoundSystem(new LoggingSoundSystem( new SDL_SoundSystem()));
+	SoundServiceLocator::RegisterSoundSystem( new SDL_SoundSystem());
 
 
 
